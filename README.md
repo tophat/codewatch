@@ -2,6 +2,6 @@
 
 TODO
 
-# Special Thanks
+# Credits
 
-Special thanks to Carol Skelly for donating the 'tophat' GitHub organization.
+Special thanks to [Carol Skelly](https://github.com/iatek) for donating the 'tophat' GitHub organization.

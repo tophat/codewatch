@@ -21,15 +21,15 @@ class ModuleLoader(object):
         filter_module_name,
         visitor_module_name,
     ):
-        self.assertions = self.load_assertions(assertion_module_name)
-        self.filters = self.load_file_filters(filter_module_name)
-        self.visitors = self.load_node_visitors(visitor_module_name)
+        self.assertions = self._load_assertions(assertion_module_name)
+        self.filters = self._load_file_filters(filter_module_name)
+        self.visitors = self._load_node_visitors(visitor_module_name)
 
-    def load_assertions(self, assertion_module_name):
+    def _load_assertions(self, assertion_module_name):
         assertion_module = importlib.import_module(assertion_module_name)
         return _enumerate_subclasses_in_module(assertion_module, Assertion)
 
-    def load_file_filters(self, filter_module_name):
+    def _load_file_filters(self, filter_module_name):
         filter_module = importlib.import_module(filter_module_name)
         if not hasattr(filter_module, 'directory_filter'):
             raise NotImplementedError('need directory_filter method in filter_module')
@@ -41,6 +41,6 @@ class ModuleLoader(object):
         yield directory_filter
         yield file_filter
 
-    def load_node_visitors(self, visitor_module_name):
+    def _load_node_visitors(self, visitor_module_name):
         node_visitor_module = importlib.import_module(visitor_module_name)
         return _enumerate_subclasses_in_module(node_visitor_module, NodeVisitor)

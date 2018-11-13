@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+
+import logging
+import os
+import sys
+from codewatch import (
+    Analyzer,
+    AssertionChecker,
+    ModuleLoader,
+)
+
+
+def help():
+    u = """
+Codewatch analyzes & checks code, preferring customization
+
+
+Usage:
+    codewatch codewatch_module
+    """
+    sys.stderr.write(u)
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+
+    if len(sys.argv) != 2:
+        help()
+        sys.exit(-1)
+
+    assertion_module = sys.argv[1]
+    filter_module = sys.argv[1]
+    visitor_module = sys.argv[1]
+    cwd = os.getcwd()
+
+    try:
+        sys.path.insert(0, cwd)
+        loader = ModuleLoader(assertion_module, filter_module, visitor_module)
+        analyzer = Analyzer(loader, cwd)
+        stats = analyzer.run()
+        checker = AssertionChecker(loader, stats)
+        successes, failures = checker.run()
+        print('successes', successes)
+        print('failures', failures)
+    finally:
+        del sys.path[0]

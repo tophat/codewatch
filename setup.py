@@ -6,5 +6,5 @@ from setuptools import (
 setup(
     name='codewatch',
     packages=find_packages(),
-    version='0.1',
+    version='0.0.1-alpha',
  )

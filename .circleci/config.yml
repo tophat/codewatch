@@ -36,8 +36,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            mkdir test-reports
-            pytest --junitxml=test-reports/junit.xml
+            tox
 
       - store_test_results:
           path: test-reports

@@ -44,5 +44,3 @@ class ModuleLoader(object):
     def load_node_visitors(self):
         node_visitor_module = importlib.import_module(self.visitor_module_name)
         return _enumerate_subclasses_in_module(node_visitor_module, NodeVisitor)
-
-

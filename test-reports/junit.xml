@@ -1,1 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><testsuite errors="0" failures="0" name="pytest" skips="0" tests="1" time="0.020"><testcase classname="tests.test_true" file="tests/test_true.py" line="0" name="test_true" time="0.000855922698975"></testcase></testsuite>

@@ -10,3 +10,7 @@ from codewatch.run import (
 from codewatch.node_visitor import NodeVisitor
 from codewatch.file_walker import FileWalker
 from codewatch.stats import Stats
+
+def hello_world():
+    print('hello world')
+    return True

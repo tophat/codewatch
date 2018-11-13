@@ -1,6 +1,6 @@
 [run]
 branch = True
-source = codewatch
+include = codewatch/*
 
 [report]
 exclude_lines =

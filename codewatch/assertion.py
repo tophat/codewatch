@@ -7,7 +7,7 @@ class Assertion(object):
 
     def run(self, successes, failures):
         for attr_name in dir(self):
-            if 'assert_' not in attr_name:
+            if not attr_name.startswith('assert_'):
                 continue
             assertion_fn = getattr(self, attr_name)
             if not callable(assertion_fn):
@@ -17,7 +17,7 @@ class Assertion(object):
             success, err = assertion_fn()
             assertion_label = '{}.{}'.format(
                 self.__class__.__name__,
-                assertion_fn.__name__,
+                attr_name,
             )
             if success:
                 successes.append(assertion_label)

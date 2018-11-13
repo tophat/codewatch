@@ -1,5 +1,8 @@
 class Stats(object):
-    def __init__(self, stats, namespace=None):
+    def __init__(self, stats=None, namespace=None):
+        if stats is None:
+            stats = {}
+
         if namespace is not None:
             if namespace not in stats:
                 stats[namespace] = {}

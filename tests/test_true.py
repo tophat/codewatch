@@ -1,2 +1,4 @@
+from codewatch import hello_world
+
 def test_true():
-    assert True
+    assert hello_world()

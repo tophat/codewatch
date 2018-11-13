@@ -1,15 +1,10 @@
 class Stats(object):
-    def __init__(self, base_stats, namespace=None):
-        if namespace is None:
-            stats = base_stats
-        else:
-            if namespace not in base_stats:
-                base_stats[namespace] = {}
-            stats = base_stats[namespace]
+    def __init__(self, stats, namespace=None):
+        if namespace is not None:
+            if namespace not in stats:
+                stats[namespace] = {}
+            stats = stats[namespace]
         self.stats = stats
-
-    def __getattr__(self, item):
-        return self.stats.__getattribute__(item)
 
     def namespaced(self, namespace):
         return Stats(self.stats, namespace)
@@ -32,3 +27,6 @@ class Stats(object):
 
     def __repr__(self):
         return self.stats.__repr__()
+
+    def __getattr__(self, item):
+        return self.stats.__getattribute__(item)

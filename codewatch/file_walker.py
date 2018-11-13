@@ -4,9 +4,6 @@ import os
 class FileWalker(object):
     def __init__(self, loader, base_directory_path):
         self.base_directory_path = base_directory_path
-        self.base_directory_basename = os.path.basename(
-            self.base_directory_path,
-        )
         self.directory_visitor, self.file_visitor = loader.load_file_filters()
 
     def walk(self):

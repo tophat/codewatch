@@ -28,7 +28,7 @@ class AssertionChecker(object):
 
 class Analyzer(object):
     def __init__(self, loader, base_directory_path):
-        self.stats = Stats()
+        self.stats = Stats({})
         self.meta_stats = self.stats.namespaced('META').namespaced('ANALYZER')
         self.base_directory_path = base_directory_path
         self.file_walker = FileWalker(

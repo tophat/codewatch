@@ -1,15 +1,11 @@
 class Stats(object):
-    def __init__(self, base_stats=None, namespace=None):
-        if base_stats is None:
-            base_stats = {}
+    def __init__(self, base_stats, namespace=None):
         if namespace is None:
             stats = base_stats
         else:
             if namespace not in base_stats:
                 base_stats[namespace] = {}
             stats = base_stats[namespace]
-
-        self.base_stats = base_stats
         self.stats = stats
 
     def __getattr__(self, item):

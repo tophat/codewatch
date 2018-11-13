@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class AssertionChecker(object):
     def __init__(self, loader, stats):
         self.stats = stats
-        self.assertions = loader.load_assertions()
+        self.assertions = loader.assertions
 
     def run(self):
         initialized_assertions = [
@@ -64,7 +64,7 @@ class Analyzer(object):
 class NodeVisitorMaster(object):
     def __init__(self, loader, stats):
         self.stats = stats
-        self.node_visitors = loader.load_node_visitors()
+        self.node_visitors = loader.visitors
 
     def _initialize_node_visitors(self, rel_file_path):
         return [

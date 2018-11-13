@@ -1,6 +1,73 @@
 # codewatch
 
-TODO
+WORK IN PROGRESS
+
+## Usage
+
+`codewatch codewatch_config_module`
+
+The codewatch_config_module should contain the following two methods:
+
+*1. Visit all directories:*
+
+```python
+def directory_filter(_dir_name):
+    return True
+```
+
+*2. Visit all files:*
+```python
+def file_filter(file_name):
+    return True
+```
+
+Tune these filters to suit your needs.
+
+Then, you should add visitor classes that subclass from `codewatch.NodeVisitor`. It follows the same API as `ast.NodeVisitor`:
+
+```python
+from codewatch import NodeVisitor
+
+
+class CountImportsVisitor(NodeVisitor):
+    def _count_import(self):
+        self.stats.increment('total_imports_num')
+
+    def visit_Import(self, node):
+        self._count_import()
+
+    def visit_ImportFrom(self, node):
+        self._count_import()
+```
+
+This will build a stats dictionary that contains something like the following:
+
+```json
+{
+    "total_imports_num": 763
+}
+```
+
+Then, once again in the codewatch_config_module you can add assertions against this stat dictionary. The class should inherit from `codewatch.Assertion`:
+
+```python
+from codewatch import Assertion
+
+class CountImportsAssertion(Assertion):
+    def assert_number_of_imports_not_too_high(self):
+        threshold = 700
+        newStat = self.stats.get('total_imports_num')
+        err = 'There were {} total imports detected which exceeds threshold of {}'.format(newStat, threshold)
+        return newStat <= threshold, err
+```
+
+In this case, the assertion would fail since 763 is the `newStat` and the message:
+
+```
+There were 763 total imports detected which exceeds threshold of 700
+```
+
+would be printed
 
 ## Contributing
 

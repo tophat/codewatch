@@ -32,9 +32,13 @@ class ModuleLoader(object):
     def _load_file_filters(self, filter_module_name):
         filter_module = importlib.import_module(filter_module_name)
         if not hasattr(filter_module, 'directory_filter'):
-            raise NotImplementedError('need directory_filter method in filter_module')
+            raise NotImplementedError(
+                'need directory_filter method in filter_module',
+            )
         if not hasattr(filter_module, 'file_filter'):
-            raise NotImplementedError('need file_filter method in filter_module')
+            raise NotImplementedError(
+                'need file_filter method in filter_module',
+            )
         directory_filter = getattr(filter_module, 'directory_filter')
         file_filter = getattr(filter_module, 'file_filter')
 
@@ -43,4 +47,7 @@ class ModuleLoader(object):
 
     def _load_node_visitors(self, visitor_module_name):
         node_visitor_module = importlib.import_module(visitor_module_name)
-        return _enumerate_subclasses_in_module(node_visitor_module, NodeVisitor)
+        return _enumerate_subclasses_in_module(
+            node_visitor_module,
+            NodeVisitor,
+        )

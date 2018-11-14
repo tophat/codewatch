@@ -11,6 +11,19 @@ from codewatch.node_visitor import NodeVisitor
 from codewatch.file_walker import FileWalker
 from codewatch.stats import Stats
 
+
 def hello_world():
     print('hello world')
     return True
+
+
+__all__ = [
+    Assertion,
+    with_stats_namespace,
+    ModuleLoader,
+    Analyzer,
+    AssertionChecker,
+    NodeVisitor,
+    FileWalker,
+    Stats,
+]

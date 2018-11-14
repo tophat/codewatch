@@ -10,10 +10,7 @@ class FileWalker(object):
         for path, directories, files in os.walk(self.base_directory_path):
             rel_path = os.path.relpath(path, self.base_directory_path)
             path_basename = os.path.basename(path)
-            if (
-                rel_path != '.'
-                and not self.directory_filter(path_basename)
-            ):
+            if rel_path != '.' and not self.directory_filter(path_basename):
                 continue
 
             for file in files:

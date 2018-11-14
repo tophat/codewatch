@@ -7,6 +7,8 @@ WORK IN PROGRESS
 
 _Monitor and manage deeply customizable metrics about your python code using ASTs._
 
+codewatch lets you write simple python code to track statistics about the state of your codebase and write lint-like assertions on those statistics. Use this to incrementally improve and evolve the quality of your code base, increase the visibility of problematic code, to encourage use of new patterns while discouraging old ones, to enforce coding style guides, or to prevent certain kinds of regression errors.
+
 ## Usage
 
 `codewatch codewatch_config_module`
@@ -53,7 +55,7 @@ This will build a stats dictionary that contains something like the following:
 }
 ```
 
-Then, once again in the codewatch_config_module you can add assertions against this stat dictionary. The class should inherit from `codewatch.Assertion`:
+Then, once again in the `codewatch_config_module` you can add assertions against this stat dictionary. The class should inherit from `codewatch.Assertion`:
 
 ```python
 from codewatch import Assertion

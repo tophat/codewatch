@@ -5,6 +5,8 @@
 
 WORK IN PROGRESS
 
+_Monitor and manage deeply customizable metrics about your python code using ASTs._
+
 ## Usage
 
 `codewatch codewatch_config_module`

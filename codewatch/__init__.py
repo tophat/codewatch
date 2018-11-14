@@ -12,11 +12,6 @@ from codewatch.file_walker import FileWalker
 from codewatch.stats import Stats
 
 
-def hello_world():
-    print('hello world')
-    return True
-
-
 __all__ = [
     Assertion,
     with_stats_namespace,

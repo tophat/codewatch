@@ -1,5 +1,7 @@
 # codewatch
 [![Builds](https://img.shields.io/circleci/project/github/tophat/codewatch.svg)](https://circleci.com/gh/tophat/codewatch)
+[![codecov](https://codecov.io/gh/tophat/codewatch/branch/master/graph/badge.svg)](https://codecov.io/gh/tophat/codewatch)
+
 
 WORK IN PROGRESS
 

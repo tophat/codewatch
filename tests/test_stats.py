@@ -64,5 +64,5 @@ def test_responds_to_dict_methods():
     stats = Stats()
     stats.increment('mycounter')
 
-    assert stats.keys() == ['mycounter']
-    assert stats.values() == [1]
+    assert list(stats.keys()) == ['mycounter']
+    assert list(stats.values()) == [1]

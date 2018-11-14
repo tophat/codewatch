@@ -9,6 +9,11 @@ class EmptyAssertion(Assertion):
     pass
 
 
+class UncallableAssertion(Assertion):
+    # this should have no effect
+    assert_not_called = True
+
+
 class SuccessfulAssertion(Assertion):
     def assert_success(self):
         return True, None
@@ -28,6 +33,14 @@ class MultipleAssertions(SuccessfulAssertion, UnsuccessfulAssertion):
 def test_empty_assertion():
     successes, failures = [], {}
     EmptyAssertion(Stats()).run(successes, failures)
+
+    assert successes == []
+    assert failures == {}
+
+
+def test_uncallable_assertion():
+    successes, failures = [], {}
+    UncallableAssertion(Stats()).run(successes, failures)
 
     assert successes == []
     assert failures == {}

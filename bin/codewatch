@@ -28,8 +28,8 @@ if __name__ == '__main__':
     codewatch_config_module = sys.argv[1]
     cwd = os.getcwd()
     runner = Runner(
-        codewatch_config_module,
         cwd,
+        codewatch_config_module,
     )
     successes, failures = runner.run()
     print('successes', successes)

@@ -5,11 +5,13 @@
 
 WORK IN PROGRESS
 
+_Monitor and manage deeply customizable metrics about your python code using ASTs._
+
 ## Usage
 
 `codewatch codewatch_config_module`
 
-The codewatch_config_module should contain the following two methods:
+`codewatch_config_module` is a file that should contain the following two methods:
 
 *1. Visit all directories:*
 

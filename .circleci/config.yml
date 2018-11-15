@@ -47,6 +47,7 @@ jobs:
       - deploy:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              . venv/bin/activate && \
               pip install twine wheel && \
               python setup.py sdist bdist_wheel && \
               twine upload --skip-existing dist/*

@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+
+import logging
+import os
+import sys
+
+from codewatch import Runner
+
+
+def help():
+    u = """
+Codewatch analyzes & checks code, preferring customization
+
+
+Usage:
+    codewatch codewatch_module
+    """
+    sys.stderr.write(u)
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+
+    if len(sys.argv) != 2:
+        help()
+        sys.exit(-1)
+
+    codewatch_config_module = sys.argv[1]
+    cwd = os.getcwd()
+    runner = Runner(
+        cwd,
+        codewatch_config_module,
+    )
+    successes, failures = runner.run()
+    print('successes', successes)
+    print('failures', failures)

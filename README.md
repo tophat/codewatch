@@ -7,6 +7,8 @@ WORK IN PROGRESS
 
 _Monitor and manage deeply customizable metrics about your python code using ASTs._
 
+codewatch lets you write simple python code to track statistics about the state of your codebase and write lint-like assertions on those statistics. Use this to incrementally improve and evolve the quality of your code base, increase the visibility of problematic code, to encourage use of new patterns while discouraging old ones, to enforce coding style guides, or to prevent certain kinds of regression errors.
+
 ## Usage
 
 `codewatch codewatch_config_module`
@@ -53,7 +55,7 @@ This will build a stats dictionary that contains something like the following:
 }
 ```
 
-Then, once again in the codewatch_config_module you can add assertions against this stat dictionary. The class should inherit from `codewatch.Assertion`:
+Then, once again in the `codewatch_config_module` you can add assertions against this stat dictionary. The class should inherit from `codewatch.Assertion`:
 
 ```python
 from codewatch import Assertion
@@ -80,7 +82,7 @@ Thanks goes to these wonderful people! ([Emoji key](https://github.com/kentcdodd
 
 | [<img src="https://avatars2.githubusercontent.com/u/9436142?s=460&v=4" width="100px;"/><br /><sub><b>Josh Doncaster Marsiglio</b></sub>](https://github.com/lime-green)<br />[💻](https://github.com/tophat/codewatch/commits?author=lime-green)  | [<img src="https://avatars0.githubusercontent.com/u/18485117?s=460&v=4" width="100px;"/><br /><sub><b>Rohit Jain</b></sub>](https://github.com/rohit-jain27)<br />[💻](https://github.com/tophat/codewatch/commits?author=rohitjain-27) | [<img src="https://avatars2.githubusercontent.com/u/840172?s=460&v=4" width="100px;"/><br /><sub><b>Chris Abiad</b></sub>](https://github.com/cabiad)<br />[💻](https://github.com/tophat/codewatch/commits?author=cabiad) |
 | :---: | :---: | :---: |
-| [<img src="https://avatars.githubusercontent.com/u/3876970?s=100"/><br /><sub><b>Francois Campbell</b></sub>](https://github.com/francoiscampbell)<br />[🤔](https://github.com/tophat/codewatch/commits?author=francoiscampbell) | | |
+| [<img src="https://avatars.githubusercontent.com/u/3876970?s=100"/><br /><sub><b>Francois Campbell</b></sub>](https://github.com/francoiscampbell)<br />[🤔](https://github.com/tophat/codewatch/commits?author=francoiscampbell) | [<img src="https://avatars.githubusercontent.com/u/3534236?s=100" width="100px;"/><br /><sub><b>Jake Bolam</b></sub>](https://github.com/jakebolam)<br />[🚇](https://github.com/tophat/codewatch/commits?author=jakebolam) | |
 
 # Credits
 

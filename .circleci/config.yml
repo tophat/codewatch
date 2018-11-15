@@ -31,7 +31,7 @@ jobs:
           paths:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements_test.txt" }}
-        
+
       - run:
           name: run tests
           command: |
@@ -42,5 +42,12 @@ jobs:
           path: test-reports
 
       - store_artifacts:
-          path: test-reports    
+          path: test-reports
 
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              pip install twine wheel && \
+              python setup.py sdist bdist_wheel && \
+              twine upload --skip-existing dist/*
+            fi

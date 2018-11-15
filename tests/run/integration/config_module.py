@@ -1,5 +1,5 @@
 """
-This module is used by test_runner.py as an integration test
+This module is used by integration tests
 """
 
 import os

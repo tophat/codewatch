@@ -11,19 +11,19 @@ def _enumerate_subclasses_in_module(module, parent_class):
             continue
         if not issubclass(attr, parent_class):
             continue
+        if attr == parent_class:
+            continue
         yield attr
 
 
 class ModuleLoader(object):
     def __init__(
         self,
-        assertion_module_name,
-        filter_module_name,
-        visitor_module_name,
+        codewatch_config_module,
     ):
-        self.assertions = self._load_assertions(assertion_module_name)
-        self.filters = self._load_file_filters(filter_module_name)
-        self.visitors = self._load_node_visitors(visitor_module_name)
+        self.assertions = self._load_assertions(codewatch_config_module)
+        self.filters = self._load_file_filters(codewatch_config_module)
+        self.visitors = self._load_node_visitors(codewatch_config_module)
 
     def _load_assertions(self, assertion_module_name):
         assertion_module = importlib.import_module(assertion_module_name)

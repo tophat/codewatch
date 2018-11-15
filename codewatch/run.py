@@ -1,12 +1,34 @@
 import ast
 import logging
 import os
-from datetime import datetime
+import sys
 
 from codewatch.file_walker import FileWalker
+from codewatch.loader import ModuleLoader
 from codewatch.stats import Stats
 
 logger = logging.getLogger(__name__)
+
+
+class Runner(object):
+    def __init__(self, base_directory, codewatch_config_module):
+        self.codewatch_config_module = codewatch_config_module
+        self.base_directory = base_directory
+
+    def run(self):
+        try:
+            sys.path.insert(0, self.base_directory)
+            loader = ModuleLoader(self.codewatch_config_module)
+            stats = Stats()
+
+            file_walker = FileWalker(loader, self.base_directory)
+            node_master = NodeVisitorMaster(loader, stats)
+            analyzer = Analyzer(self.base_directory, file_walker, node_master)
+            analyzer.run()
+            checker = AssertionChecker(loader, stats)
+            return checker.run()
+        finally:
+            del sys.path[0]
 
 
 class AssertionChecker(object):
@@ -27,38 +49,22 @@ class AssertionChecker(object):
 
 
 class Analyzer(object):
-    def __init__(self, loader, base_directory_path):
-        self.stats = Stats()
-        self.meta_stats = self.stats.namespaced('META').namespaced('ANALYZER')
+    def __init__(
+        self,
+        base_directory_path,
+        file_walker,
+        node_visitor_master,
+    ):
         self.base_directory_path = base_directory_path
-        self.file_walker = FileWalker(
-            loader,
-            base_directory_path,
-        )
-        self.node_visitor_master = NodeVisitorMaster(
-            loader,
-            self.stats,
-        )
-
-    def _log_meta_stats(self):
-        logger.debug('time taken: {}'.format(self.meta_stats.get('runtime')))
-        logger.debug('num files walked: {}'.format(
-            self.meta_stats.get('visited_files'),
-        ))
+        self.file_walker = file_walker
+        self.node_visitor_master = node_visitor_master
 
     def run(self):
-        start = datetime.now()
         for file in self.file_walker.walk():
             file_contents = open(file).read()
             tree = ast.parse(file_contents, os.path.basename(file))
             rel_file_path = os.path.relpath(file, self.base_directory_path)
             self.node_visitor_master.visit(tree, rel_file_path)
-            self.meta_stats.increment('visited_files')
-        end = datetime.now()
-
-        self.meta_stats.append('runtime', end - start)
-        self._log_meta_stats()
-        return self.stats
 
 
 class NodeVisitorMaster(object):

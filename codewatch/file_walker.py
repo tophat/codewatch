@@ -1,6 +1,4 @@
-from os import (
-    walk as os_walk,
-)
+from os import walk as os_walk
 from os.path import (
     basename,
     join,

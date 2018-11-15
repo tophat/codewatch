@@ -11,6 +11,7 @@ def test_full_run():
     assert successes == [
         'custom_label_always_true',
         'expressions_more_than_zero',
+        'num_import_from_more_than_zero',
     ]
     assert failures == {
         'always_false': 'should always be false',

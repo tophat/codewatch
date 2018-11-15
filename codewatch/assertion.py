@@ -3,11 +3,11 @@ from functools import wraps
 
 class Assertion(object):
     def __init__(self, stats, assertion_fns):
-        self.base_stats = stats
+        self.stats = stats
         self.assertion_fns = assertion_fns
 
     @staticmethod
-    def load_assertions(module):
+    def load_assertion_fns(module):
         for attr_name in dir(module):
             attr = getattr(module, attr_name)
             if not callable(attr):
@@ -21,7 +21,7 @@ class Assertion(object):
         failures = {}
 
         for assertion_fn in self.assertion_fns:
-            success, err = assertion_fn(self.base_stats)
+            success, err = assertion_fn(self.stats)
             assertion_label = assertion_fn.assertion_label
 
             if success:

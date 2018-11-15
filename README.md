@@ -24,27 +24,28 @@ def directory_filter(_dir_name):
 
 *2. Visit all files:*
 ```python
-def file_filter(file_name):
+def file_filter(_file_name):
     return True
 ```
 
 Tune these filters to suit your needs.
 
-Then, you should add visitor classes that subclass from `codewatch.NodeVisitor`. It follows the same API as `ast.NodeVisitor`:
+Then, you should use the `@visit` decorator. It follows a similar API to `ast.NodeVisitor`:
 
 ```python
-from codewatch import NodeVisitor
+from codewatch import visitor
 
 
-class CountImportsVisitor(NodeVisitor):
-    def _count_import(self):
-        self.stats.increment('total_imports_num')
+def _count_import(stats):
+    stats.increment('total_imports_num')
 
-    def visit_Import(self, node):
-        self._count_import()
+@visit('import')
+def count_import(self, node):
+    _count_import(self.stats)
 
-    def visit_ImportFrom(self, node):
-        self._count_import()
+@visit('importFrom')
+def count_import_from(self, node):
+    _count_import(self.stats)
 ```
 
 This will build a stats dictionary that contains something like the following:
@@ -55,17 +56,18 @@ This will build a stats dictionary that contains something like the following:
 }
 ```
 
-Then, once again in the `codewatch_config_module` you can add assertions against this stat dictionary. The class should inherit from `codewatch.Assertion`:
+Then, once again in the `codewatch_config_module` you can add assertions against this stat dictionary using the `@assertion` decorator
 
 ```python
-from codewatch import Assertion
+from codewatch import assertion
 
-class CountImportsAssertion(Assertion):
-    def assert_number_of_imports_not_too_high(self):
-        threshold = 700
-        newStat = self.stats.get('total_imports_num')
-        err = 'There were {} total imports detected which exceeds threshold of {}'.format(newStat, threshold)
-        return newStat <= threshold, err
+
+@assertion()
+def number_of_imports_not_too_high(stats):
+    threshold = 700
+    newStat = stats.get('total_imports_num')
+    err = 'There were {} total imports detected which exceeds threshold of {}'.format(newStat, threshold)
+    return newStat <= threshold, err
 ```
 
 In this case, the assertion would fail since 763 is the `newStat` and the message:

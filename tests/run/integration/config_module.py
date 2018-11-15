@@ -7,6 +7,7 @@ import os
 from codewatch import (
     assertion,
     NodeVisitor,
+    visit,
 )
 
 
@@ -24,13 +25,24 @@ def directory_filter(_):
 
 
 class MyVisitor(NodeVisitor):
-    def visit_Expr(self, node):
+    def visit_Expr(self, _node):
         self.stats.increment('num_expressions')
+
+
+@visit('importFrom')
+def count_imports(self, _node):
+    self.stats.increment('num_import_from')
+
+
+@assertion()
+def num_import_from_more_than_zero(stats):
+    err = 'num_import_from is not more than 0'
+    return stats.get('num_import_from', 0) > 0, err
 
 
 @assertion()
 def expressions_more_than_zero(stats):
-    return stats.get('num_expressions') > 0, 'not more than zero'
+    return stats.get('num_expressions', 0) > 0, 'not more than zero'
 
 
 @assertion(label='custom_label_always_true')

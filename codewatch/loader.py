@@ -15,7 +15,7 @@ class ModuleLoader(object):
 
     def _load_assertions(self, assertion_module_name):
         assertion_module = importlib.import_module(assertion_module_name)
-        return Assertion.load_assertions(assertion_module)
+        return Assertion.load_assertion_fns(assertion_module)
 
     def _load_file_filters(self, filter_module_name):
         filter_module = importlib.import_module(filter_module_name)

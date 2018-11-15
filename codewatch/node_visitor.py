@@ -1,5 +1,6 @@
 import ast
 import uuid
+from functools import wraps
 
 
 class NodeVisitor(ast.NodeVisitor):
@@ -26,11 +27,13 @@ class NodeVisitor(ast.NodeVisitor):
 def visit(node_name):
     class_name = 'NodeVisitor_' + uuid.uuid4().hex
     klass = type(class_name, (NodeVisitor,), {})
-    method_name = 'visit_' + node_name.capitalize()
+    normalized_node_name = node_name[:1].upper() + node_name[1:]
+    method_name = 'visit_' + normalized_node_name
 
     def decorator(fn):
         setattr(klass, method_name, fn)
 
+        @wraps(fn)
         def wrapper(*args, **kwargs):
             return fn(*args, **kwargs)
         wrapper.wrapped_node_visitor = klass

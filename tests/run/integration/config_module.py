@@ -13,6 +13,9 @@ from codewatch import (
 # only visit this file itself
 def file_filter(file_name):
     this_file = os.path.basename(__file__)
+
+    # make sure it's a .py file (not .pyc)
+    this_file = os.path.splitext(this_file)[0] + '.py'
     return file_name == this_file
 
 

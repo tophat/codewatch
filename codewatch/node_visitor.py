@@ -27,7 +27,7 @@ class NodeVisitor(ast.NodeVisitor):
 def visit(node_name):
     class_name = 'NodeVisitor_' + uuid.uuid4().hex
     klass = type(class_name, (NodeVisitor,), {})
-    normalized_node_name = node_name[:1].upper() + node_name[1:]
+    normalized_node_name = node_name[0].upper() + node_name[1:]
     method_name = 'visit_' + normalized_node_name
 
     def decorator(fn):

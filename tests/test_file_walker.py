@@ -1,4 +1,4 @@
-from codewatch import FileWalker
+from codewatch.file_walker import FileWalker
 
 MOCK_PATHS = [
     ('.', ['dir1', 'dir2'], ['file1', 'file2', 'file3']),

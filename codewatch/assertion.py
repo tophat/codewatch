@@ -2,37 +2,60 @@ from functools import wraps
 
 
 class Assertion(object):
-    def __init__(self, stats):
+    def __init__(self, stats, assertion_fns):
         self.base_stats = stats
+        self.assertion_fns = assertion_fns
 
-    def run(self, successes, failures):
-        for attr_name in dir(self):
-            if not attr_name.startswith('assert_'):
+    @staticmethod
+    def load_assertions(module):
+        for attr_name in dir(module):
+            attr = getattr(module, attr_name)
+            if not callable(attr):
                 continue
-            assertion_fn = getattr(self, attr_name)
-            if not callable(assertion_fn):
+            if not hasattr(attr, 'assertion_label'):
                 continue
+            yield attr
 
-            self.stats = self.base_stats
-            success, err = assertion_fn()
-            assertion_label = '{}.{}'.format(
-                self.__class__.__name__,
-                attr_name,
-            )
+    def run(self):
+        successes = []
+        failures = {}
+
+        for assertion_fn in self.assertion_fns:
+            success, err = assertion_fn(self.base_stats)
+            assertion_label = assertion_fn.assertion_label
+
             if success:
                 successes.append(assertion_label)
             else:
                 failures[assertion_label] = err
+        return successes, failures
 
 
-def with_stats_namespace(*namespaces):
+def _with_stats_namespace(*namespaces):
     def decorator(fn):
         @wraps(fn)
-        def wrapper(self, *args, **kwargs):
-            _stats = self.base_stats
+        def wrapper(stats, *args, **kwargs):
+            _stats = stats
             for namespace in namespaces:
                 _stats = _stats.namespaced(namespace)
-            self.stats = _stats
-            return fn(self, *args, **kwargs)
+            return fn(_stats, *args, **kwargs)
+        return wrapper
+    return decorator
+
+
+def assertion(label=None, stats_namespaces=None):
+    def decorator(fn):
+        _label = label
+        if _label is None:
+            _label = fn.__name__
+        _stats_namespaces = stats_namespaces
+        if _stats_namespaces is None:
+            _stats_namespaces = []
+
+        @_with_stats_namespace(*_stats_namespaces)
+        @wraps(fn)
+        def wrapper(*args, **kwargs):
+            return fn(*args, **kwargs)
+        wrapper.assertion_label = _label
         return wrapper
     return decorator

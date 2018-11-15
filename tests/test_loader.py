@@ -1,15 +1,18 @@
-from codewatch import (
-    Assertion,
-    ModuleLoader,
+from codewatch.assertion import assertion
+from codewatch.loader import ModuleLoader
+from codewatch.node_visitor import (
     NodeVisitor,
+    visit,
 )
 
 
-class FirstAssertion(Assertion):
+@assertion()
+def first__assertion(_stats):
     pass
 
 
-class SecondAssertion(Assertion):
+@assertion()
+def second_assertion(_stats):
     pass
 
 
@@ -17,7 +20,8 @@ class FirstVisitor(NodeVisitor):
     pass
 
 
-class SecondVisitor(NodeVisitor):
+@visit(node_name='import')
+def second_visitor(_self):
     pass
 
 
@@ -35,7 +39,7 @@ def create_loader():
 
 def test_loads_assertions():
     loader = create_loader()
-    assert [FirstAssertion, SecondAssertion] == list(loader.assertions)
+    assert [first__assertion, second_assertion] == list(loader.assertions)
 
 
 def test_loads_filters():
@@ -45,4 +49,6 @@ def test_loads_filters():
 
 def test_loads_visitors():
     loader = create_loader()
-    assert [FirstVisitor, SecondVisitor] == list(loader.visitors)
+
+    assert next(loader.visitors) == FirstVisitor
+    assert next(loader.visitors) == second_visitor.wrapped_node_visitor

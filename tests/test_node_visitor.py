@@ -1,7 +1,5 @@
-from codewatch import (
-    NodeVisitor,
-    Stats,
-)
+from codewatch.node_visitor import NodeVisitor
+from codewatch.stats import Stats
 
 
 def test_sets_stats_and_file_path():

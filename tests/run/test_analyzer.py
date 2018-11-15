@@ -2,7 +2,7 @@ import ast
 import os
 from contextlib import contextmanager
 
-from codewatch import Analyzer
+from codewatch.run import Analyzer
 
 try:
     # python 2

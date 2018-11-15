@@ -4,18 +4,6 @@ from codewatch.assertion import Assertion
 from codewatch.node_visitor import NodeVisitor
 
 
-def _enumerate_subclasses_in_module(module, parent_class):
-    for attr_name in dir(module):
-        attr = getattr(module, attr_name)
-        if not type(attr) is type:
-            continue
-        if not issubclass(attr, parent_class):
-            continue
-        if attr == parent_class:
-            continue
-        yield attr
-
-
 class ModuleLoader(object):
     def __init__(
         self,
@@ -27,7 +15,7 @@ class ModuleLoader(object):
 
     def _load_assertions(self, assertion_module_name):
         assertion_module = importlib.import_module(assertion_module_name)
-        return _enumerate_subclasses_in_module(assertion_module, Assertion)
+        return Assertion.load_assertions(assertion_module)
 
     def _load_file_filters(self, filter_module_name):
         filter_module = importlib.import_module(filter_module_name)
@@ -47,7 +35,4 @@ class ModuleLoader(object):
 
     def _load_node_visitors(self, visitor_module_name):
         node_visitor_module = importlib.import_module(visitor_module_name)
-        return _enumerate_subclasses_in_module(
-            node_visitor_module,
-            NodeVisitor,
-        )
+        return NodeVisitor.load_visitors(node_visitor_module)

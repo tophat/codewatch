@@ -5,7 +5,7 @@ This module is used by integration tests
 import os
 
 from codewatch import (
-    Assertion,
+    assertion,
     NodeVisitor,
 )
 
@@ -28,12 +28,16 @@ class MyVisitor(NodeVisitor):
         self.stats.increment('num_expressions')
 
 
-class MyAssertion(Assertion):
-    def assert_expressions_more_than_zero(self):
-        return self.stats.get('num_expressions') > 0, 'not more than zero'
+@assertion()
+def expressions_more_than_zero(stats):
+    return stats.get('num_expressions') > 0, 'not more than zero'
 
-    def assert_always_true(self):
-        return True, None
 
-    def assert_always_false(self):
-        return False, 'should always be false'
+@assertion(label='custom_label_always_true')
+def always_true(_stats):
+    return True, None
+
+
+@assertion(stats_namespaces=['level1'])
+def always_false(_stats):
+    return False, 'should always be false'

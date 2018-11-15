@@ -3,6 +3,7 @@ import logging
 import os
 import sys
 
+from codewatch.assertion import Assertion
 from codewatch.file_walker import FileWalker
 from codewatch.loader import ModuleLoader
 from codewatch.stats import Stats
@@ -37,15 +38,8 @@ class AssertionChecker(object):
         self.assertions = loader.assertions
 
     def run(self):
-        initialized_assertions = [
-            assertion(self.stats) for assertion in self.assertions
-        ]
-        successes = []
-        failures = {}
-
-        for assertion_obj in initialized_assertions:
-            assertion_obj.run(successes, failures)
-        return successes, failures
+        assertion_runner = Assertion(self.stats, self.assertions)
+        return assertion_runner.run()
 
 
 class Analyzer(object):

@@ -1,8 +1,6 @@
-from codewatch import (
-    Assertion,
-    AssertionChecker,
-    Stats,
-)
+from codewatch.assertion import assertion
+from codewatch.run import AssertionChecker
+from codewatch.stats import Stats
 
 
 class MockLoader(object):
@@ -10,21 +8,30 @@ class MockLoader(object):
         self.assertions = assertions
 
 
-class MyAssertionClass(Assertion):
-    err_msg = 'my assertion failed!'
+@assertion()
+def assert_fail_if_counter_over_5(stats):
+    return stats.get('counter', 0) > 5, 'counter is over 5'
 
-    def assert_fail_if_counter_over_5(self):
-        return self.stats.get('counter', 0) > 5, self.err_msg
 
-    def assert_always_fails(self):
-        return False, self.err_msg
+@assertion()
+def assert_always_fails(_stats):
+    return False, 'this should always fail'
 
-    def assert_always_passes(self):
-        return True, None
+
+@assertion()
+def assert_always_passes(_stats):
+    return True, None
+
+
+ASSERTIONS = [
+    assert_fail_if_counter_over_5,
+    assert_always_fails,
+    assert_always_passes,
+]
 
 
 def test_assertions_are_run_counter_check_fails():
-    loader = MockLoader(assertions=[MyAssertionClass])
+    loader = MockLoader(assertions=ASSERTIONS)
     stats = Stats()
     checker = AssertionChecker(loader, stats)
     successes, failures = checker.run()
@@ -34,7 +41,7 @@ def test_assertions_are_run_counter_check_fails():
 
 
 def test_asserts_are_run_counter_check_passes():
-    loader = MockLoader(assertions=[MyAssertionClass])
+    loader = MockLoader(assertions=ASSERTIONS)
     stats = Stats()
     stats.append('counter', 10)
     checker = AssertionChecker(loader, stats)

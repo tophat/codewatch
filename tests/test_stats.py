@@ -1,4 +1,4 @@
-from codewatch import Stats
+from codewatch.stats import Stats
 
 
 def test_can_insert_and_retrieve_value():

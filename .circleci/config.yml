@@ -16,9 +16,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v2-dependencies-{{ checksum "requirements_test.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v2-dependencies-
+          - tox-dependencies-{{ checksum "requirements_test.txt" }}
+          - tox-dependencies-
+          - ci-dependencies
 
       - run:
           name: install dependencies
@@ -30,14 +30,19 @@ jobs:
       - save_cache:
           paths:
             - ./venv
-            - ./.tox
-          key: v2-dependencies-{{ checksum "requirements_test.txt" }}
+          key: ci-dependencies
 
       - run:
           name: run tests
           command: |
             . venv/bin/activate
             tox
+
+      - save_cache:
+          paths:
+          - ./.tox/py27
+          - ./.tox/py36
+          key: tox-dependencies-{{ checksum "requirements_test.txt" }}
 
       - store_test_results:
           path: test-reports

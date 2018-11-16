@@ -30,6 +30,7 @@ jobs:
       - save_cache:
           paths:
             - ./venv
+            - ./.tox
           key: v1-dependencies-{{ checksum "requirements_test.txt" }}
 
       - run:

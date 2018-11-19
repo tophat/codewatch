@@ -46,7 +46,9 @@ class AssertionChecker(object):
 
 
 class Analyzer(object):
-    CODING_REGEX = re.compile(r'^[ \t\f]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)')
+    CODING_REGEX = re.compile(
+        r'^[ \t\f]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)'
+    )
 
     def __init__(
         self,
@@ -63,11 +65,13 @@ class Analyzer(object):
             filep = io.open(file, encoding='utf-8')
 
             line1, line2 = filep.readline(), filep.readline()
-            file_contents = ''
-            if bool(re.match(self.CODING_REGEX, line1)):
-                file_contents += line2
-            if bool(re.match(self.CODING_REGEX, line2)):
-                file_contents += line1
+            print('line1', line1)
+            if bool(self.CODING_REGEX.match(line1)):
+                file_contents = line2
+            elif bool(self.CODING_REGEX.match(line2)):
+                file_contents = line1
+            else:
+                file_contents = line1 + line2
             file_contents += filep.read()
 
             tree = astroid.parse(file_contents, os.path.basename(file))

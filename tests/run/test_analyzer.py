@@ -43,6 +43,7 @@ class MockNodeMaster(object):
 @contextmanager
 def patch_open(file_contents):
     open_mock = mock.MagicMock()
+    open_mock.readline.return_value = file_contents
     open_mock.read.return_value = file_contents
 
     with mock.patch(open_path, return_value=open_mock) as m:

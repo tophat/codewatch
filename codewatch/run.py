@@ -1,4 +1,5 @@
 import astroid
+import io
 import logging
 import os
 import sys
@@ -56,7 +57,7 @@ class Analyzer(object):
 
     def run(self):
         for file in self.file_walker.walk():
-            file_contents = open(file).read()
+            file_contents = io.open(file, encoding='utf-8').read()
             tree = astroid.parse(file_contents, os.path.basename(file))
             rel_file_path = os.path.relpath(file, self.base_directory_path)
             self.node_visitor_master.visit(tree, rel_file_path)

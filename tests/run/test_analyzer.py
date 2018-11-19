@@ -7,11 +7,10 @@ from codewatch.run import Analyzer
 try:
     # python 2
     from unittest import mock
-    open_path = 'builtins.open'
 except ImportError:
     # python 3
     import mock
-    open_path = '__builtin__.open'
+open_path = 'io.open'
 
 
 MOCK_BASE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))

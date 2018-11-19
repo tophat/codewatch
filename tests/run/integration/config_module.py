@@ -6,9 +6,10 @@ import os
 
 from codewatch import (
     assertion,
-    NodeVisitor,
     visit,
 )
+
+from astroid import nodes
 
 
 # only visit this file itself
@@ -24,14 +25,16 @@ def directory_filter(_):
     return True
 
 
-class MyVisitor(NodeVisitor):
-    def visit_Expr(self, _node):
-        self.stats.increment('num_expressions')
+@visit(nodes.Expr)
+def count_expressions(_node, stats, _rel_file_path):
+    stats.increment('num_expressions')
+    return _node
 
 
-@visit('importFrom')
-def count_imports(self, _node):
-    self.stats.increment('num_import_from')
+@visit(nodes.ImportFrom)
+def count_imports(_node, stats, _rel_file_path):
+    stats.increment('num_import_from')
+    return _node
 
 
 @assertion()

@@ -35,10 +35,12 @@ class NodeVisitorMaster(object):
 
     @staticmethod
     def load_visitors(module):
+        visitors = []
         for attr_name in dir(module):
             attr = getattr(module, attr_name)
             if hasattr(attr, '_wrapper_node'):
-                yield attr
+                visitors.append(attr)
+        return visitors
 
     def _initialize_node_visitors(self, rel_file_path):
         initialized_node_visitors = []

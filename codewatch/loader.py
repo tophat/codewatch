@@ -35,4 +35,4 @@ class ModuleLoader(object):
 
     def _load_node_visitors(self, visitor_module_name):
         node_visitor_module = importlib.import_module(visitor_module_name)
-        return list(NodeVisitorMaster.load_visitors(node_visitor_module))
+        return NodeVisitorMaster.load_visitors(node_visitor_module)

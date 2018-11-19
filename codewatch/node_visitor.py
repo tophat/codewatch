@@ -12,8 +12,8 @@ class NodeVisitor(ast.NodeVisitor):
     def load_visitors(module):
         for attr_name in dir(module):
             attr = getattr(module, attr_name)
-            if hasattr(attr, 'wrapped_node_visitor'):
-                yield attr.wrapped_node_visitor
+            if hasattr(attr, '_wrapped_node_visitor'):
+                yield attr._wrapped_node_visitor
                 continue
             if not type(attr) is type:
                 continue
@@ -36,6 +36,6 @@ def visit(node_name):
         @wraps(fn)
         def wrapper(*args, **kwargs):
             return fn(*args, **kwargs)
-        wrapper.wrapped_node_visitor = klass
+        wrapper._wrapped_node_visitor = klass
         return wrapper
     return decorator

@@ -12,7 +12,7 @@ class Assertion(object):
             attr = getattr(module, attr_name)
             if not callable(attr):
                 continue
-            if not hasattr(attr, 'assertion_label'):
+            if not hasattr(attr, '_wrapped_assertion_label'):
                 continue
             yield attr
 
@@ -22,7 +22,7 @@ class Assertion(object):
 
         for assertion_fn in self.assertion_fns:
             success, err = assertion_fn(self.stats)
-            assertion_label = assertion_fn.assertion_label
+            assertion_label = assertion_fn._wrapped_assertion_label
 
             if success:
                 successes.append(assertion_label)
@@ -56,6 +56,6 @@ def assertion(label=None, stats_namespaces=None):
         @wraps(fn)
         def wrapper(*args, **kwargs):
             return fn(*args, **kwargs)
-        wrapper.assertion_label = _label
+        wrapper._wrapped_assertion_label = _label
         return wrapper
     return decorator

@@ -51,4 +51,4 @@ def test_loads_visitors():
     loader = create_loader()
 
     assert next(loader.visitors) == FirstVisitor
-    assert next(loader.visitors) == second_visitor.wrapped_node_visitor
+    assert next(loader.visitors) == second_visitor._wrapped_node_visitor

@@ -75,3 +75,11 @@ def test_can_compare_to_normal_dict():
 
     assert stats == {'abc': 1}
     assert stats != {}
+
+
+def test_can_compare_to_normal_dict_with_namespace():
+    stats = Stats().namespaced('level1')
+    stats.increment('abc')
+
+    assert stats == {'abc': 1}
+    assert stats != {}

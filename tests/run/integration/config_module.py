@@ -33,8 +33,6 @@ def count_expressions(_node, stats, _rel_file_path):
 
 @visit(nodes.ImportFrom)
 def count_imports(_node, stats, _rel_file_path):
-    print('_node', _node)
-    print('self.stats', stats)
     stats.increment('num_import_from')
     return _node
 

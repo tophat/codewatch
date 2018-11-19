@@ -22,7 +22,6 @@ def visit(node):
     def decorator(fn):
         @wraps(fn)
         def wrapper(node, *args, **kwargs):
-            print('node in wrapper', node)
             return fn(node, node._stats, node._rel_file_path, *args, **kwargs)
         wrapper._wrapper_node = node
         return wrapper

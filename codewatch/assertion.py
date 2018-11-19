@@ -21,7 +21,6 @@ class Assertion(object):
         failures = {}
 
         for assertion_fn in self.assertion_fns:
-            print('calling assertion_fn', assertion_fn.__name__)
             success, err = assertion_fn(self.stats)
             assertion_label = assertion_fn._wrapped_assertion_label
 
@@ -29,8 +28,6 @@ class Assertion(object):
                 successes.append(assertion_label)
             else:
                 failures[assertion_label] = err
-            print('successes: ', successes)
-            print('failures: ', failures)
         return successes, failures
 
 

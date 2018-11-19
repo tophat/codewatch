@@ -1,7 +1,7 @@
 import importlib
 
 from codewatch.assertion import Assertion
-from codewatch.node_visitor import NodeVisitor
+from codewatch.node_visitor import NodeVisitorMaster
 
 
 class ModuleLoader(object):
@@ -35,4 +35,4 @@ class ModuleLoader(object):
 
     def _load_node_visitors(self, visitor_module_name):
         node_visitor_module = importlib.import_module(visitor_module_name)
-        return NodeVisitor.load_visitors(node_visitor_module)
+        return NodeVisitorMaster.load_visitors(node_visitor_module)

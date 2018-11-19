@@ -1,4 +1,4 @@
-import ast
+import astroid
 import logging
 import os
 import sys
@@ -6,6 +6,7 @@ import sys
 from codewatch.assertion import Assertion
 from codewatch.file_walker import FileWalker
 from codewatch.loader import ModuleLoader
+from codewatch.node_visitor import NodeVisitorMaster
 from codewatch.stats import Stats
 
 logger = logging.getLogger(__name__)
@@ -56,26 +57,6 @@ class Analyzer(object):
     def run(self):
         for file in self.file_walker.walk():
             file_contents = open(file).read()
-            tree = ast.parse(file_contents, os.path.basename(file))
+            tree = astroid.parse(file_contents, os.path.basename(file))
             rel_file_path = os.path.relpath(file, self.base_directory_path)
             self.node_visitor_master.visit(tree, rel_file_path)
-
-
-class NodeVisitorMaster(object):
-    def __init__(self, loader, stats):
-        self.stats = stats
-        self.node_visitors = loader.visitors
-
-    def _initialize_node_visitors(self, rel_file_path):
-        return [
-            node_visitor(self.stats, rel_file_path)
-            for node_visitor in self.node_visitors
-        ]
-
-    def visit(self, node, rel_file_path):
-        node_visitors_initialized = self._initialize_node_visitors(
-            rel_file_path,
-        )
-
-        for node_visitor_initialized in node_visitors_initialized:
-            node_visitor_initialized.visit(node)

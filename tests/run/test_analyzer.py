@@ -1,4 +1,4 @@
-import ast
+import astroid
 import os
 from contextlib import contextmanager
 
@@ -65,6 +65,6 @@ def test_visits_file_with_ast_tree_and_relative_path():
         assert len(node_master.visited) == len(MOCK_FILES)
 
         for i, (tree, file_path) in enumerate(node_master.visited):
-            assert isinstance(tree, ast.Module)
+            assert isinstance(tree, astroid.Module)
             expected_file_path = RELATIVE_MOCK_FILE_PATHS[i]
             assert file_path == expected_file_path

@@ -8,13 +8,15 @@ class Assertion(object):
 
     @staticmethod
     def load_assertion_fns(module):
+        assertions = []
         for attr_name in dir(module):
             attr = getattr(module, attr_name)
             if not callable(attr):
                 continue
             if not hasattr(attr, '_wrapped_assertion_label'):
                 continue
-            yield attr
+            assertions.append(attr)
+        return assertions
 
     def run(self):
         successes = []

@@ -33,14 +33,14 @@ def create_loader():
 
 def test_loads_assertions():
     loader = create_loader()
-    assert [first__assertion, second_assertion] == list(loader.assertions)
+    assert [first__assertion, second_assertion] == loader.assertions
 
 
 def test_loads_filters():
     loader = create_loader()
-    assert [directory_filter, file_filter] == list(loader.filters)
+    assert (directory_filter, file_filter) == loader.filters
 
 
 def test_loads_visitors():
     loader = create_loader()
-    assert next(loader.visitors) == my_visitor
+    assert loader.visitors == [my_visitor]

@@ -46,6 +46,7 @@ class AssertionChecker(object):
 
 
 class Analyzer(object):
+    # https://www.python.org/dev/peps/pep-0263/
     CODING_REGEX = re.compile(
         r'^[ \t\f]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)'
     )
@@ -65,7 +66,6 @@ class Analyzer(object):
             filep = io.open(file, encoding='utf-8')
 
             line1, line2 = filep.readline(), filep.readline()
-            print('line1', line1)
             if bool(self.CODING_REGEX.match(line1)):
                 file_contents = line2
             elif bool(self.CODING_REGEX.match(line2)):

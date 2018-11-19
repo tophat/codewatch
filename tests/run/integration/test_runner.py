@@ -16,3 +16,16 @@ def test_full_run():
     assert failures == {
         'always_false': 'should always be false',
     }
+
+
+def test_full_run_utf8():
+    runner = Runner(THIS_DIR, 'config_module_utf8')
+    successes, failures = runner.run()
+    assert successes == [
+        'custom_label_always_true',
+        'expressions_more_than_zero',
+        'num_import_from_more_than_zero',
+    ]
+    assert failures == {
+        'always_false': 'should always be false',
+    }

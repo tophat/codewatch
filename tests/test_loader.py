@@ -43,4 +43,4 @@ def test_loads_filters():
 
 def test_loads_visitors():
     loader = create_loader()
-    assert loader.visitors[0] == my_visitor
+    assert loader.visitors == [my_visitor]

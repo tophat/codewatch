@@ -1,9 +1,7 @@
+from astroid import nodes
 from codewatch.assertion import assertion
 from codewatch.loader import ModuleLoader
-from codewatch.node_visitor import (
-    NodeVisitor,
-    visit,
-)
+from codewatch.node_visitor import visit
 
 
 @assertion()
@@ -16,12 +14,8 @@ def second_assertion(_stats):
     pass
 
 
-class FirstVisitor(NodeVisitor):
-    pass
-
-
-@visit(node_name='import')
-def second_visitor(_self):
+@visit(nodes.Import)
+def my_visitor(_self):
     pass
 
 
@@ -49,6 +43,4 @@ def test_loads_filters():
 
 def test_loads_visitors():
     loader = create_loader()
-
-    assert next(loader.visitors) == FirstVisitor
-    assert next(loader.visitors) == second_visitor._wrapped_node_visitor
+    assert next(loader.visitors) == my_visitor

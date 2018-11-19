@@ -31,5 +31,11 @@ class Stats(object):
     def __repr__(self):
         return self.stats.__repr__()
 
+    def __eq__(self, other):
+        return self.stats.__eq__(other)
+
+    def __getitem__(self, item):
+        return self.stats.__getitem__(item)
+
     def __getattr__(self, item):
         return self.stats.__getattribute__(item)

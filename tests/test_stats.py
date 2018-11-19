@@ -66,3 +66,20 @@ def test_responds_to_dict_methods():
 
     assert list(stats.keys()) == ['mycounter']
     assert list(stats.values()) == [1]
+    assert stats['mycounter'] == 1
+
+
+def test_can_compare_to_normal_dict():
+    stats = Stats()
+    stats.increment('abc')
+
+    assert stats == {'abc': 1}
+    assert stats != {}
+
+
+def test_can_compare_to_normal_dict_with_namespace():
+    stats = Stats().namespaced('level1')
+    stats.increment('abc')
+
+    assert stats == {'abc': 1}
+    assert stats != {}

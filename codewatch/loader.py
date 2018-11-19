@@ -30,8 +30,7 @@ class ModuleLoader(object):
         directory_filter = getattr(filter_module, 'directory_filter')
         file_filter = getattr(filter_module, 'file_filter')
 
-        yield directory_filter
-        yield file_filter
+        return directory_filter, file_filter
 
     def _load_node_visitors(self, visitor_module_name):
         node_visitor_module = importlib.import_module(visitor_module_name)

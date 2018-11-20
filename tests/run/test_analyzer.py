@@ -54,8 +54,8 @@ def _as_unicode(str):
 def patch_open(file_contents, num_files):
     open_mock = mock.MagicMock()
     split = _as_unicode(file_contents).split('\n')
-    # this mock will only work if there's 3 or more lines
-    assert len(split) >= 3
+    # this mock will only work if there's 2 or more lines
+    assert len(split) >= 2
 
     line1, line2, rest = split[0], split[1], split[2:]
     read_line_values = [line1 + '\n', line2 + '\n'] * num_files

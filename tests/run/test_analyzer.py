@@ -41,17 +41,23 @@ class MockNodeMaster(object):
 
 
 @contextmanager
-def patch_open(file_contents):
+def patch_open(file_contents, num_files):
     open_mock = mock.MagicMock()
-    open_mock.readline.return_value = file_contents
-    open_mock.read.return_value = file_contents
+    split = file_contents.split('\n')
+    # this mock will only work if there's 3 or more lines
+    assert len(split) >= 3
 
+    line1, line2, rest = split[0], split[1], split[2:]
+    read_line_values = [line1 + '\n', line2 + '\n'] * num_files
+
+    open_mock.readline.side_effect = read_line_values
+    open_mock.read.return_value = '\n'.join(rest)
     with mock.patch(open_path, return_value=open_mock) as m:
         yield m
 
 
-def test_visits_file_with_ast_tree_and_relative_path():
-    with patch_open('') as m:
+def _test_visits_file_with_ast_tree_and_relative_path(file_contents):
+    with patch_open(file_contents, len(MOCK_FILES)) as m:
         file_walker = MockFileWalker(MOCK_FILES)
         node_master = MockNodeMaster()
         analyzer = Analyzer(
@@ -68,3 +74,30 @@ def test_visits_file_with_ast_tree_and_relative_path():
             assert isinstance(tree, astroid.Module)
             expected_file_path = RELATIVE_MOCK_FILE_PATHS[i]
             assert file_path == expected_file_path
+
+
+NORMAL_FILE = (
+    'a = 3\n'
+    'b = 3\n'
+)
+UTF8_FILE = (
+    '# -*- coding: utf-8 -*-\n'
+    'a = "你好，世界"\n'
+)
+UTF8_FILE_CODING_LINE2 = (
+    '\n'
+    '# -*- coding: utf-8 -*-\n'
+    'a = "你好，世界"\n'
+)
+
+
+def test_visits_file_with_ast_tree_and_relative_path():
+    _test_visits_file_with_ast_tree_and_relative_path(NORMAL_FILE)
+
+
+def test_visits_file_with_ast_tree_and_relative_path_utf8():
+    _test_visits_file_with_ast_tree_and_relative_path(UTF8_FILE)
+
+
+def test_visits_file_with_ast_tree_and_relative_path_utf8_line2():
+    _test_visits_file_with_ast_tree_and_relative_path(UTF8_FILE_CODING_LINE2)

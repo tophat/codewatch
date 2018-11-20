@@ -1,6 +1,35 @@
 # -*- coding: utf-8 -*-
 
-from tests.run.integration.config_module import *  # noqa
+from astroid import nodes
+from codewatch import (
+    assertion,
+    visit,
+)
 
-# let's have a unicode variable!
+import os
+
+
 hello_world = '你好，世界'
+
+
+def file_filter(file_name):
+    this_file = os.path.basename(__file__)
+
+    # make sure it's a .py file (not .pyc)
+    this_file = os.path.splitext(this_file)[0] + '.py'
+    return file_name == this_file
+
+
+def directory_filter(_dir_name):
+    return True
+
+
+@visit(nodes.Expr)
+def count_expressions(_node, stats, _rel_file_path):
+    stats.increment(hello_world)
+    return _node
+
+
+@assertion()
+def unicode_works(stats):
+    return stats.get(hello_world, 0) > 0, 'unicode not working'

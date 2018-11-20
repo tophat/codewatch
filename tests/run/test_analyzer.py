@@ -5,16 +5,9 @@ import os
 from contextlib import contextmanager
 
 import pytest
+from io import StringIO
 
 from codewatch.run import Analyzer
-
-try:
-    # python 2
-    from unittest import mock
-except ImportError:
-    # python 3
-    import mock
-open_path = 'io.open'
 
 
 MOCK_BASE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -44,47 +37,42 @@ class MockNodeMaster(object):
         self.visited.append((tree, file_path))
 
 
-def _as_unicode(str):
-    if type(str) is bytes:
-        return str.decode('utf-8')
-    return str
+class MockFileOpener(object):
+    def __init__(self, mock_file_contents):
+        self.mock_file_contents = self._as_unicode(mock_file_contents)
+        self.opens = []
 
+    def _as_unicode(self, str):
+        if type(str) is bytes:
+            return str.decode('utf-8')
+        return str
 
-@contextmanager
-def patch_open(file_contents, num_files):
-    open_mock = mock.MagicMock()
-    split = _as_unicode(file_contents).split('\n')
-    # this mock will only work if there's 2 or more lines
-    assert len(split) >= 2
-
-    line1, line2, rest = split[0], split[1], split[2:]
-    read_line_values = [line1 + '\n', line2 + '\n'] * num_files
-
-    # this is to mock the io.open context manager usage
-    open_mock.__enter__.return_value.readline.side_effect = read_line_values
-    open_mock.__enter__.return_value.read.return_value = '\n'.join(rest)
-    with mock.patch(open_path, return_value=open_mock) as m:
-        yield m
+    @contextmanager
+    def open(self, *args, **kwargs):
+        file_as_string_io = StringIO(self.mock_file_contents)
+        self.opens.append((args, kwargs))
+        yield file_as_string_io
 
 
 def _test_visits_file_with_ast_tree_and_relative_path(file_contents):
-    with patch_open(file_contents, len(MOCK_FILES)) as m:
-        file_walker = MockFileWalker(MOCK_FILES)
-        node_master = MockNodeMaster()
-        analyzer = Analyzer(
-            MOCK_BASE_DIRECTORY_PATH,
-            file_walker,
-            node_master,
-        )
-        analyzer.run()
+    file_opener = MockFileOpener(file_contents)
+    file_walker = MockFileWalker(MOCK_FILES)
+    node_master = MockNodeMaster()
+    analyzer = Analyzer(
+        MOCK_BASE_DIRECTORY_PATH,
+        file_walker,
+        node_master,
+        file_opener.open,
+    )
+    analyzer.run()
 
-        assert m.call_count == len(MOCK_FILES)
-        assert len(node_master.visited) == len(MOCK_FILES)
+    assert len(file_opener.opens) == len(MOCK_FILES)
+    assert len(node_master.visited) == len(MOCK_FILES)
 
-        for i, (tree, file_path) in enumerate(node_master.visited):
-            assert isinstance(tree, astroid.Module)
-            expected_file_path = RELATIVE_MOCK_FILE_PATHS[i]
-            assert file_path == expected_file_path
+    for i, (tree, file_path) in enumerate(node_master.visited):
+        assert isinstance(tree, astroid.Module)
+        expected_file_path = RELATIVE_MOCK_FILE_PATHS[i]
+        assert file_path == expected_file_path
 
 
 NORMAL_FILE = (

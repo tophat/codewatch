@@ -56,13 +56,15 @@ class Analyzer(object):
         base_directory_path,
         file_walker,
         node_visitor_master,
+        file_opener_fn=io.open,
     ):
         self.base_directory_path = base_directory_path
         self.file_walker = file_walker
         self.node_visitor_master = node_visitor_master
+        self.file_opener_fn = file_opener_fn
 
     def _get_file_contents(self, file_name):
-        with io.open(file_name, encoding='utf-8') as fp:
+        with self.file_opener_fn(file_name, encoding='utf-8') as fp:
             line1, line2 = fp.readline(), fp.readline()
             if bool(self.CODING_REGEX.match(line1)):
                 file_contents = line2

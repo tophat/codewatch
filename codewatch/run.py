@@ -1,6 +1,8 @@
 import astroid
+import io
 import logging
 import os
+import re
 import sys
 
 from codewatch.assertion import Assertion
@@ -44,19 +46,42 @@ class AssertionChecker(object):
 
 
 class Analyzer(object):
+    # https://www.python.org/dev/peps/pep-0263/
+    CODING_REGEX = re.compile(
+        r'^[ \t\f]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)'
+    )
+
     def __init__(
         self,
         base_directory_path,
         file_walker,
         node_visitor_master,
+        file_opener_fn=io.open,
+        parser_fn=astroid.parse,
     ):
         self.base_directory_path = base_directory_path
         self.file_walker = file_walker
         self.node_visitor_master = node_visitor_master
+        self.file_opener_fn = file_opener_fn
+        self.parser_fn = parser_fn
+
+    def _get_file_contents(self, file_name):
+        with self.file_opener_fn(file_name, encoding='utf-8') as fp:
+            line1, line2 = fp.readline(), fp.readline()
+            file_contents = u''
+            if not bool(self.CODING_REGEX.match(line1)):
+                file_contents += line1
+            if not bool(self.CODING_REGEX.match(line2)):
+                file_contents += line2
+            file_contents += fp.read()
+            return file_contents
 
     def run(self):
-        for file in self.file_walker.walk():
-            file_contents = open(file).read()
-            tree = astroid.parse(file_contents, os.path.basename(file))
-            rel_file_path = os.path.relpath(file, self.base_directory_path)
+        for file_name in self.file_walker.walk():
+            file_contents = self._get_file_contents(file_name)
+            tree = self.parser_fn(file_contents, os.path.basename(file_name))
+            rel_file_path = os.path.relpath(
+                file_name,
+                self.base_directory_path,
+            )
             self.node_visitor_master.visit(tree, rel_file_path)

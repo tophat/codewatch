@@ -26,15 +26,15 @@ def directory_filter(_):
 
 
 @visit(nodes.Expr)
-def count_expressions(_node, stats, _rel_file_path):
+def count_expressions(node, stats, _rel_file_path):
     stats.increment('num_expressions')
-    return _node
+    return node
 
 
 @visit(nodes.ImportFrom)
-def count_imports(_node, stats, _rel_file_path):
+def count_imports(node, stats, _rel_file_path):
     stats.increment('num_import_from')
-    return _node
+    return node
 
 
 @assertion()

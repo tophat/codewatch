@@ -25,6 +25,7 @@ def test_default_directory_filter(dir_name, kwargs, expected_output):
 @pytest.mark.parametrize('file_name,kwargs,expected_output', [
     ('normal_python_file.py', {}, True),
     ('non_python_file.txt', {}, False),
+    ('non_python_file.txt', {'only_include_py_files': False}, True),
     ('a_pyc_file.pyc', {}, False),
     ('test_py_file.py', {}, False),
     ('test_py_file.py', {'exclude_test_files': False}, True),

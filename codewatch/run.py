@@ -68,12 +68,11 @@ class Analyzer(object):
     def _get_file_contents(self, file_name):
         with self.file_opener_fn(file_name, encoding='utf-8') as fp:
             line1, line2 = fp.readline(), fp.readline()
-            if bool(self.CODING_REGEX.match(line1)):
-                file_contents = line2
-            elif bool(self.CODING_REGEX.match(line2)):
-                file_contents = line1
-            else:
-                file_contents = line1 + line2
+            file_contents = u''
+            if not bool(self.CODING_REGEX.match(line1)):
+                file_contents += line1
+            if not bool(self.CODING_REGEX.match(line2)):
+                file_contents += line2
             file_contents += fp.read()
             return file_contents
 

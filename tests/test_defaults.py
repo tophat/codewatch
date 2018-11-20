@@ -30,6 +30,6 @@ def test_create_directory_filter(dir_name, kwargs, expected_output):
     ('test_py_file.py', {}, False),
     ('test_py_file.py', {'exclude_test_files': False}, True),
 ])
-def test_default_file_filter(file_name, kwargs, expected_output):
+def test_create_file_filter(file_name, kwargs, expected_output):
     file_filter = create_file_filter(**kwargs)
     assert file_filter(file_name) == expected_output

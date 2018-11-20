@@ -16,3 +16,12 @@ def test_full_run():
     assert failures == {
         'always_false': 'should always be false',
     }
+
+
+def test_full_run_utf8():
+    runner = Runner(THIS_DIR, 'config_module_utf8')
+    successes, failures = runner.run()
+    assert successes == [
+        'unicode_works'
+    ]
+    assert failures == {}

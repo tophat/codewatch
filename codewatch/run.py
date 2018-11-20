@@ -6,7 +6,6 @@ import sys
 from codewatch.assertion import Assertion
 from codewatch.file_walker import FileWalker
 from codewatch.loader import ModuleLoader
-from codewatch.node_visitor import NodeVisitorMaster
 from codewatch.stats import Stats
 
 logger = logging.getLogger(__name__)
@@ -24,7 +23,6 @@ class Runner(object):
             stats = Stats()
 
             file_walker = FileWalker(loader, self.base_directory)
-            node_master = NodeVisitorMaster(loader, stats)
             analyzer = Analyzer(self.base_directory, file_walker, node_master)
             analyzer.run()
             checker = AssertionChecker(loader, stats)

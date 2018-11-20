@@ -93,12 +93,12 @@ def _test_visits_file_with_ast_tree_and_relative_path(
 
     for i, (tree, file_path) in enumerate(node_master.visited):
         assert tree == mock_tree
-
         expected_file_path = RELATIVE_MOCK_FILE_PATHS[i]
         assert file_path == expected_file_path
 
-        (file_contents_received, file_name), _ = parser.parses[i]
-        assert file_contents_received == _as_unicode(
+    for i, (args, _) in enumerate(parser.parses):
+        file_contents_received_for_parsing, file_name = args
+        assert file_contents_received_for_parsing == _as_unicode(
             expected_file_contents_for_parsing,
         )
         assert file_name == MOCK_FILE_NAMES[i]

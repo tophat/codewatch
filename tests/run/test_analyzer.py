@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import astroid
 import os
 from contextlib import contextmanager

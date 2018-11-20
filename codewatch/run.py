@@ -61,19 +61,24 @@ class Analyzer(object):
         self.file_walker = file_walker
         self.node_visitor_master = node_visitor_master
 
-    def run(self):
-        for file in self.file_walker.walk():
-            filep = io.open(file, encoding='utf-8')
-
-            line1, line2 = filep.readline(), filep.readline()
+    def _get_file_contents(self, file_name):
+        with io.open(file_name, encoding='utf-8') as fp:
+            line1, line2 = fp.readline(), fp.readline()
             if bool(self.CODING_REGEX.match(line1)):
                 file_contents = line2
             elif bool(self.CODING_REGEX.match(line2)):
                 file_contents = line1
             else:
                 file_contents = line1 + line2
-            file_contents += filep.read()
+            file_contents += fp.read()
+            return file_contents
 
-            tree = astroid.parse(file_contents, os.path.basename(file))
-            rel_file_path = os.path.relpath(file, self.base_directory_path)
+    def run(self):
+        for file_name in self.file_walker.walk():
+            file_contents = self._get_file_contents(file_name)
+            tree = astroid.parse(file_contents, os.path.basename(file_name))
+            rel_file_path = os.path.relpath(
+                file_name,
+                self.base_directory_path,
+            )
             self.node_visitor_master.visit(tree, rel_file_path)

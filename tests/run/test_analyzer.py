@@ -58,8 +58,9 @@ def patch_open(file_contents, num_files):
     line1, line2, rest = split[0], split[1], split[2:]
     read_line_values = [line1 + '\n', line2 + '\n'] * num_files
 
-    open_mock.readline.side_effect = read_line_values
-    open_mock.read.return_value = '\n'.join(rest)
+    # this is to mock the io.open context manager usage
+    open_mock.__enter__.return_value.readline.side_effect = read_line_values
+    open_mock.__enter__.return_value.read.return_value = '\n'.join(rest)
     with mock.patch(open_path, return_value=open_mock) as m:
         yield m
 

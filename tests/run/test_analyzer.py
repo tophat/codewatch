@@ -42,7 +42,7 @@ class MockNodeMaster(object):
         self.visited.append((tree, file_path))
 
 
-def _as_utf8(str):
+def _as_unicode(str):
     if type(str) is bytes:
         return str.decode('utf-8')
     return str
@@ -51,7 +51,7 @@ def _as_utf8(str):
 @contextmanager
 def patch_open(file_contents, num_files):
     open_mock = mock.MagicMock()
-    split = _as_utf8(file_contents).split('\n')
+    split = _as_unicode(file_contents).split('\n')
     # this mock will only work if there's 3 or more lines
     assert len(split) >= 3
 

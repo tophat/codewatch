@@ -4,6 +4,8 @@ import astroid
 import os
 from contextlib import contextmanager
 
+import pytest
+
 from codewatch.run import Analyzer
 
 try:
@@ -100,13 +102,10 @@ UTF8_FILE_CODING_LINE2 = (
 )
 
 
-def test_visits_file_with_ast_tree_and_relative_path():
-    _test_visits_file_with_ast_tree_and_relative_path(NORMAL_FILE)
-
-
-def test_visits_file_with_ast_tree_and_relative_path_utf8():
-    _test_visits_file_with_ast_tree_and_relative_path(UTF8_FILE)
-
-
-def test_visits_file_with_ast_tree_and_relative_path_utf8_line2():
-    _test_visits_file_with_ast_tree_and_relative_path(UTF8_FILE_CODING_LINE2)
+@pytest.mark.parametrize('file', [
+    NORMAL_FILE,
+    UTF8_FILE,
+    UTF8_FILE_CODING_LINE2,
+])
+def test_visits_file_with_ast_tree_and_relative_path(file):
+    _test_visits_file_with_ast_tree_and_relative_path(file)

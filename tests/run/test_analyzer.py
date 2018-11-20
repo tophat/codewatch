@@ -71,7 +71,7 @@ class MockParser(object):
 
 def _test_visits_file_with_ast_tree_and_relative_path(
     mock_file_contents,
-    file_contents_for_parsing,
+    expected_file_contents_for_parsing,
 ):
     mock_tree = astroid.Module(doc='', name='mock_module')
     file_opener = MockFileOpener(mock_file_contents)
@@ -98,7 +98,9 @@ def _test_visits_file_with_ast_tree_and_relative_path(
         assert file_path == expected_file_path
 
         (file_contents_received, file_name), _ = parser.parses[i]
-        assert file_contents_received == _as_unicode(file_contents_for_parsing)
+        assert file_contents_received == _as_unicode(
+            expected_file_contents_for_parsing,
+        )
         assert file_name == MOCK_FILE_NAMES[i]
 
 
@@ -129,16 +131,16 @@ EXPECTED_UTF8_FILE_CODING_LINE2_TO_PARSE = (
 )
 
 
-@pytest.mark.parametrize('file,expected_for_parsing', [
+@pytest.mark.parametrize('file,expected_file_contents_for_parsing', [
     (NORMAL_FILE, EXPECTED_NORMAL_FILE_TO_PARSE),
     (UTF8_FILE, EXPECTED_UTF8_FILE_TO_PARSE),
     (UTF8_FILE_CODING_LINE2, EXPECTED_UTF8_FILE_CODING_LINE2_TO_PARSE),
 ])
 def test_visits_file_with_ast_tree_and_relative_path(
     file,
-    expected_for_parsing,
+    expected_file_contents_for_parsing,
 ):
     _test_visits_file_with_ast_tree_and_relative_path(
         file,
-        expected_for_parsing,
+        expected_file_contents_for_parsing,
     )

@@ -17,7 +17,7 @@ from codewatch.defaults import (
     ('test_dir', {'exclude_test_dirs': False}, True),
     ('another_test', {}, False),
 ])
-def test_default_directory_filter(dir_name, kwargs, expected_output):
+def test_create_directory_filter(dir_name, kwargs, expected_output):
     dir_filter = create_directory_filter(**kwargs)
     assert dir_filter(dir_name) == expected_output
 

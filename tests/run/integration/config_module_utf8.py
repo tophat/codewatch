@@ -25,9 +25,9 @@ def directory_filter(_dir_name):
 
 
 @visit(nodes.Expr)
-def count_expressions(_node, stats, _rel_file_path):
+def count_expressions(node, stats, _rel_file_path):
     stats.increment(hello_world)
-    return _node
+    return node
 
 
 @assertion()

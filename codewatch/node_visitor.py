@@ -1,5 +1,5 @@
 from collections import namedtuple
-from functools import partial, wraps
+from functools import wraps
 
 from astroid.nodes import Call as CallNode
 from astroid.node_classes import NodeNG
@@ -15,10 +15,11 @@ class NodeVisitor(TransformVisitor):
 
     def _add_codewatch_annotations(self, node):
         CodewatchNodeAnnotations = namedtuple(
-            'CodewatchNodeAnnotations',
-            ['stats', 'rel_file_path']
+            "CodewatchNodeAnnotations", ["stats", "rel_file_path"]
         )
-        node._codewatch = CodewatchNodeAnnotations(self.stats, self.rel_file_path)
+        node._codewatch = CodewatchNodeAnnotations(
+            self.stats, self.rel_file_path
+        )
         return node
 
     def _transform(self, node):
@@ -31,7 +32,7 @@ class NodeVisitor(TransformVisitor):
 
 
 def _astroid_interface_for_visitor(visitor_function):
-    '''Turn codewatch visitors into astroid-compatible transform functions
+    """Turn codewatch visitors into astroid-compatible transform functions
 
     codewatch visitors can make use of 3 args, the node, stats, and the
     relative file path you were visited for
@@ -40,7 +41,7 @@ def _astroid_interface_for_visitor(visitor_function):
 
     By annotating the node with stats and relative file path, we can make our
     codewatch visitors compatible with astroid transform functions.
-    '''
+    """
 
     @wraps(visitor_function)
     def call_visitor(annotated_node, *args, **kwargs):
@@ -51,6 +52,7 @@ def _astroid_interface_for_visitor(visitor_function):
             *args,
             **kwargs
         )
+
     return call_visitor
 
 
@@ -59,6 +61,7 @@ def visit(node_type):
         wrapper = _astroid_interface_for_visitor(fn)
         NodeVisitorMaster.register_visitor(node_type, wrapper)
         return wrapper
+
     return decorator
 
 
@@ -84,7 +87,8 @@ def count_calling_files(stats_namespace, name, module, expected_type=None):
         expected_python_type = ".".join([module, expected_type])
 
         inferred_an_expected_python_type = any(
-            '.'.join([inferred_type.root().name, inferred_type.name]) == expected_python_type
+            ".".join([inferred_type.root().name, inferred_type.name])
+            == expected_python_type
             for inferred_type in inferred_types
         )
 
@@ -100,7 +104,6 @@ def count_calling_files(stats_namespace, name, module, expected_type=None):
             return call_node
         record_stats(stats, rel_file_path)
         return call_node
-
 
     if expected_type is None:
         visit_call = _astroid_interface_for_visitor(visit_function_call)
@@ -136,7 +139,9 @@ class NodeVisitorMaster(object):
 
     @classmethod
     def visit(cls, stats, node, rel_file_path):
-        node_visitors_initialized = cls._initialize_node_visitors(stats, rel_file_path)
+        node_visitors_initialized = cls._initialize_node_visitors(
+            stats, rel_file_path
+        )
 
         for node_visitor_initialized in node_visitors_initialized:
             node_visitor_initialized.visit(node)

@@ -8,6 +8,7 @@ import sys
 from codewatch.assertion import Assertion
 from codewatch.file_walker import FileWalker
 from codewatch.loader import ModuleLoader
+from codewatch.node_visitor import NodeVisitorMaster
 from codewatch.stats import Stats
 
 logger = logging.getLogger(__name__)
@@ -25,7 +26,7 @@ class Runner(object):
             stats = Stats()
 
             file_walker = FileWalker(loader, self.base_directory)
-            analyzer = Analyzer(self.base_directory, file_walker, node_master)
+            analyzer = Analyzer(self.base_directory, file_walker)
             analyzer.run()
             checker = AssertionChecker(loader, stats)
             return checker.run()
@@ -46,27 +47,25 @@ class AssertionChecker(object):
 class Analyzer(object):
     # https://www.python.org/dev/peps/pep-0263/
     CODING_REGEX = re.compile(
-        r'^[ \t\f]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)'
+        r"^[ \t\f]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)"
     )
 
     def __init__(
         self,
         base_directory_path,
         file_walker,
-        node_visitor_master,
         file_opener_fn=io.open,
         parser_fn=astroid.parse,
     ):
         self.base_directory_path = base_directory_path
         self.file_walker = file_walker
-        self.node_visitor_master = node_visitor_master
         self.file_opener_fn = file_opener_fn
         self.parser_fn = parser_fn
 
     def _get_file_contents(self, file_name):
-        with self.file_opener_fn(file_name, encoding='utf-8') as fp:
+        with self.file_opener_fn(file_name, encoding="utf-8") as fp:
             line1, line2 = fp.readline(), fp.readline()
-            file_contents = u''
+            file_contents = u""
             if not bool(self.CODING_REGEX.match(line1)):
                 file_contents += line1
             if not bool(self.CODING_REGEX.match(line2)):
@@ -79,7 +78,6 @@ class Analyzer(object):
             file_contents = self._get_file_contents(file_name)
             tree = self.parser_fn(file_contents, os.path.basename(file_name))
             rel_file_path = os.path.relpath(
-                file_name,
-                self.base_directory_path,
+                file_name, self.base_directory_path
             )
-            self.node_visitor_master.visit(tree, rel_file_path)
+            NodeVisitorMaster.visit(tree, rel_file_path)

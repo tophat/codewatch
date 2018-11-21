@@ -67,8 +67,7 @@ def count_calling_files(stats_namespace, name, module, expected_type=None):
         raise Exception("count_calling_files() requires a valid namespace")
 
     def record_stats(stats, rel_file_path):
-        if stats_namespace is not None:
-            stats = stats.namespaced(stats_namespace)
+        stats = stats.namespaced(stats_namespace)
         stats.increment(rel_file_path)
 
     def visit_method_call(call_node, stats, rel_file_path):

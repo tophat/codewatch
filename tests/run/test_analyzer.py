@@ -1,23 +1,20 @@
 # -*- coding: utf-8 -*-
 
-import astroid
 import os
 from contextlib import contextmanager
-
-import pytest
 from io import StringIO
 
+import astroid
+import pytest
 from codewatch.run import Analyzer
+from codewatch.stats import Stats
 
 
 MOCK_BASE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-MOCK_FILE_NAMES = (
-    'mockfile1.py',
-    'mockfile2.py',
-)
+MOCK_FILE_NAMES = ("mockfile1.py", "mockfile2.py")
 RELATIVE_MOCK_FILE_PATHS = (
-    'mockdir/' + MOCK_FILE_NAMES[0],
-    'mockdir/' + MOCK_FILE_NAMES[1],
+    "mockdir/" + MOCK_FILE_NAMES[0],
+    "mockdir/" + MOCK_FILE_NAMES[1],
 )
 MOCK_FILES = [
     os.path.join(MOCK_BASE_DIRECTORY_PATH, RELATIVE_MOCK_FILE_PATHS[0]),
@@ -34,16 +31,16 @@ class MockFileWalker(object):
 
 
 class MockNodeMaster(object):
-    def __init__(self):
-        self.visited = []
+    visited = []
 
-    def visit(self, tree, file_path):
-        self.visited.append((tree, file_path))
+    @classmethod
+    def visit(cls, stats, tree, file_path):
+        cls.visited.append((tree, file_path))
 
 
 def _as_unicode(str):
     if type(str) is bytes:
-        return str.decode('utf-8')
+        return str.decode("utf-8")
     return str
 
 
@@ -70,28 +67,23 @@ class MockParser(object):
 
 
 def _test_visits_file_with_ast_tree_and_relative_path(
-    mock_file_contents,
-    expected_file_contents_for_parsing,
+    mock_file_contents, expected_file_contents_for_parsing
 ):
-    mock_tree = astroid.Module(doc='', name='mock_module')
+    mock_tree = astroid.Module(doc="", name="mock_module")
     file_opener = MockFileOpener(mock_file_contents)
     file_walker = MockFileWalker(MOCK_FILES)
-    node_master = MockNodeMaster()
     parser = MockParser(mock_tree)
     analyzer = Analyzer(
-        MOCK_BASE_DIRECTORY_PATH,
-        file_walker,
-        node_master,
-        file_opener.open,
-        parser.parse,
+        MOCK_BASE_DIRECTORY_PATH, file_walker, file_opener.open, parser.parse
     )
-    analyzer.run()
+    analyzer.override_node_visitor_master(MockNodeMaster)
+    analyzer.run(Stats())
 
     assert len(file_opener.opens) == len(MOCK_FILES)
-    assert len(node_master.visited) == len(MOCK_FILES)
+    assert len(MockNodeMaster.visited) == len(MOCK_FILES)
     assert len(parser.parses) == len(MOCK_FILES)
 
-    for i, (tree, file_path) in enumerate(node_master.visited):
+    for i, (tree, file_path) in enumerate(MockNodeMaster.visited):
         assert tree == mock_tree
         expected_file_path = RELATIVE_MOCK_FILE_PATHS[i]
         assert file_path == expected_file_path
@@ -99,7 +91,7 @@ def _test_visits_file_with_ast_tree_and_relative_path(
     for i, (args, _) in enumerate(parser.parses):
         file_contents_received_for_parsing, file_name = args
         assert file_contents_received_for_parsing == _as_unicode(
-            expected_file_contents_for_parsing,
+            expected_file_contents_for_parsing
         )
         assert file_name == MOCK_FILE_NAMES[i]
 
@@ -131,16 +123,17 @@ EXPECTED_UTF8_FILE_CODING_LINE2_TO_PARSE = (
 )
 
 
-@pytest.mark.parametrize('file,expected_file_contents_for_parsing', [
-    (NORMAL_FILE, EXPECTED_NORMAL_FILE_TO_PARSE),
-    (UTF8_FILE, EXPECTED_UTF8_FILE_TO_PARSE),
-    (UTF8_FILE_CODING_LINE2, EXPECTED_UTF8_FILE_CODING_LINE2_TO_PARSE),
-])
+@pytest.mark.parametrize(
+    "file,expected_file_contents_for_parsing",
+    [
+        (NORMAL_FILE, EXPECTED_NORMAL_FILE_TO_PARSE),
+        (UTF8_FILE, EXPECTED_UTF8_FILE_TO_PARSE),
+        (UTF8_FILE_CODING_LINE2, EXPECTED_UTF8_FILE_CODING_LINE2_TO_PARSE),
+    ],
+)
 def test_visits_file_with_ast_tree_and_relative_path(
-    file,
-    expected_file_contents_for_parsing,
+    file, expected_file_contents_for_parsing
 ):
     _test_visits_file_with_ast_tree_and_relative_path(
-        file,
-        expected_file_contents_for_parsing,
+        file, expected_file_contents_for_parsing
     )

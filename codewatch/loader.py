@@ -5,7 +5,6 @@ from codewatch.defaults import (
     create_directory_filter,
     create_file_filter,
 )
-from codewatch.node_visitor import NodeVisitorMaster
 
 
 class ModuleLoader(object):
@@ -15,7 +14,6 @@ class ModuleLoader(object):
     ):
         self.assertions = self._load_assertions(codewatch_config_module)
         self.filters = self._load_file_filters(codewatch_config_module)
-        self.visitors = self._load_node_visitors(codewatch_config_module)
 
     def _load_assertions(self, assertion_module_name):
         assertion_module = importlib.import_module(assertion_module_name)
@@ -34,7 +32,3 @@ class ModuleLoader(object):
         else:
             file_filter = create_file_filter()
         return directory_filter, file_filter
-
-    def _load_node_visitors(self, visitor_module_name):
-        node_visitor_module = importlib.import_module(visitor_module_name)
-        return NodeVisitorMaster.load_visitors(node_visitor_module)

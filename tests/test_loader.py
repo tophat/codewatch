@@ -1,14 +1,10 @@
 from codewatch.loader import ModuleLoader
-from tests.config_modules import (
-    basic_config,
-    empty_config,
-)
+from tests.config_modules import basic_config, empty_config
 from tests.config_modules.basic_config import (
     first_assertion,
     second_assertion,
     directory_filter,
     file_filter,
-    my_visitor,
 )
 
 
@@ -24,11 +20,6 @@ def test_loads_assertions():
 def test_loads_filters():
     loader = create_loader()
     assert (directory_filter, file_filter) == loader.filters
-
-
-def test_loads_visitors():
-    loader = create_loader()
-    assert [my_visitor] == loader.visitors
 
 
 def test_empty_config_uses_default_filters():

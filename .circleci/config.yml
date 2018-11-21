@@ -5,23 +5,20 @@ website_docker_defaults: &website_docker_defaults
     - image: circleci/node:8.11.3
 
 commands:
-  prep_env:
-    description: "Prepapres environment with cache and yvm"
+  prep_website_env:
+    description: "Prepapres environment with cache"
     steps:
       - checkout:
           path: ~/repo
       - restore_cache:
           name: Restore node_modules cache
-          key: yvm-{{ .Branch }}-{{ checksum "yarn.lock" }}
-      - run:
-          name: 'Install yvm release version'
-          command: 'curl https://raw.githubusercontent.com/tophat/yvm/master/scripts/install.sh | YVM_ALIAS_DIR=$(pwd) bash'
-  save_env_cache:
+          key: website-{{ .Branch }}-{{ checksum "yarn.lock" }}
+  save_website_cache:
     description: "Saves environment cache"
     steps:
       - save_cache:
           name: Save node_modules cache
-          key: yvm-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: website-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules/
 
@@ -86,9 +83,9 @@ jobs:
     <<: *website_docker_defaults
     working_directory: ~/repo/website
     steps:
-      - prep_env
+      - prep_website_env
       - run: yarn install
-      - save_env_cache
+      - save_website_cache
       - run: yarn build
       - persist_to_workspace:
           root: ./
@@ -98,7 +95,7 @@ jobs:
     <<: *website_docker_defaults
     working_directory: ~/repo/website
     steps:
-      - prep_env
+      - prep_website_env
       - attach_workspace:
           at: ./
       - add_ssh_keys:

@@ -27,7 +27,7 @@ class Runner(object):
 
             file_walker = FileWalker(loader, self.base_directory)
             analyzer = Analyzer(self.base_directory, file_walker)
-            analyzer.run()
+            analyzer.run(stats)
             checker = AssertionChecker(loader, stats)
             return checker.run()
         finally:
@@ -61,6 +61,7 @@ class Analyzer(object):
         self.file_walker = file_walker
         self.file_opener_fn = file_opener_fn
         self.parser_fn = parser_fn
+        self.node_visitor_master_class = NodeVisitorMaster
 
     def _get_file_contents(self, file_name):
         with self.file_opener_fn(file_name, encoding="utf-8") as fp:
@@ -73,11 +74,17 @@ class Analyzer(object):
             file_contents += fp.read()
             return file_contents
 
-    def run(self):
+    def run(self, stats):
         for file_name in self.file_walker.walk():
             file_contents = self._get_file_contents(file_name)
             tree = self.parser_fn(file_contents, os.path.basename(file_name))
             rel_file_path = os.path.relpath(
                 file_name, self.base_directory_path
             )
-            NodeVisitorMaster.visit(tree, rel_file_path)
+            self.node_visitor_master_class.visit(stats, tree, rel_file_path)
+
+    def override_node_visitor_master(self, node_visitor_master_class):
+        """Dep inj test helper to replace and reset a custom NodeVisitorMaster
+        """
+        node_visitor_master_class.visited = []
+        self.node_visitor_master_class = node_visitor_master_class

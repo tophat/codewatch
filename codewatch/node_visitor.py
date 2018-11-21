@@ -133,10 +133,10 @@ class NodeVisitorMaster(object):
     @classmethod
     def _initialize_node_visitors(cls, stats, rel_file_path):
         initialized_node_visitors = []
-        for node_visitor in cls.node_visitor_registry:
+        for node, node_visitor_function in cls.node_visitor_registry:
             node_visitor_obj = NodeVisitor(stats, rel_file_path)
             node_visitor_obj.register_transform(
-                node_visitor[0], node_visitor[1]
+                node, node_visitor_function
             )
             initialized_node_visitors.append(node_visitor_obj)
         return initialized_node_visitors

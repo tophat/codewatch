@@ -62,7 +62,7 @@ def visit(node_type):
     return decorator
 
 
-def count_calling_files(stats_namespace, name, module, optional_inferred_type=None):
+def count_calling_files(stats_namespace, name, module, expected_type=None):
     if stats_namespace is None:
         raise Exception("count_calling_files() requires a valid namespace")
 
@@ -72,24 +72,24 @@ def count_calling_files(stats_namespace, name, module, optional_inferred_type=No
         stats.increment(rel_file_path)
 
     def visit_method_call(call_node, stats, rel_file_path):
-        inferred_type = optional_inferred_type
-
         if not hasattr(call_node.func, "attrname"):
             return call_node
         if call_node.func.attrname != name:
             return call_node
 
         try:
-            inferred_types = call_node.inferred()
+            inferred_types = call_node.func.expr.inferred()
         except InferenceError:
             return call_node
 
-        expected_python_type = ".".join([module, inferred_type])
+        expected_python_type = ".".join([module, expected_type])
 
-        if not any(
-            inferred_type.pytype() == expected_python_type
+        inferred_an_expected_python_type = any(
+            '.'.join([inferred_type.root().name, inferred_type.name]) == expected_python_type
             for inferred_type in inferred_types
-        ):
+        )
+
+        if not inferred_an_expected_python_type:
             return call_node
 
         record_stats(stats, rel_file_path)
@@ -103,14 +103,16 @@ def count_calling_files(stats_namespace, name, module, optional_inferred_type=No
         return call_node
 
 
-    if optional_inferred_type is None:
+    if expected_type is None:
         visit_call = _astroid_interface_for_visitor(visit_function_call)
+    else:
+        visit_call = _astroid_interface_for_visitor(visit_method_call)
 
     NodeVisitorMaster.register_visitor(CallNode, visit_call)
 
 
 class NodeVisitorMaster(object):
-    _node_visitors = []
+    node_visitor_registry = []
 
     @classmethod
     def register_visitor(cls, node, visitor_function):
@@ -120,12 +122,12 @@ class NodeVisitorMaster(object):
                 "Please use a NodeNG subclass from the astroid.nodes module."
             )
 
-        cls._node_visitors.append((node, visitor_function))
+        cls.node_visitor_registry.append((node, visitor_function))
 
     @classmethod
     def _initialize_node_visitors(cls, stats, rel_file_path):
         initialized_node_visitors = []
-        for node_visitor in cls._node_visitors:
+        for node_visitor in cls.node_visitor_registry:
             node_visitor_obj = NodeVisitor(stats, rel_file_path)
             node_visitor_obj.register_transform(
                 node_visitor[0], node_visitor[1]

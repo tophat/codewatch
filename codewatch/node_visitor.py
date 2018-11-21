@@ -65,52 +65,56 @@ def visit(node_type):
     return decorator
 
 
-def count_calling_files(stats_namespace, name, module, expected_type=None):
+def count_calling_files(stats_namespace, expected_callable_qname):
     if stats_namespace is None:
         raise Exception("count_calling_files() requires a valid namespace")
+
+    expected_callable_name = expected_callable_qname.split('.')[-1]
 
     def record_stats(stats, rel_file_path):
         stats = stats.namespaced(stats_namespace)
         stats.increment(rel_file_path)
 
-    def visit_method_call(call_node, stats, rel_file_path):
-        if not hasattr(call_node.func, "attrname"):
-            return call_node
-        if call_node.func.attrname != name:
+    def visit_call(call_node, stats, rel_file_path):
+        """A visitor function to gather call stats.
+
+        astroid.nodes.Call nodes are from one of two forms:
+          symbol()
+        or
+          some.expression.attribute()
+
+        AST are structured differently in each case. We detect and handle both.
+        """
+        callable_as_attribute = hasattr(call_node.func, "attrname")
+        if callable_as_attribute:
+            callable_name = call_node.func.attrname
+        else:
+            callable_name = call_node.func.name
+
+        # Optimization: Start with a cheap guard before astroid inference
+        if callable_name != expected_callable_name:
             return call_node
 
         try:
-            inferred_types = call_node.func.expr.inferred()
+            inferred_types = call_node.func.inferred()
         except InferenceError:
             return call_node
 
-        expected_python_type = ".".join([module, expected_type])
-
-        inferred_an_expected_python_type = any(
-            ".".join([inferred_type.root().name, inferred_type.name])
-            == expected_python_type
+        found_matching_inferred_qname = any(
+            inferred_type.qname() == expected_callable_qname
             for inferred_type in inferred_types
         )
 
-        if not inferred_an_expected_python_type:
+        if not found_matching_inferred_qname:
             return call_node
 
         record_stats(stats, rel_file_path)
 
         return call_node
 
-    def visit_function_call(call_node, stats, rel_file_path):
-        if call_node.func.name != name:
-            return call_node
-        record_stats(stats, rel_file_path)
-        return call_node
-
-    if expected_type is None:
-        visit_call = _astroid_interface_for_visitor(visit_function_call)
-    else:
-        visit_call = _astroid_interface_for_visitor(visit_method_call)
-
-    NodeVisitorMaster.register_visitor(CallNode, visit_call)
+    NodeVisitorMaster.register_visitor(
+        CallNode, _astroid_interface_for_visitor(visit_call)
+    )
 
 
 class NodeVisitorMaster(object):

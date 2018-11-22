@@ -4,7 +4,7 @@ This module is used by integration tests
 
 import os
 
-from codewatch import assertion, visit
+from codewatch import assertion, inference, visit
 
 from astroid import nodes, MANAGER
 from astroid.builder import AstroidBuilder
@@ -70,7 +70,7 @@ class A(object):
 @visit(
     nodes.Call,
     predicate=is_a_object_get,
-    change_node_inference=infer_objects_get_as_a,
+    inferences=[inference(nodes.Call, infer_objects_get_as_a)]
 )
 def call_visitor(node, stats, _rel_file_path):
     inf_types = node.inferred()
@@ -83,8 +83,9 @@ def always_true_predicate(_node):
 
 @visit(
     nodes.Call,
-    change_node_inference=infer_objects_get_as_a,
-    predicate=always_true_predicate,
+    inferences=[
+        inference(nodes.Call, infer_objects_get_as_a, always_true_predicate),
+    ],
 )
 def predicate_visitor_inference(_node, stats, _rel_file_path):
     stats.increment("predicate_visitor_inference")

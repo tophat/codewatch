@@ -6,6 +6,7 @@ from codewatch.run import (
     Runner,
 )
 from codewatch.node_visitor import (
+    inference,
     NodeVisitor,
     visit,
 )
@@ -23,4 +24,5 @@ __all__ = [
     visit,
     FileWalker,
     Stats,
+    inference,
 ]

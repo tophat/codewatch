@@ -33,7 +33,7 @@ class A(object):
 A.objects.get()
 
 
-def predicate(node):
+def is_a_object_get(node):
     if not hasattr(node.func, "expr"):
         return False
 
@@ -53,9 +53,6 @@ def predicate(node):
 
 
 def infer_objects_get_as_a(node, context=None):
-    if not predicate(node):
-        raise UseInferenceDefault()
-
     builder = AstroidBuilder(MANAGER)
     m = builder.string_build(
         """\
@@ -70,10 +67,12 @@ class A(object):
     return (class_node.instantiate_class(),)
 
 
-@visit(nodes.Call, change_node_inference=infer_objects_get_as_a)
+@visit(
+    nodes.Call,
+    predicate=is_a_object_get,
+    change_node_inference=infer_objects_get_as_a,
+)
 def call_visitor(node, stats, _rel_file_path):
-    if not predicate(node):
-        return node
     inf_types = node.inferred()
     stats.append("inferred A.objects.get()", inf_types)
 

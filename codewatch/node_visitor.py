@@ -100,7 +100,7 @@ def count_calling_files(stats_namespace, expected_callable_qname):
             return call_node
 
         try:
-            inferred_types = call_node.func.inferred()
+            inferred_types = node_to_infer.inferred()
         except InferenceError:
             return call_node
 

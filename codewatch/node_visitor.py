@@ -18,7 +18,9 @@ class NodeVisitor(TransformVisitor):
         CodewatchNodeAnnotations = namedtuple(
             "CodewatchNodeAnnotations", ["stats", "rel_file_path"]
         )
-        node._codewatch = CodewatchNodeAnnotations(self.stats, self.rel_file_path)
+        node._codewatch = CodewatchNodeAnnotations(
+            self.stats, self.rel_file_path
+        )
         return node
 
     def _transform(self, node):
@@ -57,7 +59,9 @@ def _astroid_interface_for_visitor(visitor_function):
 
 def visit(node_type, change_node_inference=None):
     def decorator(fn):
-        NodeVisitorMaster.register_visitor(node_type, fn, change_node_inference)
+        NodeVisitorMaster.register_visitor(
+            node_type, fn, change_node_inference
+        )
         return fn
 
     return decorator
@@ -117,7 +121,9 @@ class NodeVisitorMaster(object):
     node_visitor_registry = []
 
     @classmethod
-    def register_visitor(cls, node, visitor_function, change_node_inference=None):
+    def register_visitor(
+        cls, node, visitor_function, change_node_inference=None
+    ):
         wrapped = _astroid_interface_for_visitor(visitor_function)
 
         if not issubclass(node, NodeNG):
@@ -126,7 +132,9 @@ class NodeVisitorMaster(object):
                 "Please use a NodeNG subclass from the astroid.nodes module."
             )
 
-        cls.node_visitor_registry.append((node, wrapped, change_node_inference))
+        cls.node_visitor_registry.append(
+            (node, wrapped, change_node_inference)
+        )
 
     @classmethod
     def _initialize_node_visitors(cls, stats, rel_file_path):
@@ -149,7 +157,9 @@ class NodeVisitorMaster(object):
 
     @classmethod
     def visit(cls, stats, node, rel_file_path):
-        node_visitors_initialized = cls._initialize_node_visitors(stats, rel_file_path)
+        node_visitors_initialized = cls._initialize_node_visitors(
+            stats, rel_file_path
+        )
 
         for node_visitor_initialized in node_visitors_initialized:
             node_visitor_initialized.visit(node)

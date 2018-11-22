@@ -4,14 +4,10 @@ This module is used by integration tests
 
 import os
 
-from codewatch import (
-    assertion,
-    visit,
-)
+from codewatch import assertion, visit
 
 from astroid import nodes, UseInferenceDefault, MANAGER
 from astroid.builder import AstroidBuilder
-
 
 
 # only visit this file itself
@@ -33,7 +29,9 @@ class A(object):
         def get():
             pass
 
+
 A.objects.get()
+
 
 def predicate(node):
     if not hasattr(node.func, "expr"):
@@ -59,15 +57,17 @@ def infer_objects_get_as_a(node, context=None):
         raise UseInferenceDefault()
 
     builder = AstroidBuilder(MANAGER)
-    m = builder.string_build("""\
+    m = builder.string_build(
+        """\
 class A(object):
     class objects(object):
         @staticmethod
         def get():
-            pass""")
+            pass"""
+    )
     class_node = m.body[0]
 
-    return ((class_node.instantiate_class(),))
+    return (class_node.instantiate_class(),)
 
 
 @visit(nodes.Call, change_node_inference=infer_objects_get_as_a)

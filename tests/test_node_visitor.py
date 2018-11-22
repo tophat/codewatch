@@ -70,7 +70,11 @@ OuterClass2.inner.inner_method()"""
             NESTED_METHOD_IN_ATTR_CODE,
             "nested_method_in_attr_module",
             "nested_method_in_attr_module.InnerClass2.inner_method",
-            {"COUNT_NESTED_METHOD_IN_ATTR_CALLS": {"nested_method_in_attr_module.py": 1}},
+            {
+                "COUNT_NESTED_METHOD_IN_ATTR_CALLS": {
+                    "nested_method_in_attr_module.py": 1
+                }
+            },
         ),
     ],
 )

@@ -40,6 +40,13 @@ class OuterClass2(object):
     inner = InnerClass2()
 OuterClass2.inner.inner_method()"""
 
+CHAINED_FUNCTION_CALL_CODE = """\
+def function1():
+    pass
+def function2():
+    return function1
+function2()()"""
+
 
 @pytest.mark.parametrize(
     "stats_namespace,code,module_name,expected_callable_qname,expected_stats",
@@ -78,12 +85,7 @@ OuterClass2.inner.inner_method()"""
         ),
         (
             "COUNT_CHAINED_FUNCTION_CALLS",
-            """
-def function1():
-    pass
-def function2():
-    return function1
-function2()()""",
+            CHAINED_FUNCTION_CALL_CODE,
             "function_module",
             "function_module.function2",
             {'COUNT_CHAINED_FUNCTION_CALLS': {'function_module.py': 1}},

@@ -40,6 +40,13 @@ class OuterClass2(object):
     inner = InnerClass2()
 OuterClass2.inner.inner_method()"""
 
+CHAINED_FUNCTION_CALL_CODE = """\
+def function1():
+    pass
+def function2():
+    return function1
+function2()()"""
+
 
 @pytest.mark.parametrize(
     "stats_namespace,code,module_name,expected_callable_qname,expected_stats",

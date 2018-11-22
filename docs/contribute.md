@@ -1,8 +1,8 @@
 ---
-id: faq
-title: FAQ
+id: contribute
+title: Contribute
 ---
 
-## I get the message `blah`
-This means you're blah
+## Helpful resources
+TODO
 

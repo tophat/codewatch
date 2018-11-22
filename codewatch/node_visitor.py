@@ -1,8 +1,13 @@
+import importlib
 from collections import namedtuple
 from functools import wraps
 
 from astroid import inference_tip
-from astroid.nodes import Call as CallNode
+from astroid.nodes import (
+    Call,
+    ImportFrom,
+    Import,
+)
 from astroid.node_classes import NodeNG
 from astroid.exceptions import InferenceError
 from astroid.transforms import TransformVisitor
@@ -67,6 +72,44 @@ def visit(node_type, predicate=None, change_node_inference=None):
     return decorator
 
 
+def track_troublesome_module_usages(qname, importer=None):
+    if importer is None:
+        importer = importlib.import_module
+
+    module_name = '.'.join(qname.split('.')[:-1])
+    trouble_attribute = qname.split('.')[-1]
+
+    def track_import(stats, rel_file_path):
+        file_module = rel_file_path.split('.')
+        stats = stats.namespaced('TROUBLESOME').namespaced(
+            '.'.join(file_module[:-1]),
+        )
+        stats.increment('IMPORT_COUNT')
+
+    def visit_import(import_node, stats, rel_file_path):
+        for name, alias in import_node.names:
+            if name == qname:
+                track_import(stats, rel_file_path)
+        return import_node
+
+    def visit_importfrom(import_from_node, stats, rel_file_path):
+        modname = import_from_node.modname
+
+        for name, alias in import_from_node.names:
+            if name == '*':
+                module = importer(module_name)
+                if trouble_attribute in dir(module):
+                    track_import(stats, rel_file_path)
+            else:
+                imported_qname = modname + '.' + name
+                if imported_qname == qname:
+                    track_import(stats, rel_file_path)
+        return import_from_node
+
+    NodeVisitorMaster.register_visitor(Import, visit_import, None)
+    NodeVisitorMaster.register_visitor(ImportFrom, visit_importfrom, None)
+
+
 def count_calling_files(stats_namespace, expected_callable_qname):
     if stats_namespace is None:
         raise Exception("count_calling_files() requires a valid namespace")
@@ -114,7 +157,7 @@ def count_calling_files(stats_namespace, expected_callable_qname):
 
         return call_node
 
-    NodeVisitorMaster.register_visitor(CallNode, visit_call, None)
+    NodeVisitorMaster.register_visitor(Call, visit_call, None)
 
 
 class NodeVisitorMaster(object):

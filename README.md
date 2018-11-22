@@ -3,7 +3,6 @@
 <img src="website/static/img/codewatch@2x.png"/>
 </a>
 </div>
-<div align="center">
 
 [![version](https://img.shields.io/pypi/v/codewatch.svg)](https://pypi.org/project/codewatch/)
 [![codecov](https://codecov.io/gh/tophat/codewatch/branch/master/graph/badge.svg)](https://codecov.io/gh/tophat/codewatch)

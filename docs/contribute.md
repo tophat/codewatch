@@ -6,5 +6,5 @@ title: Contribute
 ## Helpful resources
 TODO
 
-Join the discussion on [slack](tophat-opensource.slack.com)!
+Join the discussion on [slack](https://tophat-opensource.slack.com)!
 

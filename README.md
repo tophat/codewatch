@@ -25,17 +25,6 @@ Execute the following in your terminal:
 pip install codewatch
 ```
 
-Or if already installed, to update to the latest version
-```bash
-codewatch update-self
-```
-
-To download and install a version of yarn, run:
-
-```bash
-codewatch install <version>
-```
-
 # Usage
 
 `codewatch codewatch_config_module`

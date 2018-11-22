@@ -64,7 +64,7 @@ class A(object):
     )
     class_node = m.body[0]
 
-    return (class_node.instantiate_class(),)
+    return iter((class_node.instantiate_class(),))
 
 
 @visit(
@@ -98,7 +98,6 @@ def infer_itself(node, context=None):
 @visit(
     nodes.Call,
     inferences=[
-        inference(nodes.Call, infer_objects_get_as_a, always_true_predicate),
         inference(nodes.Import, infer_itself),
         inference(nodes.ImportFrom, infer_itself),
     ],

@@ -1,6 +1,7 @@
 from collections import namedtuple
 from functools import wraps
 
+from astroid import inference_tip
 from astroid.nodes import Call as CallNode
 from astroid.node_classes import NodeNG
 from astroid.exceptions import InferenceError
@@ -54,11 +55,10 @@ def _astroid_interface_for_visitor(visitor_function):
     return call_visitor
 
 
-def visit(node_type):
+def visit(node_type, change_node_inference=None):
     def decorator(fn):
-        wrapper = _astroid_interface_for_visitor(fn)
-        NodeVisitorMaster.register_visitor(node_type, wrapper)
-        return wrapper
+        NodeVisitorMaster.register_visitor(node_type, fn, change_node_inference)
+        return fn
 
     return decorator
 
@@ -86,26 +86,20 @@ def count_calling_files(stats_namespace, expected_callable_qname):
         callable_as_attribute = hasattr(call_node.func, "attrname")
         if callable_as_attribute:
             callable_name = call_node.func.attrname
-            node_to_infer = call_node.func.expr
-            build_qname = lambda inferred_type: ".".join(
-                [inferred_type.qname(), callable_name]
-            )
         else:
             callable_name = call_node.func.name
-            node_to_infer = call_node.func
-            build_qname = lambda inferred_type: inferred_type.qname()
 
         # Optimization: Start with a cheap guard before astroid inference
         if callable_name != expected_callable_name:
             return call_node
 
         try:
-            inferred_types = node_to_infer.inferred()
+            inferred_types = call_node.func.inferred()
         except InferenceError:
             return call_node
 
         found_matching_inferred_qname = any(
-            build_qname(inferred_type) == expected_callable_qname
+            inferred_type.qname() == expected_callable_qname
             for inferred_type in inferred_types
         )
 
@@ -116,29 +110,39 @@ def count_calling_files(stats_namespace, expected_callable_qname):
 
         return call_node
 
-    NodeVisitorMaster.register_visitor(
-        CallNode, _astroid_interface_for_visitor(visit_call)
-    )
+    NodeVisitorMaster.register_visitor(CallNode, visit_call, None)
 
 
 class NodeVisitorMaster(object):
     node_visitor_registry = []
 
     @classmethod
-    def register_visitor(cls, node, visitor_function):
+    def register_visitor(cls, node, visitor_function, change_node_inference=None):
+        wrapped = _astroid_interface_for_visitor(visitor_function)
+
         if not issubclass(node, NodeNG):
             raise Exception(
                 "visitor_function {v} registered for invalid node type. "
                 "Please use a NodeNG subclass from the astroid.nodes module."
             )
 
-        cls.node_visitor_registry.append((node, visitor_function))
+        cls.node_visitor_registry.append((node, wrapped, change_node_inference))
 
     @classmethod
     def _initialize_node_visitors(cls, stats, rel_file_path):
         initialized_node_visitors = []
-        for node, node_visitor_function in cls.node_visitor_registry:
+        for (
+            node,
+            node_visitor_function,
+            change_node_inference,
+        ) in cls.node_visitor_registry:
             node_visitor_obj = NodeVisitor(stats, rel_file_path)
+
+            if change_node_inference is not None:
+                node_visitor_obj.register_transform(
+                    node, inference_tip(change_node_inference)
+                )
+
             node_visitor_obj.register_transform(node, node_visitor_function)
             initialized_node_visitors.append(node_visitor_obj)
         return initialized_node_visitors

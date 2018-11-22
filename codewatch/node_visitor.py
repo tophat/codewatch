@@ -17,9 +17,7 @@ class NodeVisitor(TransformVisitor):
         CodewatchNodeAnnotations = namedtuple(
             "CodewatchNodeAnnotations", ["stats", "rel_file_path"]
         )
-        node._codewatch = CodewatchNodeAnnotations(
-            self.stats, self.rel_file_path
-        )
+        node._codewatch = CodewatchNodeAnnotations(self.stats, self.rel_file_path)
         return node
 
     def _transform(self, node):
@@ -69,7 +67,7 @@ def count_calling_files(stats_namespace, expected_callable_qname):
     if stats_namespace is None:
         raise Exception("count_calling_files() requires a valid namespace")
 
-    expected_callable_name = expected_callable_qname.split('.')[-1]
+    expected_callable_name = expected_callable_qname.split(".")[-1]
 
     def record_stats(stats, rel_file_path):
         stats = stats.namespaced(stats_namespace)
@@ -89,7 +87,9 @@ def count_calling_files(stats_namespace, expected_callable_qname):
         if callable_as_attribute:
             callable_name = call_node.func.attrname
             node_to_infer = call_node.func.expr
-            build_qname = lambda inferred_type: inferred_type.qname() + callable_name
+            build_qname = lambda inferred_type: ".".join(
+                [inferred_type.qname(), callable_name]
+            )
         else:
             callable_name = call_node.func.name
             node_to_infer = call_node.func
@@ -139,17 +139,13 @@ class NodeVisitorMaster(object):
         initialized_node_visitors = []
         for node, node_visitor_function in cls.node_visitor_registry:
             node_visitor_obj = NodeVisitor(stats, rel_file_path)
-            node_visitor_obj.register_transform(
-                node, node_visitor_function
-            )
+            node_visitor_obj.register_transform(node, node_visitor_function)
             initialized_node_visitors.append(node_visitor_obj)
         return initialized_node_visitors
 
     @classmethod
     def visit(cls, stats, node, rel_file_path):
-        node_visitors_initialized = cls._initialize_node_visitors(
-            stats, rel_file_path
-        )
+        node_visitors_initialized = cls._initialize_node_visitors(stats, rel_file_path)
 
         for node_visitor_initialized in node_visitors_initialized:
             node_visitor_initialized.visit(node)

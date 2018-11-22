@@ -1,6 +1,7 @@
 from collections import namedtuple
 from functools import wraps
 
+from astroid import inference_tip
 from astroid.nodes import Call as CallNode
 from astroid.node_classes import NodeNG
 from astroid.exceptions import InferenceError
@@ -56,11 +57,12 @@ def _astroid_interface_for_visitor(visitor_function):
     return call_visitor
 
 
-def visit(node_type):
+def visit(node_type, change_node_inference=None):
     def decorator(fn):
-        wrapper = _astroid_interface_for_visitor(fn)
-        NodeVisitorMaster.register_visitor(node_type, wrapper)
-        return wrapper
+        NodeVisitorMaster.register_visitor(
+            node_type, fn, change_node_inference
+        )
+        return fn
 
     return decorator
 
@@ -69,7 +71,7 @@ def count_calling_files(stats_namespace, expected_callable_qname):
     if stats_namespace is None:
         raise Exception("count_calling_files() requires a valid namespace")
 
-    expected_callable_name = expected_callable_qname.split('.')[-1]
+    expected_callable_name = expected_callable_qname.split(".")[-1]
 
     def record_stats(stats, rel_file_path):
         stats = stats.namespaced(stats_namespace)
@@ -114,32 +116,44 @@ def count_calling_files(stats_namespace, expected_callable_qname):
 
         return call_node
 
-    NodeVisitorMaster.register_visitor(
-        CallNode, _astroid_interface_for_visitor(visit_call)
-    )
+    NodeVisitorMaster.register_visitor(CallNode, visit_call, None)
 
 
 class NodeVisitorMaster(object):
     node_visitor_registry = []
 
     @classmethod
-    def register_visitor(cls, node, visitor_function):
+    def register_visitor(
+        cls, node, visitor_function, change_node_inference=None
+    ):
+        wrapped = _astroid_interface_for_visitor(visitor_function)
+
         if not issubclass(node, NodeNG):
             raise Exception(
                 "visitor_function {v} registered for invalid node type. "
                 "Please use a NodeNG subclass from the astroid.nodes module."
             )
 
-        cls.node_visitor_registry.append((node, visitor_function))
+        cls.node_visitor_registry.append(
+            (node, wrapped, change_node_inference)
+        )
 
     @classmethod
     def _initialize_node_visitors(cls, stats, rel_file_path):
         initialized_node_visitors = []
-        for node, node_visitor_function in cls.node_visitor_registry:
+        for (
+            node,
+            node_visitor_function,
+            change_node_inference,
+        ) in cls.node_visitor_registry:
             node_visitor_obj = NodeVisitor(stats, rel_file_path)
-            node_visitor_obj.register_transform(
-                node, node_visitor_function
-            )
+
+            if change_node_inference is not None:
+                node_visitor_obj.register_transform(
+                    node, inference_tip(change_node_inference)
+                )
+
+            node_visitor_obj.register_transform(node, node_visitor_function)
             initialized_node_visitors.append(node_visitor_obj)
         return initialized_node_visitors
 

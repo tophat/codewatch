@@ -6,7 +6,7 @@ import os
 
 from codewatch import assertion, visit
 
-from astroid import nodes, UseInferenceDefault, MANAGER
+from astroid import nodes, MANAGER
 from astroid.builder import AstroidBuilder
 
 

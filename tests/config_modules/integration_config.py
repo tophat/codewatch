@@ -106,8 +106,18 @@ def infer_itself(node, context=None):
 def multiple_inferences(node, stats, _rel_file_path):
     stats.increment("predicate_visitor_inference")
     import_node = node.root().body[0]
-    assert type(import_node) in (nodes.Import, nodes.ImportFrom)
-    assert import_node.inferred()[0] == import_node
+
+    if type(import_node) is nodes.Import:
+        inference_works = import_node.inferred()[0] == import_node
+        stats.append('importInference', inference_works)
+    elif type(import_node) is nodes.ImportFrom:
+        inference_works = import_node.inferred()[0] == import_node
+        stats.append('importInference', inference_works)
+
+
+@assertion()
+def import_inference_worked(stats):
+    return stats.get('importInference', False), 'inference failed'
 
 
 @visit(

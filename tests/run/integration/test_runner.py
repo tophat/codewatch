@@ -22,6 +22,7 @@ def test_full_run():
         'custom_label_always_true',
         'correctly_rewritten_inference',
         'expressions_more_than_zero',
+        'import_inference_worked',
         'num_import_from_more_than_zero',
         'predicate_inference_works',
         'predicate_works',

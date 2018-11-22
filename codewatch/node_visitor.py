@@ -134,6 +134,8 @@ def count_calling_files(stats_namespace, expected_callable_qname):
         if callable_as_attribute:
             callable_name = call_node.func.attrname
         else:
+            if not hasattr(call_node.func, "name"):
+                return call_node
             callable_name = call_node.func.name
 
         # Optimization: Start with a cheap guard before astroid inference

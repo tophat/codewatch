@@ -70,7 +70,7 @@ class A(object):
 @visit(
     nodes.Call,
     predicate=is_a_object_get,
-    inferences=[inference(nodes.Call, infer_objects_get_as_a)]
+    inferences=[inference(nodes.Call, infer_objects_get_as_a, is_a_object_get)]
 )
 def call_visitor(node, stats, _rel_file_path):
     inf_types = node.inferred()
@@ -89,6 +89,25 @@ def always_true_predicate(_node):
 )
 def predicate_visitor_inference(_node, stats, _rel_file_path):
     stats.increment("predicate_visitor_inference")
+
+
+def infer_itself(node, context=None):
+    return iter((node,))
+
+
+@visit(
+    nodes.Call,
+    inferences=[
+        inference(nodes.Call, infer_objects_get_as_a, always_true_predicate),
+        inference(nodes.Import, infer_itself),
+        inference(nodes.ImportFrom, infer_itself),
+    ],
+)
+def multiple_inferences(node, stats, _rel_file_path):
+    stats.increment("predicate_visitor_inference")
+    import_node = node.root().body[0]
+    assert type(import_node) in (nodes.Import, nodes.ImportFrom)
+    assert import_node.inferred()[0] == import_node
 
 
 @visit(

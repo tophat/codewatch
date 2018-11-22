@@ -5,6 +5,7 @@ from codewatch.node_visitor import (
     NodeVisitor,
     NodeVisitorMaster,
     count_calling_files,
+    track_troublesome_module_usages,
 )
 from codewatch.stats import Stats
 
@@ -96,18 +97,12 @@ def test_count_calling_files_function(
     stats_namespace, code, module_name, expected_callable_qname, expected_stats
 ):
     NodeVisitorMaster.node_visitor_registry = []
-
     module = astroid.parse(code, module_name)
-
     assert len(NodeVisitorMaster.node_visitor_registry) == 0
-
     count_calling_files(stats_namespace, expected_callable_qname)
-
     assert len(NodeVisitorMaster.node_visitor_registry) == 1
-
     stats = Stats()
     NodeVisitorMaster.visit(stats, module, module_name + ".py")
-
     assert stats == expected_stats
 
 
@@ -118,3 +113,43 @@ def test_sets_stats_and_file_path():
 
     assert node_visitor.stats == stats
     assert node_visitor.rel_file_path == file_path
+
+
+class MockModule(object):
+    def __dir__(self):
+        return ['Trouble']
+
+
+def mock_importer(mod_name):
+    if mod_name == 'api.views':
+        return MockModule()
+    return None
+
+
+@pytest.mark.parametrize(
+    "code,module_name",
+    [
+        (
+            """
+    from api import App
+    from api.views import User, Admin, Trouble
+    from api.views import Trouble as InDisguise
+    import api.views.User
+    import api.views.Admin
+    import api.views.Trouble as Trouble2
+    import api.views.Trouble
+    from api.views import *
+    """,
+            'api.views.Trouble',
+        ),
+    ],
+)
+def test_track_troublesome_module_usages(code, module_name):
+    NodeVisitorMaster.node_visitor_registry = []
+    module = astroid.parse(code, module_name)
+    assert len(NodeVisitorMaster.node_visitor_registry) == 0
+    track_troublesome_module_usages(module_name, mock_importer)
+    assert len(NodeVisitorMaster.node_visitor_registry) == 2
+    stats = Stats()
+    NodeVisitorMaster.visit(stats, module, module_name + ".py")
+    assert stats == {'TROUBLESOME': {'api.views.Trouble': {'IMPORT_COUNT': 5}}}

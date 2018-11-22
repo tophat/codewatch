@@ -20,6 +20,7 @@ def test_full_run():
     successes, failures = _get_runner_for_config(integration_config).run()
     assert successes == [
         'custom_label_always_true',
+        'correctly_rewritten_inference',
         'expressions_more_than_zero',
         'num_import_from_more_than_zero',
     ]

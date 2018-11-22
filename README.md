@@ -2,14 +2,13 @@
 <a href="https://github.com/tophat/codewatch">
 <img src="website/static/img/codewatch@2x.png"/>
 </a>
-</div>
-<div align="center">
 
 [![version](https://img.shields.io/pypi/v/codewatch.svg)](https://pypi.org/project/codewatch/)
 [![codecov](https://codecov.io/gh/tophat/codewatch/branch/master/graph/badge.svg)](https://codecov.io/gh/tophat/codewatch)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Builds](https://img.shields.io/circleci/project/github/tophat/codewatch/master.svg)](https://circleci.com/gh/tophat/codewatch)
 [![Slack workspace](https://slackinvite.dev.tophat.com/badge.svg)](https://tophat-opensource.slack.com/)
+</div>
 
 # Overview
 
@@ -94,7 +93,7 @@ would be printed
 ## Helpful resources
 TODO
 
-#Contributors
+# Contributors
 
 Thanks goes to these wonderful people! ([Emoji key](https://github.com/kentcdodds/all-contributors#emoji-key))
 

@@ -4,7 +4,7 @@ from functools import wraps
 
 from astroid import inference_tip
 from astroid.nodes import (
-    Call as CallNode,
+    Call,
     ImportFrom,
     Import,
 )
@@ -157,7 +157,7 @@ def count_calling_files(stats_namespace, expected_callable_qname):
 
         return call_node
 
-    NodeVisitorMaster.register_visitor(CallNode, visit_call, None)
+    NodeVisitorMaster.register_visitor(Call, visit_call, None)
 
 
 class NodeVisitorMaster(object):

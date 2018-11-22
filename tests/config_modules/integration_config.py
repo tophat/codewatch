@@ -152,4 +152,7 @@ def predicate_works(stats):
 
 @assertion()
 def predicate_inference_works(stats):
-    return stats.get('predicate_visitor_inference', -1) > 0, 'predicate not working'
+    return (
+        stats.get('predicate_visitor_inference', -1) > 0,
+        'predicate not working'
+    )

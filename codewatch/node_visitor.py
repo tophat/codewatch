@@ -57,10 +57,10 @@ def _astroid_interface_for_visitor(visitor_function):
     return call_visitor
 
 
-def visit(node_type, change_node_inference=None):
+def visit(node_type, predicate=None, change_node_inference=None):
     def decorator(fn):
         NodeVisitorMaster.register_visitor(
-            node_type, fn, change_node_inference
+            node_type, fn, predicate, change_node_inference
         )
         return fn
 
@@ -124,7 +124,7 @@ class NodeVisitorMaster(object):
 
     @classmethod
     def register_visitor(
-        cls, node, visitor_function, change_node_inference=None
+        cls, node, visitor_function, predicate=None, change_node_inference=None
     ):
         wrapped = _astroid_interface_for_visitor(visitor_function)
 
@@ -135,7 +135,7 @@ class NodeVisitorMaster(object):
             )
 
         cls.node_visitor_registry.append(
-            (node, wrapped, change_node_inference)
+            (node, wrapped, predicate, change_node_inference)
         )
 
     @classmethod
@@ -144,16 +144,21 @@ class NodeVisitorMaster(object):
         for (
             node,
             node_visitor_function,
+            predicate,
             change_node_inference,
         ) in cls.node_visitor_registry:
             node_visitor_obj = NodeVisitor(stats, rel_file_path)
 
             if change_node_inference is not None:
                 node_visitor_obj.register_transform(
-                    node, inference_tip(change_node_inference)
+                    node, inference_tip(change_node_inference), predicate,
                 )
 
-            node_visitor_obj.register_transform(node, node_visitor_function)
+            node_visitor_obj.register_transform(
+                node,
+                node_visitor_function,
+                predicate,
+            )
             initialized_node_visitors.append(node_visitor_obj)
         return initialized_node_visitors
 

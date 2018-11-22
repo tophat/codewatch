@@ -78,6 +78,27 @@ def call_visitor(node, stats, _rel_file_path):
     stats.append("inferred A.objects.get()", inf_types)
 
 
+def always_true_predicate(_node):
+    return True
+
+
+@visit(
+    nodes.Call,
+    change_node_inference=infer_objects_get_as_a,
+    predicate=always_true_predicate,
+)
+def predicate_visitor_inference(_node, stats, _rel_file_path):
+    stats.increment("predicate_visitor_inference")
+
+
+@visit(
+    nodes.Call,
+    predicate=always_true_predicate,
+)
+def predicate_visitor(_node, stats, _rel_file_path):
+    stats.increment("predicate_visitor")
+
+
 @visit(nodes.Expr)
 def count_expressions(node, stats, _rel_file_path):
     stats.increment('num_expressions')
@@ -121,3 +142,14 @@ def always_true(_stats):
 @assertion(stats_namespaces=['level1'])
 def always_false(_stats):
     return False, 'should always be false'
+
+
+@assertion()
+def predicate_works(stats):
+    print('stats', stats)
+    return stats.get('predicate_visitor', -1) > 0, 'predicate not working'
+
+
+@assertion()
+def predicate_inference_works(stats):
+    return stats.get('predicate_visitor_inference', -1) > 0, 'predicate not working'

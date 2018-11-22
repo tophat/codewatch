@@ -58,6 +58,18 @@ OuterClass.outer_method().inner_method()""",
             "nested_method_module.InnerClass.inner_method",
             {"COUNT_NESTED_METHOD_CALLS": {"nested_method_module.py": 1}},
         ),
+        (
+            "COUNT_CHAINED_FUNCTION_CALLS",
+            """
+def function1():
+    pass
+def function2():
+    return function1
+function2()()""",
+            "function_module",
+            "function_module.function2",
+            {'COUNT_CHAINED_FUNCTION_CALLS': {'function_module.py': 1}},
+        ),
     ],
 )
 def test_count_calling_files_function(

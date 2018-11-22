@@ -6,7 +6,7 @@ import os
 
 from codewatch import assertion, visit
 
-from astroid import nodes, UseInferenceDefault, MANAGER
+from astroid import nodes, MANAGER
 from astroid.builder import AstroidBuilder
 
 
@@ -33,7 +33,7 @@ class A(object):
 A.objects.get()
 
 
-def predicate(node):
+def is_a_object_get(node):
     if not hasattr(node.func, "expr"):
         return False
 
@@ -53,9 +53,6 @@ def predicate(node):
 
 
 def infer_objects_get_as_a(node, context=None):
-    if not predicate(node):
-        raise UseInferenceDefault()
-
     builder = AstroidBuilder(MANAGER)
     m = builder.string_build(
         """\
@@ -70,12 +67,35 @@ class A(object):
     return (class_node.instantiate_class(),)
 
 
-@visit(nodes.Call, change_node_inference=infer_objects_get_as_a)
+@visit(
+    nodes.Call,
+    predicate=is_a_object_get,
+    change_node_inference=infer_objects_get_as_a,
+)
 def call_visitor(node, stats, _rel_file_path):
-    if not predicate(node):
-        return node
     inf_types = node.inferred()
     stats.append("inferred A.objects.get()", inf_types)
+
+
+def always_true_predicate(_node):
+    return True
+
+
+@visit(
+    nodes.Call,
+    change_node_inference=infer_objects_get_as_a,
+    predicate=always_true_predicate,
+)
+def predicate_visitor_inference(_node, stats, _rel_file_path):
+    stats.increment("predicate_visitor_inference")
+
+
+@visit(
+    nodes.Call,
+    predicate=always_true_predicate,
+)
+def predicate_visitor(_node, stats, _rel_file_path):
+    stats.increment("predicate_visitor")
 
 
 @visit(nodes.Expr)
@@ -121,3 +141,16 @@ def always_true(_stats):
 @assertion(stats_namespaces=['level1'])
 def always_false(_stats):
     return False, 'should always be false'
+
+
+@assertion()
+def predicate_works(stats):
+    return stats.get('predicate_visitor', -1) > 0, 'predicate not working'
+
+
+@assertion()
+def predicate_inference_works(stats):
+    return (
+        stats.get('predicate_visitor_inference', -1) > 0,
+        'predicate not working'
+    )

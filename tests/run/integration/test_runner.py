@@ -23,6 +23,8 @@ def test_full_run():
         'correctly_rewritten_inference',
         'expressions_more_than_zero',
         'num_import_from_more_than_zero',
+        'predicate_inference_works',
+        'predicate_works',
     ]
     assert failures == {
         'always_false': 'should always be false',

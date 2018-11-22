@@ -88,8 +88,12 @@ def count_calling_files(stats_namespace, expected_callable_qname):
         callable_as_attribute = hasattr(call_node.func, "attrname")
         if callable_as_attribute:
             callable_name = call_node.func.attrname
+            node_to_infer = call_node.func.expr
+            build_qname = lambda inferred_type: inferred_type.qname() + callable_name
         else:
             callable_name = call_node.func.name
+            node_to_infer = call_node.func
+            build_qname = lambda inferred_type: inferred_type.qname()
 
         # Optimization: Start with a cheap guard before astroid inference
         if callable_name != expected_callable_name:
@@ -101,7 +105,7 @@ def count_calling_files(stats_namespace, expected_callable_qname):
             return call_node
 
         found_matching_inferred_qname = any(
-            inferred_type.qname() == expected_callable_qname
+            build_qname(inferred_type) == expected_callable_qname
             for inferred_type in inferred_types
         )
 

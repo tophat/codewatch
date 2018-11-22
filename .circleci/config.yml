@@ -121,3 +121,9 @@ workflows:
             branches:
               only:
                 - master
+
+experimental:
+  notify:
+    branches:
+      only:
+        - master

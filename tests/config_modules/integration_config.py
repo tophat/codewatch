@@ -146,7 +146,6 @@ def always_false(_stats):
 
 @assertion()
 def predicate_works(stats):
-    print('stats', stats)
     return stats.get('predicate_visitor', -1) > 0, 'predicate not working'
 
 

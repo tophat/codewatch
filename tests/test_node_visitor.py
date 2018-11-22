@@ -90,13 +90,6 @@ function2()()"""
             "function_module.function1",
             {},
         ),
-        (
-            "COUNT_CHAINED_FUNCTION_CALLS",
-            CHAINED_FUNCTION_CALL_CODE,
-            "function_module",
-            "function_module.function2",
-            {'COUNT_CHAINED_FUNCTION_CALLS': {'function_module.py': 1}},
-        ),
     ],
 )
 def test_count_calling_files_function(

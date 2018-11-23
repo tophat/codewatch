@@ -31,11 +31,18 @@ else:
         'astroid==1.6.4',  # 2.0 onwards is py3 only
     ]
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name='codewatch',
     classifiers=CLASSIFIERS,
     packages=find_packages(),
-    version='0.0.13',
+    version='0.0.14',
+    description="Monitor and manage deeply customizable metrics about your python code using ASTs",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/tophat/codewatch",
     scripts=['bin/codewatch'],
     install_requires=INSTALL_REQUIRES,
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, <3.8"

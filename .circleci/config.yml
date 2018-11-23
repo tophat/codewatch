@@ -24,7 +24,7 @@ commands:
 
 
 jobs:
-  build-27: &build-template
+  python-27: &build-template
     environment:
       TOX_ENV: py27
 
@@ -109,11 +109,11 @@ jobs:
             git config --global user.name "CircleCI Codewatch"
             USE_SSH=true yarn publish-gh-pages
 
-  build-36:
+  python-36:
     <<: *build-template
     environment:
       TOX_ENV: py36
-  build-37:
+  python-37:
     <<: *build-template
     environment:
       TOX_ENV: py37
@@ -135,14 +135,14 @@ workflows:
   version: 2
   codewatch_and_website:
     jobs:
-      - build-27
-      - build-36
-      - build-37
+      - python-27
+      - python-36
+      - python-37
       - deploy_to_pypi:
           requires:
-            - build-27
-            - build-36
-            - build-37
+            - python-27
+            - python-36
+            - python-37
           filters:
             branches:
               only:

@@ -113,11 +113,13 @@ jobs:
     <<: *build-template
     steps:
       - checkout
-      command: |
-          . venv/bin/activate && \
-          pip install -r requirements_deploy.txt && \
-          python setup.py sdist bdist_wheel && \
-          twine upload --skip-existing dist/*
+      - run:
+        name: Deploy to pypi
+        command: |
+            . venv/bin/activate && \
+            pip install -r requirements_deploy.txt && \
+            python setup.py sdist bdist_wheel && \
+            twine upload --skip-existing dist/*
 
 workflows:
   version: 2

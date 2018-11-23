@@ -79,7 +79,7 @@ def visit(node_type, predicate=None, inferences=None):
     return decorator
 
 
-def track_troublesome_module_usages(qname, importer=None):
+def count_troublesome_usages(stats_namespace, qname, importer=None):
     if importer is None:
         importer = importlib.import_module
 
@@ -87,11 +87,7 @@ def track_troublesome_module_usages(qname, importer=None):
     trouble_attribute = qname.split('.')[-1]
 
     def track_import(stats, rel_file_path):
-        file_module = rel_file_path.split('.')
-        stats = stats.namespaced('TROUBLESOME').namespaced(
-            '.'.join(file_module[:-1]),
-        )
-        stats.increment('IMPORT_COUNT')
+        stats.namespaced(stats_namespace).increment(rel_file_path)
 
     def visit_import(import_node, stats, rel_file_path):
         for name, alias in import_node.names:

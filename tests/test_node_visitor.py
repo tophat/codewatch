@@ -7,7 +7,7 @@ from codewatch.node_visitor import (
     NodeVisitor,
     NodeVisitorMaster,
     count_calling_files,
-    track_troublesome_module_usages,
+    count_troublesome_usages,
 )
 from codewatch.stats import Stats
 
@@ -49,6 +49,16 @@ def function1():
 def function2():
     return function1
 function2()()"""
+
+TROUBLESOME_IMPORTS_CODE = """\
+from api import App
+from api.views import User, Admin, Trouble
+from api.views import Trouble as InDisguise
+import api.views.User
+import api.views.Admin
+import api.views.Trouble as Trouble2
+import api.views.Trouble
+from api.views import *"""
 
 
 @pytest.mark.parametrize(
@@ -180,16 +190,7 @@ def mock_importer(mod_name):
     "code,module_name",
     [
         (
-            """
-    from api import App
-    from api.views import User, Admin, Trouble
-    from api.views import Trouble as InDisguise
-    import api.views.User
-    import api.views.Admin
-    import api.views.Trouble as Trouble2
-    import api.views.Trouble
-    from api.views import *
-    """,
+            TROUBLESOME_IMPORTS_CODE,
             'api.views.Trouble',
         )
     ],
@@ -198,8 +199,8 @@ def test_track_troublesome_module_usages(code, module_name):
     NodeVisitorMaster.node_visitor_registry = []
     module = astroid.parse(code, module_name)
     assert len(NodeVisitorMaster.node_visitor_registry) == 0
-    track_troublesome_module_usages(module_name, mock_importer)
+    count_troublesome_usages('TROUBLESOME', module_name, mock_importer)
     assert len(NodeVisitorMaster.node_visitor_registry) == 2
     stats = Stats()
     NodeVisitorMaster.visit(stats, module, module_name + ".py")
-    assert stats == {'TROUBLESOME': {'api.views.Trouble': {'IMPORT_COUNT': 5}}}
+    assert stats == {"TROUBLESOME": {"api.views.Trouble.py": 5}}

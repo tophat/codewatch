@@ -12,6 +12,7 @@ from codewatch.node_visitor import (
     NodeVisitor,
     visit,
 )
+from codewatch.predicates import CallNodePredicates
 from codewatch.file_walker import FileWalker
 from codewatch.stats import Stats
 
@@ -29,4 +30,5 @@ __all__ = [
     'FileWalker',
     'Stats',
     'inference',
+    'CallNodePredicates',
 ]

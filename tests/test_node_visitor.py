@@ -7,7 +7,7 @@ from codewatch.node_visitor import (
     NodeVisitor,
     NodeVisitorMaster,
     count_calling_files,
-    count_troublesome_usages,
+    count_import_usages,
 )
 from codewatch.stats import Stats
 
@@ -199,7 +199,7 @@ def test_track_troublesome_module_usages(code, module_name):
     NodeVisitorMaster.node_visitor_registry = []
     module = astroid.parse(code, module_name)
     assert len(NodeVisitorMaster.node_visitor_registry) == 0
-    count_troublesome_usages('TROUBLESOME', module_name, mock_importer)
+    count_import_usages('TROUBLESOME', module_name, mock_importer)
     assert len(NodeVisitorMaster.node_visitor_registry) == 2
     stats = Stats()
     NodeVisitorMaster.visit(stats, module, module_name + ".py")

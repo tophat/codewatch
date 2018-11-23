@@ -7,7 +7,7 @@ from codewatch.run import (
 )
 from codewatch.node_visitor import (
     count_calling_files,
-    count_troublesome_usages,
+    count_import_usages,
     inference,
     NodeVisitor,
     visit,
@@ -19,7 +19,7 @@ from codewatch.stats import Stats
 __all__ = [
     'assertion',
     'count_calling_files',
-    'count_troublesome_usages',
+    'count_import_usages',
     'ModuleLoader',
     'Analyzer',
     'AssertionChecker',

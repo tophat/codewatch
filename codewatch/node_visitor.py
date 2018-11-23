@@ -79,7 +79,7 @@ def visit(node_type, predicate=None, inferences=None):
     return decorator
 
 
-def count_troublesome_usages(stats_namespace, qname, importer=None):
+def count_import_usages(stats_namespace, qname, importer=None):
     if importer is None:
         importer = importlib.import_module
 

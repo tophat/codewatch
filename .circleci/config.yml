@@ -41,6 +41,9 @@ jobs:
           keys:
           - tox-dependencies-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}
           - tox-dependencies-
+
+      - restore_cache:
+          keys:
           - ci-dependencies
 
       - run:
@@ -63,7 +66,9 @@ jobs:
 
       - save_cache:
           paths:
-          - ./.tox/${TOX_ENV}
+          - ./.tox/py27
+          - ./.tox/py36
+          - ./.tox/py37
           key: tox-dependencies-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}
 
       - store_test_results:

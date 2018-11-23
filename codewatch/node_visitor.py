@@ -13,6 +13,12 @@ from astroid.exceptions import InferenceError
 from astroid.transforms import TransformVisitor
 
 
+Inference = namedtuple('Inference', ('node', 'fn', 'predicate'))
+CodewatchNodeAnnotations = namedtuple(
+    "CodewatchNodeAnnotations", ["stats", "rel_file_path"]
+)
+
+
 class NodeVisitor(TransformVisitor):
     def __init__(self, stats, rel_file_path):
         self.stats = stats
@@ -20,9 +26,6 @@ class NodeVisitor(TransformVisitor):
         super(NodeVisitor, self).__init__()
 
     def _add_codewatch_annotations(self, node):
-        CodewatchNodeAnnotations = namedtuple(
-            "CodewatchNodeAnnotations", ["stats", "rel_file_path"]
-        )
         node._codewatch = CodewatchNodeAnnotations(
             self.stats, self.rel_file_path
         )
@@ -62,10 +65,14 @@ def _astroid_interface_for_visitor(visitor_function):
     return call_visitor
 
 
-def visit(node_type, predicate=None, change_node_inference=None):
+def inference(node, fn, predicate=None):
+    return Inference(node, fn, predicate)
+
+
+def visit(node_type, predicate=None, inferences=None):
     def decorator(fn):
         NodeVisitorMaster.register_visitor(
-            node_type, fn, predicate, change_node_inference
+            node_type, fn, predicate, inferences,
         )
         return fn
 
@@ -167,18 +174,22 @@ class NodeVisitorMaster(object):
 
     @classmethod
     def register_visitor(
-        cls, node, visitor_function, predicate=None, change_node_inference=None
+        cls,
+        node,
+        visitor_function,
+        predicate=None,
+        inferences=None,
     ):
         wrapped = _astroid_interface_for_visitor(visitor_function)
 
         if not issubclass(node, NodeNG):
             raise Exception(
-                "visitor_function {v} registered for invalid node type. "
+                "visitor_function registered for invalid node type. "
                 "Please use a NodeNG subclass from the astroid.nodes module."
             )
 
         cls.node_visitor_registry.append(
-            (node, wrapped, predicate, change_node_inference)
+            (node, wrapped, predicate, inferences)
         )
 
     @classmethod
@@ -188,14 +199,17 @@ class NodeVisitorMaster(object):
             node,
             node_visitor_function,
             predicate,
-            change_node_inference,
+            inferences,
         ) in cls.node_visitor_registry:
             node_visitor_obj = NodeVisitor(stats, rel_file_path)
 
-            if change_node_inference is not None:
-                node_visitor_obj.register_transform(
-                    node, inference_tip(change_node_inference), predicate,
-                )
+            if inferences is not None:
+                for inference in inferences:
+                    node_visitor_obj.register_transform(
+                        inference.node,
+                        inference_tip(inference.fn),
+                        inference.predicate,
+                    )
 
             node_visitor_obj.register_transform(
                 node,

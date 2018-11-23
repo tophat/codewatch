@@ -4,7 +4,7 @@ This module is used by integration tests
 
 import os
 
-from codewatch import assertion, visit
+from codewatch import assertion, inference, visit
 
 from astroid import nodes, MANAGER
 from astroid.builder import AstroidBuilder
@@ -64,13 +64,13 @@ class A(object):
     )
     class_node = m.body[0]
 
-    return (class_node.instantiate_class(),)
+    return iter((class_node.instantiate_class(),))
 
 
 @visit(
     nodes.Call,
     predicate=is_a_object_get,
-    change_node_inference=infer_objects_get_as_a,
+    inferences=[inference(nodes.Call, infer_objects_get_as_a, is_a_object_get)]
 )
 def call_visitor(node, stats, _rel_file_path):
     inf_types = node.inferred()
@@ -83,11 +83,43 @@ def always_true_predicate(_node):
 
 @visit(
     nodes.Call,
-    change_node_inference=infer_objects_get_as_a,
-    predicate=always_true_predicate,
+    inferences=[
+        inference(nodes.Call, infer_objects_get_as_a, always_true_predicate),
+    ],
 )
 def predicate_visitor_inference(_node, stats, _rel_file_path):
     stats.increment("predicate_visitor_inference")
+
+
+def infer_itself(node, context=None):
+    return iter((node,))
+
+
+@visit(
+    nodes.Call,
+    inferences=[
+        inference(nodes.Import, infer_itself),
+        inference(nodes.ImportFrom, infer_itself),
+    ],
+)
+def multiple_inferences(node, stats, _rel_file_path):
+    import_node = node.root().body[0]
+    inference_works = import_node.inferred()[0] == import_node
+    stats.append('importInference', inference_works)
+
+    import_from_node = node.root().body[1]
+    inference_works = import_from_node.inferred()[0] == import_from_node
+    stats.append('importFromInference', inference_works)
+
+
+@assertion()
+def import_inference_worked(stats):
+    return stats.get('importInference', False), 'inference failed'
+
+
+@assertion()
+def import_from_inference_worked(stats):
+    return stats.get('importFromInference', False), 'inference failed'
 
 
 @visit(

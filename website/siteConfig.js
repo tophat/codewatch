@@ -2,9 +2,9 @@ const siteConfig = {
     title: 'Codewatch',
     tagline: 'Monitor and manage deeply customizable metrics about your python code using ASTs',
     // For deploy
-    // cname: 'yvm.js.org', TODO
-    url: 'https://tophat.github.io',
-    baseUrl: '/codewatch/',
+    cname: 'codewatch.io',
+    url: 'https://codewatch.io',
+    baseUrl: '/',
     projectName: 'codewatch',
     organizationName: 'tophat',
     // End deploy options

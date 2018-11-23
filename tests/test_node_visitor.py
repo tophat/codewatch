@@ -1,6 +1,8 @@
 import astroid
 import pytest
 
+from astroid import nodes, UseInferenceDefault
+from codewatch import inference
 from codewatch.node_visitor import (
     NodeVisitor,
     NodeVisitorMaster,
@@ -106,6 +108,54 @@ def test_count_calling_files_function(
     assert stats == expected_stats
 
 
+def test_count_calling_files_with_inferences():
+    NodeVisitorMaster.node_visitor_registry = []
+    code = """\
+class B(object):
+    pass
+class A(object):
+    class objects(object):
+        @staticmethod
+        def get():
+            return B()
+    @staticmethod
+    def save():
+        pass
+a = A.objects.get()
+a.save()
+"""
+    module = astroid.parse(code, 'infer.this')
+
+    def infer_objects_get_as_a(call_node, context=None):
+        if getattr(call_node.func, "attrname") != 'get':
+            raise UseInferenceDefault()
+
+        code = """\
+class A(object):
+    class objects(object):
+        @staticmethod
+        def get():
+            pass
+    def save():
+        pass"""
+        m = astroid.parse(code, 'infer.this')
+        class_node = m.body[0]
+
+        return iter((class_node.instantiate_class(),))
+
+    assert len(NodeVisitorMaster.node_visitor_registry) == 0
+    count_calling_files(
+        'ccf_inf_testing',
+        'infer.this.A.save',
+        inferences=[inference(nodes.Call, infer_objects_get_as_a)],
+    )
+    assert len(NodeVisitorMaster.node_visitor_registry) == 1
+
+    stats = Stats()
+    NodeVisitorMaster.visit(stats, module, "infer/this.py")
+    assert stats == {'ccf_inf_testing': {'infer/this.py': 1}}
+
+
 def test_sets_stats_and_file_path():
     stats = Stats()
     file_path = "/mock/path"
@@ -141,7 +191,7 @@ def mock_importer(mod_name):
     from api.views import *
     """,
             'api.views.Trouble',
-        ),
+        )
     ],
 )
 def test_track_troublesome_module_usages(code, module_name):

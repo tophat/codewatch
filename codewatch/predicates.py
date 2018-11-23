@@ -57,5 +57,3 @@ class CallNodePredicates(object):
             for node_type in inferred_types
         )
         return success
-
-

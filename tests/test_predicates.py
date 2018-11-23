@@ -22,7 +22,7 @@ class A(object):
     @staticmethod
     def d():
         return A
-        
+
     @property
     def p1(self):
         return A
@@ -32,7 +32,7 @@ class A(object):
     @property
     def p3(self):
         return A
-        
+
 A.a().b().c().d()
 A.p1.p2.p3.d()
 """
@@ -43,7 +43,7 @@ class Grade(object):
         pass
     def get_nested(self):
         return Grade.nested()
-    
+
 grade = Grade().get_nested()
 """
 

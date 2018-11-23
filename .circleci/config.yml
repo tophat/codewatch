@@ -130,9 +130,9 @@ workflows:
       - build-37
       - deploy_to_pypi:
         requires:
-          - build-2.7
-          - build-3.6
-          - build-3.7
+          - build-27
+          - build-36
+          - build-37
         filters:
           branches:
             only:

@@ -21,7 +21,7 @@ CLASSIFIERS = [
 ]
 
 
-if sys.version_info[0:2] >= (3, 7):
+if sys.version_info[0:3] >= (3, 7, 0):
     # astroid<2.0 does not work on python>=3.7 because StopIteration is removed
     INSTALL_REQUIRES = [
         'astroid==2.0.4'

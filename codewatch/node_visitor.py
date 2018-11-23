@@ -14,6 +14,9 @@ from astroid.transforms import TransformVisitor
 
 
 Inference = namedtuple('Inference', ('node', 'fn', 'predicate'))
+CodewatchNodeAnnotations = namedtuple(
+    "CodewatchNodeAnnotations", ["stats", "rel_file_path"]
+)
 
 
 class NodeVisitor(TransformVisitor):
@@ -23,9 +26,6 @@ class NodeVisitor(TransformVisitor):
         super(NodeVisitor, self).__init__()
 
     def _add_codewatch_annotations(self, node):
-        CodewatchNodeAnnotations = namedtuple(
-            "CodewatchNodeAnnotations", ["stats", "rel_file_path"]
-        )
         node._codewatch = CodewatchNodeAnnotations(
             self.stats, self.rel_file_path
         )

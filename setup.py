@@ -23,7 +23,7 @@ setup(
     name='codewatch',
     classifiers=CLASSIFIERS,
     packages=find_packages(),
-    version='0.0.7',
+    version='0.0.8',
     scripts=['bin/codewatch'],
     install_requires=[
         'astroid==1.6.4',  # 2.0 onwards is py3 only

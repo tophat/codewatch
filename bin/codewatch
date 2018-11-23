@@ -34,3 +34,6 @@ if __name__ == '__main__':
     successes, failures = runner.run()
     print('successes', successes)
     print('failures', failures)
+
+    if failures:
+        sys.exit(-1)

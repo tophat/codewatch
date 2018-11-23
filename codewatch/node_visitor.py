@@ -163,7 +163,6 @@ def count_calling_files(
             for inferred_type in inferred_types
         )
 
-        import ipdb; ipdb.set_trace()
 
         if not found_matching_inferred_qname:
             return call_node

@@ -1,7 +1,7 @@
 import astroid
 import pytest
 
-from astroid import nodes
+from astroid import nodes, UseInferenceDefault
 from codewatch import inference
 from codewatch.node_visitor import (
     NodeVisitor,
@@ -110,34 +110,51 @@ def test_count_calling_files_function(
 
 def test_count_calling_files_with_inferences():
     code = """\
-def function():
+class B(object):
     pass
-def function2():
-    pass
-function()"""
+class A(object):
+    class objects(object):
+        @staticmethod
+        def get():
+            return B()
+    @staticmethod
+    def save():
+        pass
+a = A.objects.get()
+a.save()
+"""
     module = astroid.parse(code, 'infer.this')
 
-    def infer_function_as_function2(call_node, context=None):
-        inference_code = """\
-def function2():
-    pass
-function2()"""
-        inference_module = astroid.parse(inference_code)
+    def infer_objects_get_as_a(call_node, context=None):
+        if getattr(call_node.func, "attrname") != 'get':
+            raise UseInferenceDefault()
 
-        return iter((inference_module.body[1],))
+        code = """\
+class A(object):
+    class objects(object):
+        @staticmethod
+        def get():
+            pass
+    def save():
+        pass"""
+        m = astroid.parse(code, 'infer.this')
+        class_node = m.body[0]
 
+        return iter((class_node.instantiate_class(),))
+
+    assert len(NodeVisitorMaster.node_visitor_registry) == 0
     count_calling_files(
         'ccf_inf_testing',
-        'infer.this.function',
+        'infer.this.A.save',
         inferences = [
-            inference(nodes.Call, lambda _: True, infer_function_as_function2),
+            inference(nodes.Call, infer_objects_get_as_a),
         ]
     )
-    import ipdb; ipdb.set_trace()
+    assert len(NodeVisitorMaster.node_visitor_registry) == 1
 
     stats = Stats()
     NodeVisitorMaster.visit(stats, module, "infer/this.py")
-    assert stats == {}
+    assert stats == {'ccf_inf_testing': {'infer/this.py': 1}}
 
 def test_sets_stats_and_file_path():
     stats = Stats()

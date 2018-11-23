@@ -24,7 +24,10 @@ commands:
 
 
 jobs:
-  build:
+  python-27: &build-template
+    environment:
+      TOX_ENV: py27
+
     docker:
       - image: circleci/python:3.6.7
 
@@ -33,11 +36,18 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: save TOX_ENV to file to use for cache keys
+          command: echo $TOX_ENV > /tmp/TOX_ENV
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - tox-dependencies-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}
-          - tox-dependencies-
+          - tox-dependencies-v2-{{ checksum "/tmp/TOX_ENV" }}-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}
+          - tox-dependencies-v2-{{ checksum "/tmp/TOX_ENV" }}-
+
+      - restore_cache:
+          keys:
           - ci-dependencies
 
       - run:
@@ -56,29 +66,20 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            tox
+            tox -e ${TOX_ENV}
 
       - save_cache:
           paths:
           - ./.tox/py27
           - ./.tox/py36
-          key: tox-dependencies-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}
+          - ./.tox/py37
+          key: tox-dependencies-v2-{{ checksum "/tmp/TOX_ENV" }}-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}
 
       - store_test_results:
           path: test-reports
 
       - store_artifacts:
           path: test-reports
-
-      - deploy:
-          name: deploy to pypi if on master branch
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              . venv/bin/activate && \
-              pip install -r requirements_deploy.txt && \
-              python setup.py sdist bdist_wheel && \
-              twine upload --skip-existing dist/*
-            fi
   website:
     <<: *website_docker_defaults
     working_directory: ~/repo/website
@@ -108,11 +109,44 @@ jobs:
             git config --global user.name "CircleCI Codewatch"
             USE_SSH=true yarn publish-gh-pages
 
+  python-36:
+    <<: *build-template
+    environment:
+      TOX_ENV: py36
+  python-37:
+    <<: *build-template
+    environment:
+      TOX_ENV: py37
+    docker:
+      - image: circleci/python:3.7.1-stretch
+  deploy_to_pypi:
+    <<: *build-template
+    steps:
+      - checkout
+      - run:
+          name: Deploy to pypi
+          command: |
+              . venv/bin/activate && \
+              pip install -r requirements_deploy.txt && \
+              python setup.py sdist bdist_wheel && \
+              twine upload --skip-existing dist/*
+
 workflows:
   version: 2
   codewatch_and_website:
     jobs:
-      - build
+      - python-27
+      - python-36
+      - python-37
+      - deploy_to_pypi:
+          requires:
+            - python-27
+            - python-36
+            - python-37
+          filters:
+            branches:
+              only:
+                - master
       - website
       - deploy_website:
           requires:

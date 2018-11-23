@@ -48,11 +48,18 @@ grade = Grade().get_nested()
 """
 
 
+QNAME_UNINFERABLE_CODE = """\
+from my_models import Grade
+Grade()
+"""
+
+
 @pytest.mark.parametrize('code,method_name,expected_value', [
     (NESTED_FN_CALL_CODE, 'A.a.b.c.d', True),
     (NESTED_FN_CALL_CODE, 'A', False),
     (NESTED_FN_CALL_CODE, 'a.b.c.d', False),
     (NESTED_FN_CALL_CODE, 'd', False),
+    (NESTED_FN_CALL_CODE, 'A.a.x.c.d', False),
 ])
 def test_does_node_call_method_as_fn_calls(code, method_name, expected_value):
     call_node = parse(code).body[1].value
@@ -89,6 +96,16 @@ def test_does_node_call_method_as_attr(code, method_name, expected_value):
     (QNAME_INFERENCE_CODE, 'object', False),
 ])
 def test_is_node_qname_inferred(code, qname, expected_value):
+    node = parse(code, 'my_test_module').body[1].value
+    assert type(node) == nodes.Call
+    ret = CallNodePredicates.is_node_qname_inferred(node, qname)
+    assert ret == expected_value
+
+
+@pytest.mark.parametrize('code,qname,expected_value', [
+    (QNAME_UNINFERABLE_CODE, 'my_models.Grade', False),
+])
+def test_is_node_qname_inferred_uninferable(code, qname, expected_value):
     node = parse(code, 'my_test_module').body[1].value
     assert type(node) == nodes.Call
     ret = CallNodePredicates.is_node_qname_inferred(node, qname)

@@ -62,6 +62,7 @@ jobs:
           paths:
           - ./.tox/py27
           - ./.tox/py36
+          - ./.tox/py37
           key: tox-dependencies-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}
 
       - store_test_results:

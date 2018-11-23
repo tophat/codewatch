@@ -24,7 +24,6 @@ def is_not_migration_directory_filter(dir_name):
 DEFAULT_DIRECTORY_FILTERS = [
     is_not_test_directory_filter,
     is_not_migration_directory_filter,
-    is_not_test_directory_filter,
 ]
 
 DEFAULT_FILE_FILTERS = [

@@ -24,9 +24,12 @@ commands:
 
 
 jobs:
-  build:
+  build-2.7: &build-template
+    environment:
+      TOX_ENV: py27
+
     docker:
-      - image: circleci/python:3.7-stretch
+      - image: circleci/python:3.6.7
 
     working_directory: ~/repo
 
@@ -36,7 +39,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - tox-dependencies-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}
+          - tox-dependencies-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}-${TOX_ENV}
           - tox-dependencies-
           - ci-dependencies
 
@@ -45,8 +48,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install tox tox-pyenv
-            pyenv local 2.7 3.7
+            pip install tox
 
       - save_cache:
           paths:
@@ -57,30 +59,18 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            tox
+            tox -e ${TOX_ENV}
 
       - save_cache:
           paths:
-          - ./.tox/py27
-          - ./.tox/py36
-          - ./.tox/py37
-          key: tox-dependencies-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}
+          - ./.tox/${TOX_ENV}
+          key: tox-dependencies-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}-${TOX_ENV}
 
       - store_test_results:
           path: test-reports
 
       - store_artifacts:
           path: test-reports
-
-      - deploy:
-          name: deploy to pypi if on master branch
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              . venv/bin/activate && \
-              pip install -r requirements_deploy.txt && \
-              python setup.py sdist bdist_wheel && \
-              twine upload --skip-existing dist/*
-            fi
   website:
     <<: *website_docker_defaults
     working_directory: ~/repo/website
@@ -109,12 +99,42 @@ jobs:
             git config --global user.email "circleci-codewatch@users.noreply.github.com"
             git config --global user.name "CircleCI Codewatch"
             USE_SSH=true yarn publish-gh-pages
+  build-3.6:
+    <<: *build-template
+    environment:
+      TOX_ENV: py36
+  build-3.7:
+    <<: *build-template
+    environment:
+      TOX_ENV: py37
+    docker:
+      - image: circleci/python:3.7.1-stretch
+  deploy_to_pypi:
+    <<: *build-template
+    steps:
+      - checkout
+      command: |
+          . venv/bin/activate && \
+          pip install -r requirements_deploy.txt && \
+          python setup.py sdist bdist_wheel && \
+          twine upload --skip-existing dist/*
 
 workflows:
   version: 2
   codewatch_and_website:
     jobs:
-      - build
+      - build-2.7
+      - build-3.6
+      - build-3.7
+      - deploy_to_pypi
+        requires:
+          - build-2.7
+          - build-3.6
+          - build-3.7
+        filters:
+          branches:
+            only:
+            - master
       - website
       - deploy_website:
           requires:

@@ -1,6 +1,8 @@
 import astroid
 import pytest
 
+from astroid import nodes
+from codewatch import inference
 from codewatch.node_visitor import (
     NodeVisitor,
     NodeVisitorMaster,
@@ -105,6 +107,37 @@ def test_count_calling_files_function(
     NodeVisitorMaster.visit(stats, module, module_name + ".py")
     assert stats == expected_stats
 
+
+def test_count_calling_files_with_inferences():
+    code = """\
+def function():
+    pass
+def function2():
+    pass
+function()"""
+    module = astroid.parse(code, 'infer.this')
+
+    def infer_function_as_function2(call_node, context=None):
+        inference_code = """\
+def function2():
+    pass
+function2()"""
+        inference_module = astroid.parse(inference_code)
+
+        return iter((inference_module.body[1],))
+
+    count_calling_files(
+        'ccf_inf_testing',
+        'infer.this.function',
+        inferences = [
+            inference(nodes.Call, lambda _: True, infer_function_as_function2),
+        ]
+    )
+    import ipdb; ipdb.set_trace()
+
+    stats = Stats()
+    NodeVisitorMaster.visit(stats, module, "infer/this.py")
+    assert stats == {}
 
 def test_sets_stats_and_file_path():
     stats = Stats()

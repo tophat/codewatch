@@ -117,7 +117,11 @@ def track_troublesome_module_usages(qname, importer=None):
     NodeVisitorMaster.register_visitor(ImportFrom, visit_importfrom, None)
 
 
-def count_calling_files(stats_namespace, expected_callable_qname):
+def count_calling_files(
+    stats_namespace,
+    expected_callable_qname,
+    inferences=None,
+):
     if stats_namespace is None:
         raise Exception("count_calling_files() requires a valid namespace")
 
@@ -159,6 +163,8 @@ def count_calling_files(stats_namespace, expected_callable_qname):
             for inferred_type in inferred_types
         )
 
+        import ipdb; ipdb.set_trace()
+
         if not found_matching_inferred_qname:
             return call_node
 
@@ -166,7 +172,7 @@ def count_calling_files(stats_namespace, expected_callable_qname):
 
         return call_node
 
-    NodeVisitorMaster.register_visitor(Call, visit_call, None)
+    NodeVisitorMaster.register_visitor(Call, visit_call, inferences=inferences)
 
 
 class NodeVisitorMaster(object):

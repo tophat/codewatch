@@ -6,6 +6,7 @@ from codewatch.run import (
     Runner,
 )
 from codewatch.node_visitor import (
+    count_calling_files,
     inference,
     NodeVisitor,
     visit,
@@ -15,14 +16,15 @@ from codewatch.stats import Stats
 
 
 __all__ = [
-    assertion,
-    ModuleLoader,
-    Analyzer,
-    AssertionChecker,
-    Runner,
-    NodeVisitor,
-    visit,
-    FileWalker,
-    Stats,
-    inference,
+    'assertion',
+    'count_calling_files',
+    'ModuleLoader',
+    'Analyzer',
+    'AssertionChecker',
+    'Runner',
+    'NodeVisitor',
+    'visit',
+    'FileWalker',
+    'Stats',
+    'inference',
 ]

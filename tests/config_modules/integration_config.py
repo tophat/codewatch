@@ -4,9 +4,9 @@ This module is used by integration tests
 
 import os
 
-from codewatch import assertion, inference, visit
+from codewatch import assertion, count_calling_files, inference, visit
 
-from astroid import nodes, MANAGER
+from astroid import nodes, parse, UseInferenceDefault, MANAGER
 from astroid.builder import AstroidBuilder
 
 
@@ -29,8 +29,11 @@ class A(object):
         def get():
             pass
 
-
 A.objects.get()
+
+def dont_call_this():
+    a = A.objects.get()
+    a.save()
 
 
 def is_a_object_get(node):
@@ -65,6 +68,16 @@ class A(object):
     class_node = m.body[0]
 
     return iter((class_node.instantiate_class(),))
+
+
+
+count_calling_files(
+    'ccf_inf_testing',
+    'A.save',
+    inferences = [
+        inference(nodes.Call, infer_objects_get_as_a, is_a_object_get),
+    ]
+)
 
 
 @visit(
@@ -110,6 +123,12 @@ def multiple_inferences(node, stats, _rel_file_path):
     import_from_node = node.root().body[1]
     inference_works = import_from_node.inferred()[0] == import_from_node
     stats.append('importFromInference', inference_works)
+
+
+@assertion()
+def ccf_worked(stats):
+    import ipdb; ipdb.set_trace()
+    return stats.get('ccf_inf_testing') == {}, "ccf inference failed"
 
 
 @assertion()

@@ -36,10 +36,14 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: save TOX_ENV to file to use for cache keys
+          command: echo $TOX_ENV > /tmp/TOX_ENV
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - tox-dependencies-v2-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}
+          - tox-dependencies-v2-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}-{{ checksum "/tmp/TOX_ENV" }}
           - tox-dependencies-v2-
 
       - restore_cache:
@@ -69,7 +73,7 @@ jobs:
           - ./.tox/py27
           - ./.tox/py36
           - ./.tox/py37
-          key: tox-dependencies-v2-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}
+          key: tox-dependencies-v2-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}-{{ checksum "/tmp/TOX_ENV" }}
 
       - store_test_results:
           path: test-reports

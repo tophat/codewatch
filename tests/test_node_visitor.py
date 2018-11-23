@@ -146,15 +146,14 @@ class A(object):
     count_calling_files(
         'ccf_inf_testing',
         'infer.this.A.save',
-        inferences = [
-            inference(nodes.Call, infer_objects_get_as_a),
-        ]
+        inferences=[inference(nodes.Call, infer_objects_get_as_a)],
     )
     assert len(NodeVisitorMaster.node_visitor_registry) == 1
 
     stats = Stats()
     NodeVisitorMaster.visit(stats, module, "infer/this.py")
     assert stats == {'ccf_inf_testing': {'infer/this.py': 1}}
+
 
 def test_sets_stats_and_file_path():
     stats = Stats()
@@ -191,7 +190,7 @@ def mock_importer(mod_name):
     from api.views import *
     """,
             'api.views.Trouble',
-        ),
+        )
     ],
 )
 def test_track_troublesome_module_usages(code, module_name):

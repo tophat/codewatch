@@ -1,4 +1,7 @@
+import os
 import sys
+from os.path import join, exists
+
 from setuptools import (
     find_packages,
     setup,
@@ -31,8 +34,13 @@ else:
         'astroid==1.6.4',  # 2.0 onwards is py3 only
     ]
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+base_dir = os.path.dirname(__file__)
+readme_path = join(base_dir, 'README.md')
+if exists(readme_path):
+    with open(readme_path) as stream:
+        long_description = stream.read()
+else:
+    long_description = ''
 
 setup(
     name='codewatch',

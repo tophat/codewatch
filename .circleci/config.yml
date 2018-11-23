@@ -24,7 +24,7 @@ commands:
 
 
 jobs:
-  build-2.7: &build-template
+  build-27: &build-template
     environment:
       TOX_ENV: py27
 
@@ -99,11 +99,11 @@ jobs:
             git config --global user.email "circleci-codewatch@users.noreply.github.com"
             git config --global user.name "CircleCI Codewatch"
             USE_SSH=true yarn publish-gh-pages
-  build-3.6:
+  build-36:
     <<: *build-template
     environment:
       TOX_ENV: py36
-  build-3.7:
+  build-37:
     <<: *build-template
     environment:
       TOX_ENV: py37
@@ -114,20 +114,20 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Deploy to pypi
-        command: |
-            . venv/bin/activate && \
-            pip install -r requirements_deploy.txt && \
-            python setup.py sdist bdist_wheel && \
-            twine upload --skip-existing dist/*
+          name: Deploy to pypi
+          command: |
+              . venv/bin/activate && \
+              pip install -r requirements_deploy.txt && \
+              python setup.py sdist bdist_wheel && \
+              twine upload --skip-existing dist/*
 
 workflows:
   version: 2
   codewatch_and_website:
     jobs:
-      - build-2.7
-      - build-3.6
-      - build-3.7
+      - build-27
+      - build-36
+      - build-37
       - deploy_to_pypi:
         requires:
           - build-2.7

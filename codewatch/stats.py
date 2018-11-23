@@ -34,6 +34,9 @@ class Stats(object):
     def __eq__(self, other):
         return self.stats.__eq__(other)
 
+    def __ne__(self, other):
+        return self.stats.__ne__(other)
+
     def __getitem__(self, item):
         return self.stats.__getitem__(item)
 

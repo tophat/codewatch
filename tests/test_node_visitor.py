@@ -109,6 +109,7 @@ def test_count_calling_files_function(
 
 
 def test_count_calling_files_with_inferences():
+    NodeVisitorMaster.node_visitor_registry = []
     code = """\
 class B(object):
     pass

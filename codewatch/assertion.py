@@ -23,13 +23,13 @@ class Assertion(object):
         failures = {}
 
         for assertion_fn in self.assertion_fns:
-            success, err = assertion_fn(self.stats)
             assertion_label = assertion_fn._wrapped_assertion_label
-
-            if success:
-                successes.append(assertion_label)
+            try:
+                assertion_fn(self.stats)
+            except AssertionError as err:
+                failures[assertion_label] = err.args[0]
             else:
-                failures[assertion_label] = err
+                successes.append(assertion_label)
         return successes, failures
 
 

@@ -3,20 +3,8 @@ from codewatch.assertion import (
     assertion,
 )
 from codewatch.stats import Stats
-
-
-ERR_MSG = 'assertion failed!'
-MOCK_LABEL = 'wow_nice_label'
-
-
-@assertion()
-def successful_assertion(_stats):
-    return True, None
-
-
-@assertion()
-def unsuccessful_assertion(_stats):
-    return False, ERR_MSG
+from tests.mock_data import ERR_MSG, MOCK_LABEL, successful_assertion, unsuccessful_assertion, stats_assertion, \
+    label_assertion
 
 
 def test_successful_assertion():
@@ -42,13 +30,6 @@ def test_multiple_assertions():
     assert failures == {unsuccessful_assertion.__name__: ERR_MSG}
 
 
-@assertion()
-def stats_assertion(stats):
-    assert stats == stats
-    assert stats.get('counter') == 1
-    return True, None
-
-
 def test_injects_stats():
     stats = Stats()
     stats.increment('counter')
@@ -68,11 +49,6 @@ def test_with_stats_namespace():
         stats_namespaced_assertion,
     )
     Assertion(_stats, [decorated_assertion]).run()
-
-
-@assertion(label=MOCK_LABEL)
-def label_assertion(_stats):
-    return True, None
 
 
 def test_label_assertion():

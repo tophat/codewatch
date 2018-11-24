@@ -29,7 +29,7 @@ class Assertion(object):
                 assertion_fn(self.stats)
             except AssertionError as assertion_failure:
                 failures[assertion_label] = assertion_failure.args[0]
-            except BaseException as error:
+            except Exception as error:
                 errors[assertion_label] = error
             else:
                 successes.append(assertion_label)

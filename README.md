@@ -83,9 +83,9 @@ from codewatch import assertion
 @assertion()
 def number_of_imports_not_too_high(stats):
     threshold = 700
-    newStat = stats.get('total_imports_num')
-    err = 'There were {} total imports detected which exceeds threshold of {}'.format(newStat, threshold)
-    return newStat <= threshold, err
+    actual = stats.get('total_imports_num')
+    err = 'There were {} total imports detected which exceeds threshold of {}'.format(actual, threshold)
+    assert actual <= threshold, err
 ```
 
 In this case, the assertion would fail since 763 is the `newStat` and the message:

@@ -3,20 +3,29 @@ from codewatch.assertion import (
     assertion,
 )
 from codewatch.stats import Stats
-from tests.mock_data import ERR_MSG, MOCK_LABEL, successful_assertion, unsuccessful_assertion, stats_assertion, \
-    label_assertion
+from tests.mock_data import MOCK_FAILURE_MSG, MOCK_LABEL, successful_assertion, unsuccessful_assertion, stats_assertion, \
+    label_assertion, erroring_assertion, MOCK_ERR
 
 
 def test_successful_assertion():
-    successes, failures = Assertion(Stats(), [successful_assertion]).run()
+    successes, failures, errors = Assertion(Stats(), [successful_assertion]).run()
     assert successes == [successful_assertion.__name__]
     assert failures == {}
+    assert errors == {}
 
 
 def test_unsuccessful_assertion():
-    successes, failures = Assertion(Stats(), [unsuccessful_assertion]).run()
+    successes, failures, errors = Assertion(Stats(), [unsuccessful_assertion]).run()
     assert successes == []
-    assert failures == {unsuccessful_assertion.__name__: ERR_MSG}
+    assert failures == {unsuccessful_assertion.__name__: MOCK_FAILURE_MSG}
+    assert errors == {}
+
+
+def test_erroring_assertion():
+    successes, failures, errors = Assertion(Stats(), [erroring_assertion]).run()
+    assert successes == []
+    assert failures == {}
+    assert errors == {erroring_assertion.__name__: MOCK_ERR}
 
 
 def test_multiple_assertions():
@@ -24,10 +33,10 @@ def test_multiple_assertions():
         successful_assertion,
         unsuccessful_assertion,
     ]
-    successes, failures = Assertion(Stats(), assertions).run()
+    successes, failures, errors = Assertion(Stats(), assertions).run()
 
     assert successes == [successful_assertion.__name__]
-    assert failures == {unsuccessful_assertion.__name__: ERR_MSG}
+    assert failures == {unsuccessful_assertion.__name__: MOCK_FAILURE_MSG}
 
 
 def test_injects_stats():
@@ -52,5 +61,5 @@ def test_with_stats_namespace():
 
 
 def test_label_assertion():
-    successes, failures = Assertion(Stats(), [label_assertion]).run()
+    successes, _, _ = Assertion(Stats(), [label_assertion]).run()
     assert successes[0] == MOCK_LABEL

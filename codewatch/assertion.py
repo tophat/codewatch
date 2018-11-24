@@ -21,16 +21,19 @@ class Assertion(object):
     def run(self):
         successes = []
         failures = {}
+        errors = {}
 
         for assertion_fn in self.assertion_fns:
             assertion_label = assertion_fn._wrapped_assertion_label
             try:
                 assertion_fn(self.stats)
-            except AssertionError as err:
-                failures[assertion_label] = err.args[0]
+            except AssertionError as assertion_failure:
+                failures[assertion_label] = assertion_failure.args[0]
+            except BaseException as error:
+                errors[assertion_label] = error
             else:
                 successes.append(assertion_label)
-        return successes, failures
+        return successes, failures, errors
 
 
 def _with_stats_namespace(*namespaces):

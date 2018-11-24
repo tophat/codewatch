@@ -1,6 +1,7 @@
 from codewatch import assertion
 
-ERR_MSG = 'assertion failed!'
+MOCK_FAILURE_MSG = 'assertion failed!'
+MOCK_ERR = KeyError(0)
 MOCK_LABEL = 'wow_nice_label'
 
 
@@ -11,7 +12,12 @@ def successful_assertion(_stats):
 
 @assertion()
 def unsuccessful_assertion(_stats):
-    assert False, ERR_MSG
+    assert False, MOCK_FAILURE_MSG
+
+
+@assertion()
+def erroring_assertion(_stats):
+    raise MOCK_ERR
 
 
 @assertion()

@@ -31,9 +31,10 @@ if __name__ == '__main__':
         cwd,
         codewatch_config_module,
     )
-    successes, failures = runner.run()
+    successes, failures, errors = runner.run()
     print('successes', successes)
     print('failures', failures)
+    print('errors', errors)
 
     if failures:
         sys.exit(-1)

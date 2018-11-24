@@ -145,10 +145,8 @@ def count_imports(node, stats, _rel_file_path):
 @assertion()
 def correctly_rewritten_inference(stats):
     inference_results = stats.get('inferred A.objects.get()')
-    assert (
-        len(inference_results) == 1,
+    assert len(inference_results) == 1, \
         "Too many possible inferences {i}".format(i=inference_results)
-    )
     qname = inference_results[0].qname()
     assert qname == '.A', "bad inferrence {qname}".format(qname=qname)
 
@@ -181,7 +179,5 @@ def predicate_works(stats):
 
 @assertion()
 def predicate_inference_works(stats):
-    assert (
-        stats.get('predicate_visitor_inference', -1) > 0,
+    assert stats.get('predicate_visitor_inference', -1) > 0, \
         'predicate not working'
-    )

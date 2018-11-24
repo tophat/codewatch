@@ -17,7 +17,8 @@ def _get_runner_for_config(config):
 
 
 def test_full_run():
-    successes, failures, errors = _get_runner_for_config(integration_config).run()
+    successes, failures, errors = _get_runner_for_config(
+        integration_config).run()
     assert successes == [
         'custom_label_always_true',
         'correctly_rewritten_inference',
@@ -35,7 +36,8 @@ def test_full_run():
 
 
 def test_full_run_utf8():
-    successes, failures, errors = _get_runner_for_config(integration_config_utf8).run()
+    successes, failures, errors = _get_runner_for_config(
+        integration_config_utf8).run()
     assert successes == [
         'unicode_works'
     ]

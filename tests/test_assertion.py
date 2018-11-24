@@ -18,21 +18,30 @@ from tests.mock_data import (
 
 
 def test_successful_assertion():
-    successes, failures, errors = Assertion(Stats(), [successful_assertion]).run()
+    successes, failures, errors = Assertion(
+        Stats(),
+        [successful_assertion],
+    ).run()
     assert successes == [successful_assertion.__name__]
     assert failures == {}
     assert errors == {}
 
 
 def test_unsuccessful_assertion():
-    successes, failures, errors = Assertion(Stats(), [unsuccessful_assertion]).run()
+    successes, failures, errors = Assertion(
+        Stats(),
+        [unsuccessful_assertion],
+    ).run()
     assert successes == []
     assert failures == {unsuccessful_assertion.__name__: MOCK_FAILURE_MSG}
     assert errors == {}
 
 
 def test_erroring_assertion():
-    successes, failures, errors = Assertion(Stats(), [erroring_assertion]).run()
+    successes, failures, errors = Assertion(
+        Stats(),
+        [erroring_assertion],
+    ).run()
     assert successes == []
     assert failures == {}
     assert errors == {erroring_assertion.__name__: MOCK_ERR}

@@ -1,10 +1,12 @@
+import pytest
+
 from codewatch.assertion import (
     Assertion,
     assertion,
 )
 from codewatch.stats import Stats
 from tests.mock_data import (
-    MOCK_BASEEXCEPTION,
+    MOCK_BASEEXCEPTION_CLASS,
     MOCK_ERR,
     MOCK_FAILURE_MSG,
     MOCK_LABEL,
@@ -48,10 +50,8 @@ def test_erroring_assertion():
 
 
 def test_baseexception_assertion_bubbles():
-    try:
+    with pytest.raises(MOCK_BASEEXCEPTION_CLASS):
         Assertion(Stats(), [baseexception_assertion]).run()
-    except BaseException as e:
-        assert e == MOCK_BASEEXCEPTION
 
 
 def test_multiple_assertions():

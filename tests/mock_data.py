@@ -2,7 +2,7 @@ from codewatch import assertion
 
 MOCK_FAILURE_MSG = 'assertion failed!'
 MOCK_ERR = KeyError(0)
-MOCK_BASEEXCEPTION = KeyboardInterrupt()
+MOCK_BASEEXCEPTION_CLASS = KeyboardInterrupt
 MOCK_LABEL = 'wow_nice_label'
 
 
@@ -23,7 +23,7 @@ def erroring_assertion(_stats):
 
 @assertion()
 def baseexception_assertion(_stats):
-    raise MOCK_BASEEXCEPTION
+    raise MOCK_BASEEXCEPTION_CLASS()
 
 
 @assertion()

@@ -19,7 +19,7 @@ _Monitor and manage deeply customizable metrics about your python code using AST
 codewatch lets you write simple python code to track statistics about the state of your codebase and write lint-like assertions on those statistics. Use this to incrementally improve and evolve the quality of your code base, increase the visibility of problematic code, to encourage use of new patterns while discouraging old ones, to enforce coding style guides, or to prevent certain kinds of regression errors.
 
 # Installation
-Python: >=2
+Python: 2.7, 3.6, 3.7
 
 Execute the following in your terminal:
 

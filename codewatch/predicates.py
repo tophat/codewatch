@@ -44,7 +44,7 @@ class CallNodePredicates(object):
         grade = Grade()
         ```
 
-        node: `grade = Grade()` astroid node
+        node: An `astroid.nodes.Call` node
         expected_qname: 'my_models.Grade'
         returns: True
         """

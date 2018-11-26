@@ -46,7 +46,7 @@ setup(
     name='codewatch',
     classifiers=CLASSIFIERS,
     packages=find_packages(),
-    version='0.0.15',
+    version='0.0.16',
     description="Monitor and manage deeply customizable metrics about your python code using ASTs",
     long_description=long_description,
     long_description_content_type="text/markdown",

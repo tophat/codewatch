@@ -32,4 +32,4 @@ def count_expressions(node, stats, _rel_file_path):
 
 @assertion()
 def unicode_works(stats):
-    return stats.get(hello_world, 0) > 0, 'unicode not working'
+    assert stats.get(hello_world, 0) > 0, 'unicode not working'

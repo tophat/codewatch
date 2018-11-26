@@ -40,5 +40,8 @@ class Stats(object):
     def __getitem__(self, item):
         return self.stats.__getitem__(item)
 
+    def __contains__(self, item):
+        return self.stats.__contains__(item)
+
     def __getattr__(self, item):
         return self.stats.__getattribute__(item)

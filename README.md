@@ -97,7 +97,7 @@ There were 763 total imports detected which exceeds threshold of 700
 would be printed
 
 # Contributing
-
+View our Code of Conduct [here](https://github.com/tophat/getting-started/blob/master/code-of-conduct.md)
 ## Helpful resources
 TODO
 

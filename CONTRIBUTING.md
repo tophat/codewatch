@@ -1,4 +1,11 @@
-Steps to get started:
+# Contributing to codewatch
+
+Thanks for your interest in `codewatch`!
+
+We hope that this doc will help you get started if you'd like to contribute, but feel free to [join our slack workspace](https://opensource.tophat.com/#join-slack) and hop in the `#codewatch` channel if we can be of further assistance.
+
+## Steps to get started:
+
 1. Create the virtual environment in the `./venv` directory:
 ```
 python -m venv venv

@@ -114,8 +114,17 @@ Tune these filters to suit your needs.
 
 # Contributing
 View our Code of Conduct [here](https://github.com/tophat/getting-started/blob/master/code-of-conduct.md)
-## Helpful resources
-TODO
+
+## Running tests
+Assuming you have a suitable python version with pip:
+
+```bash
+# setup
+pip install -r requirements.txt -r requirements_test.txt
+
+# run the tests!
+pytest -p no:warnings -s
+```
 
 # Contributors
 

@@ -40,20 +40,22 @@ class CallNodePredicates(object):
         eg.
 
         ```
-        from my_models import Grade
-        grade = Grade()
+        from my_models import User
+        user = User()
         ```
 
         node: An `astroid.nodes.Call` node
-        expected_qname: 'my_models.Grade'
+        expected_qname: 'my_models.User'
         returns: True
         """
         try:
             inferred_types = node.inferred()
         except InferenceError:
             return False
-        success = any(
-            hasattr(node_type, 'qname') and node_type.qname() == expected_qname
-            for node_type in inferred_types
-        )
-        return success
+        for node_type in inferred_types:
+            if (
+                    hasattr(node_type, 'qname')
+                    and node_type.qname() == expected_qname
+            ):
+                return True
+        return False

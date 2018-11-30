@@ -3,17 +3,13 @@ from collections import namedtuple
 from functools import wraps
 
 from astroid import inference_tip
-from astroid.nodes import (
-    Call,
-    ImportFrom,
-    Import,
-)
+from astroid.nodes import Call, ImportFrom, Import
 from astroid.node_classes import NodeNG
 from astroid.exceptions import InferenceError
 from astroid.transforms import TransformVisitor
 
 
-Inference = namedtuple('Inference', ('node', 'fn', 'predicate'))
+Inference = namedtuple("Inference", ("node", "fn", "predicate"))
 CodewatchNodeAnnotations = namedtuple(
     "CodewatchNodeAnnotations", ["stats", "rel_file_path"]
 )
@@ -72,7 +68,7 @@ def inference(node, fn, predicate=None):
 def visit(node_type, predicate=None, inferences=None):
     def decorator(fn):
         NodeVisitorMaster.register_visitor(
-            node_type, fn, predicate, inferences,
+            node_type, fn, predicate, inferences
         )
         return fn
 
@@ -83,8 +79,8 @@ def count_import_usages(stats_namespace, expected_qname, importer=None):
     if importer is None:
         importer = importlib.import_module
 
-    module_name = '.'.join(expected_qname.split('.')[:-1])
-    trouble_attribute = expected_qname.split('.')[-1]
+    module_name = ".".join(expected_qname.split(".")[:-1])
+    trouble_attribute = expected_qname.split(".")[-1]
 
     def track_import(stats, rel_file_path):
         stats.namespaced(stats_namespace).increment(rel_file_path)
@@ -99,12 +95,12 @@ def count_import_usages(stats_namespace, expected_qname, importer=None):
         modname = import_from_node.modname
 
         for name, alias in import_from_node.names:
-            if name == '*':
+            if name == "*":
                 module = importer(module_name)
                 if trouble_attribute in dir(module):
                     track_import(stats, rel_file_path)
             else:
-                imported_qname = modname + '.' + name
+                imported_qname = modname + "." + name
                 if imported_qname == expected_qname:
                     track_import(stats, rel_file_path)
         return import_from_node
@@ -114,9 +110,7 @@ def count_import_usages(stats_namespace, expected_qname, importer=None):
 
 
 def count_calling_files(
-    stats_namespace,
-    expected_callable_qname,
-    inferences=None,
+    stats_namespace, expected_callable_qname, inferences=None
 ):
     if stats_namespace is None:
         raise Exception("count_calling_files() requires a valid namespace")
@@ -174,11 +168,7 @@ class NodeVisitorMaster(object):
 
     @classmethod
     def register_visitor(
-        cls,
-        node,
-        visitor_function,
-        predicate=None,
-        inferences=None,
+        cls, node, visitor_function, predicate=None, inferences=None
     ):
         wrapped = _astroid_interface_for_visitor(visitor_function)
 
@@ -212,9 +202,7 @@ class NodeVisitorMaster(object):
                     )
 
             node_visitor_obj.register_transform(
-                node,
-                node_visitor_function,
-                predicate,
+                node, node_visitor_function, predicate
             )
             initialized_node_visitors.append(node_visitor_obj)
         return initialized_node_visitors

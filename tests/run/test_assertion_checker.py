@@ -10,12 +10,12 @@ class MockLoader(object):
 
 @assertion()
 def assert_fail_if_counter_over_5(stats):
-    assert stats.get('counter', 0) > 5, 'counter is over 5'
+    assert stats.get("counter", 0) > 5, "counter is over 5"
 
 
 @assertion()
 def assert_always_fails(_stats):
-    assert False, 'this should always fail'
+    assert False, "this should always fail"
 
 
 @assertion()
@@ -50,7 +50,7 @@ def test_assertions_are_run_counter_check_fails():
 def test_asserts_are_run_counter_check_passes():
     loader = MockLoader(assertions=ASSERTIONS)
     stats = Stats()
-    stats.append('counter', 10)
+    stats.append("counter", 10)
     checker = AssertionChecker(loader, stats)
     successes, failures, errors = checker.run()
 

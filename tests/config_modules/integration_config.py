@@ -15,7 +15,7 @@ def file_filter(file_name):
     this_file = os.path.basename(__file__)
 
     # make sure it's a .py file (not .pyc)
-    this_file = os.path.splitext(this_file)[0] + '.py'
+    this_file = os.path.splitext(this_file)[0] + ".py"
     return file_name == this_file
 
 
@@ -40,13 +40,13 @@ def is_a_object_get(node):
     if not hasattr(node.func.expr, "expr"):
         return False
 
-    if not node.func.expr.expr.name == 'A':
+    if not node.func.expr.expr.name == "A":
         return False
 
-    if not node.func.expr.attrname == 'objects':
+    if not node.func.expr.attrname == "objects":
         return False
 
-    if not node.func.attrname == 'get':
+    if not node.func.attrname == "get":
         return False
 
     return True
@@ -70,7 +70,9 @@ class A(object):
 @visit(
     nodes.Call,
     predicate=is_a_object_get,
-    inferences=[inference(nodes.Call, infer_objects_get_as_a, is_a_object_get)]
+    inferences=[
+        inference(nodes.Call, infer_objects_get_as_a, is_a_object_get)
+    ],
 )
 def call_visitor(node, stats, _rel_file_path):
     inf_types = node.inferred()
@@ -84,7 +86,7 @@ def always_true_predicate(_node):
 @visit(
     nodes.Call,
     inferences=[
-        inference(nodes.Call, infer_objects_get_as_a, always_true_predicate),
+        inference(nodes.Call, infer_objects_get_as_a, always_true_predicate)
     ],
 )
 def predicate_visitor_inference(_node, stats, _rel_file_path):
@@ -105,79 +107,78 @@ def infer_itself(node, context=None):
 def multiple_inferences(node, stats, _rel_file_path):
     import_node = node.root().body[0]
     inference_works = import_node.inferred()[0] == import_node
-    stats.append('importInference', inference_works)
+    stats.append("importInference", inference_works)
 
     import_from_node = node.root().body[1]
     inference_works = import_from_node.inferred()[0] == import_from_node
-    stats.append('importFromInference', inference_works)
+    stats.append("importFromInference", inference_works)
 
 
 @assertion()
 def import_inference_worked(stats):
-    assert 'importInference' in stats, 'inference failed'
+    assert "importInference" in stats, "inference failed"
 
 
 @assertion()
 def import_from_inference_worked(stats):
-    assert 'importFromInference' in stats, 'inference failed'
+    assert "importFromInference" in stats, "inference failed"
 
 
-@visit(
-    nodes.Call,
-    predicate=always_true_predicate,
-)
+@visit(nodes.Call, predicate=always_true_predicate)
 def predicate_visitor(_node, stats, _rel_file_path):
     stats.increment("predicate_visitor")
 
 
 @visit(nodes.Expr)
 def count_expressions(node, stats, _rel_file_path):
-    stats.increment('num_expressions')
+    stats.increment("num_expressions")
     return node
 
 
 @visit(nodes.ImportFrom)
 def count_imports(node, stats, _rel_file_path):
-    stats.increment('num_import_from')
+    stats.increment("num_import_from")
     return node
 
 
 @assertion()
 def correctly_rewritten_inference(stats):
-    inference_results = stats.get('inferred A.objects.get()')
-    assert len(inference_results) == 1, \
-        "Too many possible inferences {i}".format(i=inference_results)
+    inference_results = stats.get("inferred A.objects.get()")
+    assert (
+        len(inference_results) == 1
+    ), "Too many possible inferences {i}".format(i=inference_results)
     qname = inference_results[0].qname()
-    assert qname == '.A', "bad inferrence {qname}".format(qname=qname)
+    assert qname == ".A", "bad inferrence {qname}".format(qname=qname)
 
 
 @assertion()
 def num_import_from_more_than_zero(stats):
-    err = 'num_import_from is not more than 0'
-    assert stats.get('num_import_from', 0) > 0, err
+    err = "num_import_from is not more than 0"
+    assert stats.get("num_import_from", 0) > 0, err
 
 
 @assertion()
 def expressions_more_than_zero(stats):
-    assert stats.get('num_expressions', 0) > 0, 'not more than zero'
+    assert stats.get("num_expressions", 0) > 0, "not more than zero"
 
 
-@assertion(label='custom_label_always_true')
+@assertion(label="custom_label_always_true")
 def always_true(_stats):
     assert True
 
 
-@assertion(stats_namespaces=['level1'])
+@assertion(stats_namespaces=["level1"])
 def always_false(_stats):
-    assert False, 'should always be false'
+    assert False, "should always be false"
 
 
 @assertion()
 def predicate_works(stats):
-    assert stats.get('predicate_visitor', -1) > 0, 'predicate not working'
+    assert stats.get("predicate_visitor", -1) > 0, "predicate not working"
 
 
 @assertion()
 def predicate_inference_works(stats):
-    assert stats.get('predicate_visitor_inference', -1) > 0, \
-        'predicate not working'
+    assert (
+        stats.get("predicate_visitor_inference", -1) > 0
+    ), "predicate not working"

@@ -1,9 +1,6 @@
 import pytest
 
-from codewatch.assertion import (
-    Assertion,
-    assertion,
-)
+from codewatch.assertion import Assertion, assertion
 from codewatch.stats import Stats
 from tests.mock_data import (
     MOCK_BASEEXCEPTION_CLASS,
@@ -21,8 +18,7 @@ from tests.mock_data import (
 
 def test_successful_assertion():
     successes, failures, errors = Assertion(
-        Stats(),
-        [successful_assertion],
+        Stats(), [successful_assertion]
     ).run()
     assert successes == [successful_assertion.__name__]
     assert failures == {}
@@ -31,8 +27,7 @@ def test_successful_assertion():
 
 def test_unsuccessful_assertion():
     successes, failures, errors = Assertion(
-        Stats(),
-        [unsuccessful_assertion],
+        Stats(), [unsuccessful_assertion]
     ).run()
     assert successes == []
     assert failures == {unsuccessful_assertion.__name__: MOCK_FAILURE_MSG}
@@ -41,8 +36,7 @@ def test_unsuccessful_assertion():
 
 def test_erroring_assertion():
     successes, failures, errors = Assertion(
-        Stats(),
-        [erroring_assertion],
+        Stats(), [erroring_assertion]
     ).run()
     assert successes == []
     assert failures == {}
@@ -55,10 +49,7 @@ def test_baseexception_assertion_bubbles():
 
 
 def test_multiple_assertions():
-    assertions = [
-        successful_assertion,
-        unsuccessful_assertion,
-    ]
+    assertions = [successful_assertion, unsuccessful_assertion]
     successes, failures, errors = Assertion(Stats(), assertions).run()
 
     assert successes == [successful_assertion.__name__]
@@ -67,21 +58,22 @@ def test_multiple_assertions():
 
 def test_injects_stats():
     stats = Stats()
-    stats.increment('counter')
+    stats.increment("counter")
     Assertion(stats, [stats_assertion]).run()
 
 
 def test_with_stats_namespace():
     _stats = Stats()
-    namespaced_stats = _stats.namespaced('level2').namespaced('level3')
-    namespaced_stats.increment('counter')
+    namespaced_stats = _stats.namespaced("level2").namespaced("level3")
+    namespaced_stats.increment("counter")
 
     def stats_namespaced_assertion(stats):
         assert stats.items() == namespaced_stats.items()
-        assert stats.get('counter') == 1
+        assert stats.get("counter") == 1
         return True, None
-    decorated_assertion = assertion(stats_namespaces=['level2', 'level3'])(
-        stats_namespaced_assertion,
+
+    decorated_assertion = assertion(stats_namespaces=["level2", "level3"])(
+        stats_namespaced_assertion
     )
     Assertion(_stats, [decorated_assertion]).run()
 

@@ -13,7 +13,7 @@ class Assertion(object):
             attr = getattr(module, attr_name)
             if not callable(attr):
                 continue
-            if not hasattr(attr, '_wrapped_assertion_label'):
+            if not hasattr(attr, "_wrapped_assertion_label"):
                 continue
             assertions.append(attr)
         return assertions
@@ -44,7 +44,9 @@ def _with_stats_namespace(*namespaces):
             for namespace in namespaces:
                 _stats = _stats.namespaced(namespace)
             return fn(_stats, *args, **kwargs)
+
         return wrapper
+
     return decorator
 
 
@@ -61,6 +63,8 @@ def assertion(label=None, stats_namespaces=None):
         @wraps(fn)
         def wrapper(*args, **kwargs):
             return fn(*args, **kwargs)
+
         wrapper._wrapped_assertion_label = _label
         return wrapper
+
     return decorator

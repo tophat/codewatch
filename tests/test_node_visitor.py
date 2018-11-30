@@ -134,10 +134,10 @@ class A(object):
 a = A.objects.get()
 a.save()
 """
-    module = astroid.parse(code, 'infer.this')
+    module = astroid.parse(code, "infer.this")
 
     def infer_objects_get_as_a(call_node, context=None):
-        if getattr(call_node.func, "attrname") != 'get':
+        if getattr(call_node.func, "attrname") != "get":
             raise UseInferenceDefault()
 
         code = """\
@@ -148,22 +148,22 @@ class A(object):
             pass
     def save():
         pass"""
-        m = astroid.parse(code, 'infer.this')
+        m = astroid.parse(code, "infer.this")
         class_node = m.body[0]
 
         return iter((class_node.instantiate_class(),))
 
     assert len(NodeVisitorMaster.node_visitor_registry) == 0
     count_calling_files(
-        'ccf_inf_testing',
-        'infer.this.A.save',
+        "ccf_inf_testing",
+        "infer.this.A.save",
         inferences=[inference(nodes.Call, infer_objects_get_as_a)],
     )
     assert len(NodeVisitorMaster.node_visitor_registry) == 1
 
     stats = Stats()
     NodeVisitorMaster.visit(stats, module, "infer/this.py")
-    assert stats == {'ccf_inf_testing': {'infer/this.py': 1}}
+    assert stats == {"ccf_inf_testing": {"infer/this.py": 1}}
 
 
 def test_sets_stats_and_file_path():
@@ -177,29 +177,23 @@ def test_sets_stats_and_file_path():
 
 class MockModule(object):
     def __dir__(self):
-        return ['Trouble']
+        return ["Trouble"]
 
 
 def mock_importer(mod_name):
-    if mod_name == 'api.views':
+    if mod_name == "api.views":
         return MockModule()
     return None
 
 
 @pytest.mark.parametrize(
-    "code,module_name",
-    [
-        (
-            TROUBLESOME_IMPORTS_CODE,
-            'api.views.Trouble',
-        )
-    ],
+    "code,module_name", [(TROUBLESOME_IMPORTS_CODE, "api.views.Trouble")]
 )
 def test_track_troublesome_module_usages(code, module_name):
     NodeVisitorMaster.node_visitor_registry = []
     module = astroid.parse(code, module_name)
     assert len(NodeVisitorMaster.node_visitor_registry) == 0
-    count_import_usages('TROUBLESOME', module_name, mock_importer)
+    count_import_usages("TROUBLESOME", module_name, mock_importer)
     assert len(NodeVisitorMaster.node_visitor_registry) == 2
     stats = Stats()
     NodeVisitorMaster.visit(stats, module, module_name + ".py")

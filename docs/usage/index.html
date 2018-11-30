@@ -36,18 +36,11 @@
               }
             });
         </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Usage</h1></header><article><div><span><p><code>codewatch codewatch_config_module</code></p>
-<p><code>codewatch_config_module</code> is a file that should contain the following two methods:</p>
-<p><em>1. Visit all directories:</em></p>
-<pre><code class="hljs css language-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">directory_filter</span><span class="hljs-params">(_dir_name)</span>:</span>
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">True</span>
-</code></pre>
-<p><em>2. Visit all files:</em></p>
-<pre><code class="hljs css language-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">file_filter</span><span class="hljs-params">(_file_name)</span>:</span>
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">True</span>
-</code></pre>
-<p>Tune these filters to suit your needs.</p>
-<p>Then, you should use the <code>@visit</code> decorator. It follows a similar API to <code>ast.NodeVisitor</code>:</p>
-<pre><code class="hljs css language-python"><span class="hljs-keyword">from</span> codewatch <span class="hljs-keyword">import</span> visitor
+<p><code>codewatch_config_module</code> is a module that should contain your visitors, assertions and filters (if required)</p>
+<h3><a class="anchor" aria-hidden="true" id="visitors"></a><a href="#visitors" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Visitors</h3>
+<p>You should use the <code>@visit</code> decorator.
+The passed in node object is an <a href="https://astroid.readthedocs.io/en/latest/">astroid</a> node which follows a similar API to <code>ast.Node</code></p>
+<pre><code class="hljs css language-python"><span class="hljs-keyword">from</span> codewatch <span class="hljs-keyword">import</span> visit
 
 
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_count_import</span><span class="hljs-params">(stats)</span>:</span>
@@ -66,19 +59,37 @@
     <span class="hljs-attr">"total_imports_num"</span>: <span class="hljs-number">763</span>
 }
 </code></pre>
-<p>Then, once again in the <code>codewatch_config_module</code> you can add assertions against this stat dictionary using the <code>@assertion</code> decorator</p>
+<h3><a class="anchor" aria-hidden="true" id="assertions"></a><a href="#assertions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Assertions</h3>
+<p>Once again in the <code>codewatch_config_module</code> you can add assertions against this stat dictionary using the <code>@assertion</code> decorator</p>
 <pre><code class="hljs css language-python"><span class="hljs-keyword">from</span> codewatch <span class="hljs-keyword">import</span> assertion
 
 
 <span class="hljs-meta">@assertion()</span>
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">number_of_imports_not_too_high</span><span class="hljs-params">(stats)</span>:</span>
     threshold = <span class="hljs-number">700</span>
-    newStat = stats.get(<span class="hljs-string">'total_imports_num'</span>)
-    err = <span class="hljs-string">'There were {} total imports detected which exceeds threshold of {}'</span>.format(newStat, threshold)
-    <span class="hljs-keyword">return</span> newStat &lt;= threshold, err
+    actual = stats.get(<span class="hljs-string">'total_imports_num'</span>)
+    err = <span class="hljs-string">'There were {} total imports detected which exceeds threshold of {}'</span>.format(actual, threshold)
+    <span class="hljs-keyword">assert</span> actual &lt;= threshold, err
 </code></pre>
 <p>In this case, the assertion would fail since 763 is the <code>newStat</code> and the message:</p>
 <pre><code class="hljs">There were <span class="hljs-number">763</span> total imports detected which exceeds threshold of <span class="hljs-number">700</span>
 </code></pre>
 <p>would be printed</p>
-</span></div></article></div><div class="docLastUpdate"><em>Last updated by sdcosta</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/overview"><span class="arrow-prev">← </span><span>Overview</span></a><a class="docs-next button" href="/docs/contribute"><span>Contribute</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="footer"><div class="footer-icon"><a href="/" class="nav-home"><img src="/img/codewatch.png" alt="Codewatch" width="65" height="45"/></a></div><div class="footer-github"><a href="https://github.com/tophat/codewatch">GitHub</a><a class="github-button" href="https://github.com/tophat/codewatch" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Top Hat Open Source</section></footer></div></body></html>
+<h3><a class="anchor" aria-hidden="true" id="filters"></a><a href="#filters" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Filters</h3>
+<p>You can add the following <em>optional</em> filters:</p>
+<ol>
+<li>directory_filter (defaults to skip test and migration directories)</li>
+</ol>
+<pre><code class="hljs css language-python"><span class="hljs-comment"># visit all directories</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">directory_filter</span><span class="hljs-params">(_dir_name)</span>:</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">True</span>
+</code></pre>
+<ol start="2">
+<li>file_filter (defaults to only include python files, and skips test files)</li>
+</ol>
+<pre><code class="hljs css language-python"><span class="hljs-comment"># visit all files</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">file_filter</span><span class="hljs-params">(_file_name)</span>:</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">True</span>
+</code></pre>
+<p>Tune these filters to suit your needs.</p>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated by Joshua Doncaster-Marsiglio</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/overview"><span class="arrow-prev">← </span><span>Overview</span></a><a class="docs-next button" href="/docs/contribute"><span>Contribute</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="footer"><div class="footer-icon"><a href="/" class="nav-home"><img src="/img/codewatch.png" alt="Codewatch" width="65" height="45"/></a></div><div class="footer-github"><a href="https://github.com/tophat/codewatch">GitHub</a><a class="github-button" href="https://github.com/tophat/codewatch" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Top Hat Open Source</section></footer></div></body></html>

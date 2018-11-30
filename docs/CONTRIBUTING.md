@@ -1,10 +1,13 @@
-# Contributing to codewatch
+---
+id: contribute
+title: Contributing
+---
 
 Thanks for your interest in `codewatch`!
 
 We hope that this doc will help you get started if you'd like to contribute, but feel free to [join our slack workspace](https://opensource.tophat.com/#join-slack) and hop in the `#codewatch` channel if we can be of further assistance.
 
-## Steps to get started:
+## Get Your Development Environment Configured:
 
 1. Create the virtual environment in the `./venv` directory:
 ```
@@ -34,3 +37,7 @@ pip install -r requirements_test.txt
 ```
 pytest
 ```
+
+## Filing a Pull Request
+
+TODO

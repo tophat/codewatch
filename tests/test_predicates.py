@@ -95,7 +95,11 @@ def test_has_expected_chain_name_as_attr(code, method_name, expected_value):
     (NESTED_FN_CALL_CODE, 'A.a', False),
     (NESTED_FN_CALL_CODE, 'A.a.b.c.d', False),
 ])
-def test_has_expected_chain_name_single_call(code, method_name, expected_value):
+def test_has_expected_chain_name_single_call(
+        code,
+        method_name,
+        expected_value,
+):
     call_node = parse(code).body[3].value
     assert type(call_node) == nodes.Call
 

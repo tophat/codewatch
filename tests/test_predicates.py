@@ -106,7 +106,11 @@ def test_is_node_qname_inferred(code, qname, expected_value):
     (QNAME_UNINFERABLE_CODE, 'my_models.Grade', False),
 ])
 def test_is_node_qname_inferred_uninferable(code, qname, expected_value):
-    node = parse(code, 'my_test_module').body[1].value
-    assert type(node) == nodes.Call
-    ret = CallNodePredicates.has_expected_qname(node, qname)
+    import_from_node = parse(code, 'my_test_module').body[0]
+    assert type(import_from_node) == nodes.ImportFrom
+
+    ret = CallNodePredicates.has_expected_qname(
+        import_from_node,
+        qname,
+    )
     assert ret == expected_value

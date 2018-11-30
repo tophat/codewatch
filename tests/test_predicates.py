@@ -62,7 +62,11 @@ Grade()
     (NESTED_FN_CALL_CODE, 'd', False),
     (NESTED_FN_CALL_CODE, 'A.a.x.c.d', False),
 ])
-def has_expected_chain_name_as_fn_calls(code, method_name, expected_value):
+def test_has_expected_chain_name_as_fn_calls(
+        code,
+        method_name,
+        expected_value,
+):
     call_node = parse(code).body[1].value
     assert type(call_node) == nodes.Call
 

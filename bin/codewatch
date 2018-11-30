@@ -36,5 +36,5 @@ if __name__ == '__main__':
     print('failures', failures)
     print('errors', errors)
 
-    if failures:
+    if failures or errors:
         sys.exit(-1)

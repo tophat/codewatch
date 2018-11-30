@@ -123,7 +123,7 @@ Assuming you have a suitable python version with pip:
 pip install -r requirements.txt -r requirements_test.txt
 
 # run the tests!
-pytest -p no:warnings -s
+pytest
 ```
 
 # Contributors

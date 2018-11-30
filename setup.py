@@ -24,7 +24,7 @@ CLASSIFIERS = [
 ]
 
 
-if sys.version_info[0:3] >= (3, 7, 0):
+if sys.version_info[0:3] >= (3, 6, 0):
     # astroid<2.0 does not work on python>=3.7 because StopIteration is removed
     INSTALL_REQUIRES = [
         'astroid==2.0.4'
@@ -46,7 +46,7 @@ setup(
     name='codewatch',
     classifiers=CLASSIFIERS,
     packages=find_packages(),
-    version='0.0.15',
+    version='0.0.16',
     description="Monitor and manage deeply customizable metrics about your python code using ASTs",
     long_description=long_description,
     long_description_content_type="text/markdown",

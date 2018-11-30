@@ -114,12 +114,12 @@ def multiple_inferences(node, stats, _rel_file_path):
 
 @assertion()
 def import_inference_worked(stats):
-    return stats.get('importInference', False), 'inference failed'
+    assert 'importInference' in stats, 'inference failed'
 
 
 @assertion()
 def import_from_inference_worked(stats):
-    return stats.get('importFromInference', False), 'inference failed'
+    assert 'importFromInference' in stats, 'inference failed'
 
 
 @visit(
@@ -145,44 +145,39 @@ def count_imports(node, stats, _rel_file_path):
 @assertion()
 def correctly_rewritten_inference(stats):
     inference_results = stats.get('inferred A.objects.get()')
-    if len(inference_results) != 1:
-        return (
-            False,
-            "Too many possible inferences {i}".format(i=inference_results),
-        )
+    assert len(inference_results) == 1, \
+        "Too many possible inferences {i}".format(i=inference_results)
     qname = inference_results[0].qname()
-    return qname == '.A', "bad inferrence {qname}".format(qname=qname)
+    assert qname == '.A', "bad inferrence {qname}".format(qname=qname)
 
 
 @assertion()
 def num_import_from_more_than_zero(stats):
     err = 'num_import_from is not more than 0'
-    return stats.get('num_import_from', 0) > 0, err
+    assert stats.get('num_import_from', 0) > 0, err
 
 
 @assertion()
 def expressions_more_than_zero(stats):
-    return stats.get('num_expressions', 0) > 0, 'not more than zero'
+    assert stats.get('num_expressions', 0) > 0, 'not more than zero'
 
 
 @assertion(label='custom_label_always_true')
 def always_true(_stats):
-    return True, None
+    assert True
 
 
 @assertion(stats_namespaces=['level1'])
 def always_false(_stats):
-    return False, 'should always be false'
+    assert False, 'should always be false'
 
 
 @assertion()
 def predicate_works(stats):
-    return stats.get('predicate_visitor', -1) > 0, 'predicate not working'
+    assert stats.get('predicate_visitor', -1) > 0, 'predicate not working'
 
 
 @assertion()
 def predicate_inference_works(stats):
-    return (
-        stats.get('predicate_visitor_inference', -1) > 0,
+    assert stats.get('predicate_visitor_inference', -1) > 0, \
         'predicate not working'
-    )

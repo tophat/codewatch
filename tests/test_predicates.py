@@ -65,7 +65,7 @@ def test_does_node_call_method_as_fn_calls(code, method_name, expected_value):
     call_node = parse(code).body[1].value
     assert type(call_node) == nodes.Call
 
-    ret = CallNodePredicates.does_node_call_method(
+    ret = CallNodePredicates.has_expected_chain_name(
         call_node,
         method_name,
     )
@@ -82,7 +82,7 @@ def test_does_node_call_method_as_attr(code, method_name, expected_value):
     call_node = parse(code).body[2].value
     assert type(call_node) == nodes.Call
 
-    ret = CallNodePredicates.does_node_call_method(
+    ret = CallNodePredicates.has_expected_chain_name(
         call_node,
         method_name,
     )
@@ -98,7 +98,7 @@ def test_does_node_call_method_as_attr(code, method_name, expected_value):
 def test_is_node_qname_inferred(code, qname, expected_value):
     node = parse(code, 'my_test_module').body[1].value
     assert type(node) == nodes.Call
-    ret = CallNodePredicates.is_node_qname_inferred(node, qname)
+    ret = CallNodePredicates.has_expected_qname(node, qname)
     assert ret == expected_value
 
 
@@ -108,5 +108,5 @@ def test_is_node_qname_inferred(code, qname, expected_value):
 def test_is_node_qname_inferred_uninferable(code, qname, expected_value):
     node = parse(code, 'my_test_module').body[1].value
     assert type(node) == nodes.Call
-    ret = CallNodePredicates.is_node_qname_inferred(node, qname)
+    ret = CallNodePredicates.has_expected_qname(node, qname)
     assert ret == expected_value

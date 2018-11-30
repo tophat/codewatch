@@ -3,7 +3,7 @@ from astroid.exceptions import InferenceError
 
 class CallNodePredicates(object):
     @staticmethod
-    def does_node_call_method(call_node, method_name):
+    def has_expected_chain_name(call_node, method_name):
         """
         Returns true if call_node looks like a call to method_name
         Does not do any inference, just matches on the name
@@ -34,7 +34,7 @@ class CallNodePredicates(object):
         return True
 
     @staticmethod
-    def is_node_qname_inferred(node, expected_qname):
+    def has_expected_qname(node, expected_qname):
         """
         Perform inference on the node and check for the expected qname
         eg.

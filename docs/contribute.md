@@ -3,7 +3,6 @@ id: contribute
 title: Contribute
 ---
 
-# Contributing
 View our Code of Conduct [here](https://github.com/tophat/getting-started/blob/master/code-of-conduct.md)
 
 ## Running tests

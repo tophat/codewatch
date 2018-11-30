@@ -1,9 +1,9 @@
 from codewatch import assertion
 
-MOCK_FAILURE_MSG = 'assertion failed!'
+MOCK_FAILURE_MSG = "assertion failed!"
 MOCK_ERR = KeyError(0)
 MOCK_BASEEXCEPTION_CLASS = KeyboardInterrupt
-MOCK_LABEL = 'wow_nice_label'
+MOCK_LABEL = "wow_nice_label"
 
 
 @assertion()
@@ -29,7 +29,7 @@ def baseexception_assertion(_stats):
 @assertion()
 def stats_assertion(stats):
     assert stats == stats
-    assert stats.get('counter') == 1
+    assert stats.get("counter") == 1
 
 
 @assertion(label=MOCK_LABEL)

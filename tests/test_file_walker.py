@@ -1,25 +1,26 @@
 from codewatch.file_walker import FileWalker
 
 MOCK_PATHS = [
-    ('.', ['dir1', 'dir2'], ['file1', 'file2', 'file3']),
-    ('./dir1', [], ['dir1_file1', 'dir1_file2']),
-    ('./dir2', ['dir2_subdir'], ['dir2_file1']),
-    ('./dir2/dir2_subdir', [], ['subdir_file1']),
+    (".", ["dir1", "dir2"], ["file1", "file2", "file3"]),
+    ("./dir1", [], ["dir1_file1", "dir1_file2"]),
+    ("./dir2", ["dir2_subdir"], ["dir2_file1"]),
+    ("./dir2/dir2_subdir", [], ["subdir_file1"]),
 ]
 
-MOCK_START_PATH = '/home/mock'
+MOCK_START_PATH = "/home/mock"
 
 
 def _expected_files_from_dir(dir_index):
     path = MOCK_PATHS[dir_index][0]
     files = MOCK_PATHS[dir_index][2]
-    return [path + '/' + file for file in files]
+    return [path + "/" + file for file in files]
 
 
 def create_mock_os_walk(mock_path):
     def _os_walk(path):
         assert path == mock_path
         return MOCK_PATHS
+
     return _os_walk
 
 
@@ -42,25 +43,24 @@ def test_it_can_walk_all_files():
         return True
 
     expected_files_walked = (
-        _expected_files_from_dir(0) +
-        _expected_files_from_dir(1) +
-        _expected_files_from_dir(2) +
-        _expected_files_from_dir(3)
+        _expected_files_from_dir(0)
+        + _expected_files_from_dir(1)
+        + _expected_files_from_dir(2)
+        + _expected_files_from_dir(3)
     )
     assert _walk(directory_filter, file_filter) == expected_files_walked
 
 
 def test_it_filters_on_directories():
     def directory_filter(path):
-        return 'dir2' not in path
+        return "dir2" not in path
 
     def file_filter(_path):
         return True
 
-    expected_files_walked = (
-        _expected_files_from_dir(0) +
-        _expected_files_from_dir(1)
-    )
+    expected_files_walked = _expected_files_from_dir(
+        0
+    ) + _expected_files_from_dir(1)
     assert _walk(directory_filter, file_filter) == expected_files_walked
 
 
@@ -69,11 +69,11 @@ def test_it_filters_on_files():
         return True
 
     def file_filter(path):
-        return 'subdir' not in path
+        return "subdir" not in path
 
     expected_files_walked = (
-        _expected_files_from_dir(0) +
-        _expected_files_from_dir(1) +
-        _expected_files_from_dir(2)
+        _expected_files_from_dir(0)
+        + _expected_files_from_dir(1)
+        + _expected_files_from_dir(2)
     )
     assert _walk(directory_filter, file_filter) == expected_files_walked

@@ -96,31 +96,16 @@ def _test_visits_file_with_ast_tree_and_relative_path(
         assert file_name == MOCK_FILE_NAMES[i]
 
 
-NORMAL_FILE = (
-    'a = 3\n'
-    'b = 3\n'
-)
+NORMAL_FILE = "a = 3\n" "b = 3\n"
 EXPECTED_NORMAL_FILE_TO_PARSE = NORMAL_FILE
 
 
-UTF8_FILE = (
-    '# -*- coding: utf-8 -*-\n'
-    'a = "你好，世界"\n'
-)
-EXPECTED_UTF8_FILE_TO_PARSE = (
-    'a = "你好，世界"\n'
-)
+UTF8_FILE = "# -*- coding: utf-8 -*-\n" 'a = "你好，世界"\n'
+EXPECTED_UTF8_FILE_TO_PARSE = 'a = "你好，世界"\n'
 
 
-UTF8_FILE_CODING_LINE2 = (
-    '\n'
-    '# -*- coding: utf-8 -*-\n'
-    'a = "你好，世界"\n'
-)
-EXPECTED_UTF8_FILE_CODING_LINE2_TO_PARSE = (
-    '\n'
-    'a = "你好，世界"\n'
-)
+UTF8_FILE_CODING_LINE2 = "\n" "# -*- coding: utf-8 -*-\n" 'a = "你好，世界"\n'
+EXPECTED_UTF8_FILE_CODING_LINE2_TO_PARSE = "\n" 'a = "你好，世界"\n'
 
 
 @pytest.mark.parametrize(

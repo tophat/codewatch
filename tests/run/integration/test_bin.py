@@ -2,7 +2,10 @@ import os
 import sys
 from subprocess import call
 
-from tests.config_modules import integration_config, integration_config_utf8
+from tests.config_modules import (
+    integration_config,
+    integration_config_utf8,
+)
 
 
 def _call_codewatch(pargs, **kwargs):

@@ -2,19 +2,21 @@ import os
 import sys
 from subprocess import call
 
-from tests.config_modules import (
-    integration_config,
-    integration_config_utf8,
-)
+from tests.config_modules import integration_config, integration_config_utf8
 
 
 def _call_codewatch(pargs, **kwargs):
-    pythonexec = sys.executable or 'python'
-    codewatchbin = os.path.normcase('./bin/codewatch')
-    return call([pythonexec, codewatchbin] + pargs, shell=True, **kwargs) & 0xFF
+    bargs = []
+    if sys.platform == "win32":
+        bargs.append(sys.executable or "python")
+        bargs.append(os.path.normcase("./bin/codewatch"))
+        kwargs.update(shell=True)
+    else:
+        bargs.append("codewatch")
+    return call(bargs + pargs, **kwargs) & 0xFF
 
 
-def test_codewatch_returns_success():
+def test_codewatch_returns_correct_exit_code():
     ret = _call_codewatch([integration_config.__name__])
     assert ret == 255
 

@@ -13,8 +13,8 @@ from codewatch.stats import Stats
 MOCK_BASE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
 MOCK_FILE_NAMES = ("mockfile1.py", "mockfile2.py")
 RELATIVE_MOCK_FILE_PATHS = (
-    "mockdir/" + MOCK_FILE_NAMES[0],
-    "mockdir/" + MOCK_FILE_NAMES[1],
+    os.path.normcase("mockdir/" + MOCK_FILE_NAMES[0]),
+    os.path.normcase("mockdir/" + MOCK_FILE_NAMES[1]),
 )
 MOCK_FILES = [
     os.path.join(MOCK_BASE_DIRECTORY_PATH, RELATIVE_MOCK_FILE_PATHS[0]),

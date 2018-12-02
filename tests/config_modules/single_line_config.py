@@ -12,13 +12,13 @@ def file_filter(file_name):
 
 
 @visit(nodes.Call)
-def count_prints(node, stats, _rel_file_path):
+def count_prints_py3(node, stats, _rel_file_path):
     if node.func.name == 'print':
         stats.increment('print')
 
 
 @visit(nodes.Print)
-def count_prints(node, stats, _rel_file_path):
+def count_prints_py2(node, stats, _rel_file_path):
     stats.increment('print')
 
 

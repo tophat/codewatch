@@ -102,7 +102,7 @@ def get_inference_for_model(model_qname):
             #
             # users.first() is the node we are inferring
             #
-            # Astroid will take care of calling `infer` on `users`
+            # Astroid has already taken care of calling `infer` on `users`
             # Here we detected that `users` is an inference we returned
             klass_obj = node._codewatch_inferred_model_klass_obj
         else:

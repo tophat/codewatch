@@ -52,12 +52,12 @@ def _count_import(stats):
     stats.increment('total_imports_num')
 
 @visit('import')
-def count_import(self, node):
-    _count_import(self.stats)
+def count_import(node, stats, _rel_file_path):
+    _count_import(stats)
 
 @visit('importFrom')
-def count_import_from(self, node):
-    _count_import(self.stats)
+def count_import_from(node, stats, _rel_file_path):
+    _count_import(stats)
 ```
 
 This will build a stats dictionary that contains something like the following:
@@ -123,7 +123,7 @@ Assuming you have a suitable python version with pip:
 pip install -r requirements.txt -r requirements_test.txt
 
 # run the tests!
-pytest -p no:warnings -s
+pytest
 ```
 
 # Contributors
@@ -134,6 +134,7 @@ Thanks goes to these wonderful people! ([Emoji key](https://github.com/kentcdodd
 | :---: | :---: | :---: |
 | [<img src="https://avatars.githubusercontent.com/u/3876970?s=100" width="100px;"/><br /><sub><b>Francois Campbell</b></sub>](https://github.com/francoiscampbell)<br />🤔[💻](https://github.com/tophat/codewatch/commits?author=francoiscampbell) | [<img src="https://avatars3.githubusercontent.com/u/8105535?s=100" width="100px;"/><br /><sub><b>Monica Moore</b></sub>](https://github.com/monicamm95)<br />🎨 | [<img src="https://avatars0.githubusercontent.com/u/7827407?s=100" width="100px;"/><br /><sub><b>Jay Crumb</b></sub>](https://github.com/jcrumb)<br />[📖](https://github.com/tophat/codewatch/commits?author=jcrumb) |
 | [<img src="https://avatars.githubusercontent.com/u/3534236?s=100" width="100px;"/><br /><sub><b>Jake Bolam</b></sub>](https://github.com/jakebolam)<br />[🚇](https://github.com/tophat/codewatch/commits?author=jakebolam) | [<img src="https://avatars0.githubusercontent.com/u/6020693?s=100" width="100px;"/><br /><sub><b>Shouvik D'Costa</b></sub>](https://github.com/sdcosta)<br />[🚇](https://github.com/tophat/codewatch/commits?author=sdcosta) | [<img src="https://avatars1.githubusercontent.com/u/445636?s=100" width="100px;"/><br /><sub><b>Siavash Bidgoly</b></sub>](https://github.com/syavash)<br />[🚇](https://github.com/tophat/codewatch/commits?author=syavash) |
+| [<img src="https://avatars0.githubusercontent.com/u/1297096?s=100" width="100px;"/><br /><sub><b>Noah Negin-Ulster</b></sub>](https://github.com/noahnu)<br />[💻](https://github.com/tophat/codewatch/commits?author=noahnu)
 
 # Credits
 

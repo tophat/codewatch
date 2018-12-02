@@ -1,4 +1,5 @@
 from astroid import (
+    Load as LoadContext,
     nodes,
     InferenceError,
 )
@@ -10,12 +11,20 @@ def inference(node, fn, predicate=None):
     return Inference(node, fn, predicate)
 
 
+DJANGO_MANAGER_METHODS_LIST = (
+    'all',
+    'bulk_create',
+    'filter',
+    'order_by',
+)
+
 DJANGO_MANAGER_METHODS = (
     'get',
     'create',
+    'latest',
     'get_or_create',
     'update_or_create',
-)
+) + DJANGO_MANAGER_METHODS_LIST
 
 
 def get_inference_for_model(model_qname):
@@ -43,6 +52,12 @@ def get_inference_for_model(model_qname):
 
     def _inf_fn(node, context=None):
         klass_def = node.func.expr.expr.inferred()[0]
-        return iter((klass_def.instantiate_class(),))
+        klass_obj = klass_def.instantiate_class()
+
+        if node.func.attrname in DJANGO_MANAGER_METHODS_LIST:
+            l = nodes.List(ctx=LoadContext)
+            l.elts = [klass_obj]
+            return iter((l,))
+        return iter((klass_obj,))
 
     return inference(nodes.Call, _inf_fn, _inf_pred)

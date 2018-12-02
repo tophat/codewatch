@@ -23,4 +23,4 @@ count_calls_on_model(
 
 @assertion(stats_namespaces=[STATS_NAMESPACE])
 def correctly_infers_dangerous_method_call(_stats):
-    assert _stats.get(USAGE_FILE, 0) == 1, 'Django inference failed'
+    assert _stats.get(USAGE_FILE, 0) == 2, 'Django inference failed'

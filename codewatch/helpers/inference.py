@@ -115,7 +115,7 @@ def get_inference_for_model(model_qname):
             # we infer a `List` node with a single `klass_obj` element
             klass_obj_list = nodes.List(ctx=LoadContext)
             klass_obj_list.elts = [klass_obj]
-            klass_obj_list._codewatch_inferred_model_klass_obj = klass_obj
+            setattr(klass_obj_list, CODEWATCH_MODEL_INFERENCE_KEY, klass_obj)
             return iter((klass_obj_list,))
         # otherwise, just infer the `klass_obj`
         return iter((klass_obj,))

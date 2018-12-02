@@ -5,7 +5,10 @@ from codewatch.run import (
     AssertionChecker,
     Runner,
 )
-from codewatch.helpers.inference import inference
+from codewatch.helpers.inference import (
+    DjangoInferenceHelpers,
+    inference,
+)
 from codewatch.helpers.visitors import (
     count_calling_files,
     count_import_usages,
@@ -16,15 +19,16 @@ from codewatch.stats import Stats
 
 
 __all__ = [
+    'Analyzer',
+    'AssertionChecker',
     'assertion',
     'count_calling_files',
     'count_import_usages',
-    'ModuleLoader',
-    'Analyzer',
-    'AssertionChecker',
-    'Runner',
-    'visit',
+    'DjangoInferenceHelpers',
     'FileWalker',
-    'Stats',
     'inference',
+    'ModuleLoader',
+    'Runner',
+    'Stats',
+    'visit',
 ]

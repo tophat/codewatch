@@ -11,6 +11,7 @@ from codewatch.helpers.inference import (
 )
 from codewatch.helpers.visitors import (
     count_calling_files,
+    count_calls_on_model,
     count_import_usages,
     visit,
 )
@@ -23,6 +24,7 @@ __all__ = [
     'AssertionChecker',
     'assertion',
     'count_calling_files',
+    'count_calls_on_model',
     'count_import_usages',
     'DjangoInferenceHelpers',
     'FileWalker',

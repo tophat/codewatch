@@ -47,11 +47,11 @@ The passed in node object is an <a href="https://astroid.readthedocs.io/en/lates
     stats.increment(<span class="hljs-string">'total_imports_num'</span>)
 
 <span class="hljs-meta">@visit('import')</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">count_import</span><span class="hljs-params">(self, node)</span>:</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">count_import</span><span class="hljs-params">(self, node, _rel_file_path)</span>:</span>
     _count_import(self.stats)
 
 <span class="hljs-meta">@visit('importFrom')</span>
-<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">count_import_from</span><span class="hljs-params">(self, node)</span>:</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">count_import_from</span><span class="hljs-params">(self, node, _rel_file_path)</span>:</span>
     _count_import(self.stats)
 </code></pre>
 <p>This will build a stats dictionary that contains something like the following:</p>

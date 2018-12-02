@@ -8,10 +8,7 @@ from astroid.nodes import (
 )
 
 from codewatch.helpers.inference import DjangoInferenceHelpers
-from codewatch.node_visitor import (
-    Inference,
-    NodeVisitorMaster,
-)
+from codewatch.node_visitor import NodeVisitorMaster
 
 
 def visit(node_type, predicate=None, inferences=None):

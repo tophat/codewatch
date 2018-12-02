@@ -19,12 +19,12 @@ def _count_import(stats):
     stats.increment('total_imports_num')
 
 @visit('import')
-def count_import(self, node, _rel_file_path):
-    _count_import(self.stats)
+def count_import(node, stats, _rel_file_path):
+    _count_import(stats)
 
 @visit('importFrom')
-def count_import_from(self, node, _rel_file_path):
-    _count_import(self.stats)
+def count_import_from(node, stats, _rel_file_path):
+    _count_import(stats)
 ```
 
 This will build a stats dictionary that contains something like the following:

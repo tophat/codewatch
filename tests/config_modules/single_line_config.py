@@ -11,6 +11,10 @@ def file_filter(file_name):
     return file_name == 'single_print.py'
 
 
+def directory_filter(_dir_name):
+    return True
+
+
 @visit(nodes.Call)
 def count_prints_py3(node, stats, _rel_file_path):
     if node.func.name == 'print':

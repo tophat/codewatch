@@ -7,7 +7,7 @@ from astroid.nodes import (
     Import,
 )
 
-from codewatch.helpers.inference import DjangoInferenceHelpers
+from codewatch.helpers.inference import get_inference_for_model
 from codewatch.node_visitor import NodeVisitorMaster
 
 
@@ -132,5 +132,5 @@ def count_calls_on_model(stats_namespace, model_qname, method_name):
             record_stats(stats, rel_file_path)
 
     NodeVisitorMaster.register_visitor(Call, visit_call, inferences=[
-        DjangoInferenceHelpers.get_inference_for_model(model_qname),
+        get_inference_for_model(model_qname),
     ])

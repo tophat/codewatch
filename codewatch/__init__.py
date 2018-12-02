@@ -6,7 +6,7 @@ from codewatch.run import (
     Runner,
 )
 from codewatch.helpers.inference import (
-    DjangoInferenceHelpers,
+    get_inference_for_model,
     inference,
 )
 from codewatch.helpers.visitors import (
@@ -26,7 +26,7 @@ __all__ = [
     'count_calling_files',
     'count_calls_on_model',
     'count_import_usages',
-    'DjangoInferenceHelpers',
+    'get_inference_for_model',
     'FileWalker',
     'inference',
     'ModuleLoader',

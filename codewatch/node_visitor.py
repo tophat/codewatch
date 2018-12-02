@@ -51,7 +51,6 @@ def _astroid_interface_for_visitor(visitor_function):
             annotated_node,
             annotated_node._codewatch.stats,
             annotated_node._codewatch.rel_file_path,
-
             *args,
             **kwargs
         )

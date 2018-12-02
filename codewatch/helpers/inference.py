@@ -55,9 +55,9 @@ def get_inference_for_model(model_qname):
         klass_obj = klass_def.instantiate_class()
 
         if node.func.attrname in DJANGO_MANAGER_METHODS_LIST:
-            l = nodes.List(ctx=LoadContext)
-            l.elts = [klass_obj]
-            return iter((l,))
+            klass_obj_list = nodes.List(ctx=LoadContext)
+            klass_obj_list.elts = [klass_obj]
+            return iter((klass_obj_list,))
         return iter((klass_obj,))
 
     return inference(nodes.Call, _inf_fn, _inf_pred)

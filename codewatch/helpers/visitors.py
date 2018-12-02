@@ -105,7 +105,6 @@ def count_calling_files(
             return call_node
 
         record_stats(stats, rel_file_path)
-
         return call_node
 
     NodeVisitorMaster.register_visitor(Call, visit_call, inferences=inferences)

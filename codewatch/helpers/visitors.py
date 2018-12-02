@@ -135,8 +135,6 @@ def count_calls_on_model(stats_namespace, model_qname, method_name):
         if inferred[0].qname() == model_qname:
             record_stats(stats, rel_file_path)
 
-    inference_fn, inference_predicate = (
-        DjangoInferenceHelpers.get_inference_for_model(model_qname)
-    )
-    inferences = [Inference(Call, inference_fn, inference_predicate)]
-    NodeVisitorMaster.register_visitor(Call, visit_call, inferences=inferences)
+    NodeVisitorMaster.register_visitor(Call, visit_call, inferences=[
+        DjangoInferenceHelpers.get_inference_for_model(model_qname),
+    ])

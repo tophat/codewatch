@@ -1,4 +1,7 @@
-from astroid import InferenceError
+from astroid import (
+    nodes,
+    InferenceError,
+)
 
 from codewatch.node_visitor import Inference
 
@@ -46,4 +49,4 @@ class DjangoInferenceHelpers(object):
             klass_def = node.func.expr.expr.inferred()[0]
             return iter((klass_def.instantiate_class(),))
 
-        return _inf, _inf_pred
+        return inference(nodes.Call, _inf, _inf_pred)

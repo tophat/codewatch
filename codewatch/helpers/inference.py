@@ -35,7 +35,7 @@ def get_inference_for_model(model_qname):
         Checks to see if we inferred this node as part of _inf_fn
         """
         try:
-            inferred = node.inferred()[0]
+            inferred = next(node.infer())
         except InferenceError:
             return False, None
         if not isinstance(inferred, nodes.List):

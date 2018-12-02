@@ -111,6 +111,18 @@ def count_calling_files(
 
 
 def count_calls_on_model(stats_namespace, model_qname, method_name):
+    """
+    Counts the number of times a particular method is called on a Django model
+    Populates stats with the number of calls per file
+
+    eg:
+    count_calls_on_model('destroy_calls', 'app.lobby.models.User', 'destroy')
+
+    stats => {'destroy_calls': {'app/lobby/views.py': 15}}
+
+    This indicates the the destroy() function was called 15 times on the
+    User model in app/lobby/views.py
+    """
     def record_stats(stats, rel_file_path):
         stats = stats.namespaced(stats_namespace)
         stats.increment(rel_file_path)

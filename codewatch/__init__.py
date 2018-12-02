@@ -5,11 +5,10 @@ from codewatch.run import (
     AssertionChecker,
     Runner,
 )
-from codewatch.node_visitor import (
+from codewatch.helpers.inference import inference
+from codewatch.helpers.visitors import (
     count_calling_files,
     count_import_usages,
-    inference,
-    NodeVisitor,
     visit,
 )
 from codewatch.file_walker import FileWalker
@@ -24,7 +23,6 @@ __all__ = [
     'Analyzer',
     'AssertionChecker',
     'Runner',
-    'NodeVisitor',
     'visit',
     'FileWalker',
     'Stats',

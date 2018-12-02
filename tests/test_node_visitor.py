@@ -2,12 +2,14 @@ import astroid
 import pytest
 
 from astroid import nodes, UseInferenceDefault
-from codewatch import inference
+from codewatch.helpers.inference import inference
+from codewatch.helpers.visitors import (
+    count_calling_files,
+    count_import_usages,
+)
 from codewatch.node_visitor import (
     NodeVisitor,
     NodeVisitorMaster,
-    count_calling_files,
-    count_import_usages,
 )
 from codewatch.stats import Stats
 

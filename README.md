@@ -52,11 +52,11 @@ def _count_import(stats):
     stats.increment('total_imports_num')
 
 @visit('import')
-def count_import(self, node):
+def count_import(self, node, _rel_file_path):
     _count_import(self.stats)
 
 @visit('importFrom')
-def count_import_from(self, node):
+def count_import_from(self, node, _rel_file_path):
     _count_import(self.stats)
 ```
 

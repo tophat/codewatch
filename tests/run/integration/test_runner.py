@@ -49,6 +49,6 @@ def test_full_run_utf8():
 def test_runner_with_single_line_file():
     successes, failures, errors = _get_runner_for_config(
         single_line_config).run()
-    assert successes == ['single_file_works']
+    assert successes == ['single_line_file_works']
     assert failures == {}
     assert errors == {}

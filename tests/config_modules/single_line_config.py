@@ -23,5 +23,5 @@ def count_prints_py2(node, stats, _rel_file_path):
 
 
 @assertion()
-def single_file_works(stats):
-    assert stats.get('print', 0) == 1, 'single file not working'
+def single_line_file_works(stats):
+    assert stats.get('print', 0) == 1, 'single line file not working'

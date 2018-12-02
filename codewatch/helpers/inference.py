@@ -1,7 +1,4 @@
-from astroid import (
-    InferenceError,
-    nodes,
-)
+from astroid import InferenceError
 
 from codewatch.node_visitor import Inference
 

@@ -3,7 +3,7 @@ import pytest
 
 from astroid import nodes, UseInferenceDefault
 from codewatch.helpers.inference import inference
-from codewatch.helpers.visitors import (
+from codewatch.helpers.visitor import (
     count_calling_files,
     count_import_usages,
 )

@@ -1,5 +1,5 @@
 from codewatch.assertion import assertion
-from codewatch.helpers.visitors import count_calls_on_model
+from codewatch.helpers.visitor import count_calls_on_model
 
 
 USAGE_FILE = 'django_usage.py'

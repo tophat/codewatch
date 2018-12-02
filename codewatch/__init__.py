@@ -9,7 +9,7 @@ from codewatch.helpers.inference import (
     get_inference_for_model,
     inference,
 )
-from codewatch.helpers.visitors import (
+from codewatch.helpers.visitor import (
     count_calling_files,
     count_calls_on_model,
     count_import_usages,

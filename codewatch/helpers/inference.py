@@ -13,9 +13,15 @@ def inference(node, fn, predicate=None):
 
 DJANGO_MANAGER_METHODS_LIST = (
     'all',
+    'annotate',
     'bulk_create',
+    'distinct',
+    'exclude',
     'filter',
     'order_by',
+    'prefetch_related',
+    'select_related',
+    'using',
 )
 
 DJANGO_MANAGER_METHODS = (
@@ -41,6 +47,8 @@ def get_inference_for_model(model_qname):
         if not isinstance(inferred, nodes.List):
             return False, None
         if inferred.ctx != LoadContext:
+            return False, None
+        if len(inferred.elts) != 1:
             return False, None
         if inferred.elts[0].pytype() != model_qname:
             return False, None

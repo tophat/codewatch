@@ -125,10 +125,10 @@ def count_calls_on_model(stats_namespace, model_qname, method_name):
             return
 
         try:
-            inferred = node.func.expr.inferred()
+            inferred = next(node.func.expr.infer())
         except InferenceError:
             return
-        if inferred[0].qname() == model_qname:
+        if hasattr(inferred, 'qname') and inferred.qname() == model_qname:
             record_stats(stats, rel_file_path)
 
     NodeVisitorMaster.register_visitor(Call, visit_call, inferences=[

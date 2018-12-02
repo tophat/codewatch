@@ -35,6 +35,9 @@ DJANGO_MANAGER_METHODS = (
 ) + DJANGO_MANAGER_METHODS_LIST
 
 
+CODEWATCH_MODEL_INFERENCE_KEY = '_codewatch_inferred_model_klass_obj'
+
+
 def get_inference_for_model(model_qname):
     def _did_we_infer(node):
         """
@@ -47,15 +50,13 @@ def get_inference_for_model(model_qname):
             inferred = next(node.infer())
         except InferenceError:
             return False, None
-        if not isinstance(inferred, nodes.List):
-            return False, None
-        if inferred.ctx != LoadContext:
-            return False, None
-        if len(inferred.elts) != 1:
-            return False, None
-        if inferred.elts[0].pytype() != model_qname:
-            return False, None
-        return True, inferred.elts[0]
+
+        klass_obj = getattr(
+            inferred,
+            CODEWATCH_MODEL_INFERENCE_KEY,
+            None,
+        )
+        return klass_obj is not None, klass_obj
 
     def _inf_pred(node):
         """
@@ -80,7 +81,7 @@ def get_inference_for_model(model_qname):
             # Check for case 2)
             did_we_infer, klass_obj = _did_we_infer(node.func.expr)
             if did_we_infer:
-                node._codewatch_inferred_model_klass_obj = klass_obj
+                setattr(node, CODEWATCH_MODEL_INFERENCE_KEY, klass_obj)
             return did_we_infer
         if not hasattr(node.func.expr, 'expr'):
             return False
@@ -93,7 +94,7 @@ def get_inference_for_model(model_qname):
         return inferred[0].qname() == model_qname
 
     def _inf_fn(node, context=None):
-        if hasattr(node, '_codewatch_inferred_model_klass_obj'):
+        if hasattr(node, CODEWATCH_MODEL_INFERENCE_KEY):
             # For the case where we already inferred the manager call
             # We just need to infer the new call
             # eg:
@@ -104,7 +105,7 @@ def get_inference_for_model(model_qname):
             #
             # Astroid has already taken care of calling `infer` on `users`
             # Here we detected that `users` is an inference we returned
-            klass_obj = node._codewatch_inferred_model_klass_obj
+            klass_obj = getattr(node, CODEWATCH_MODEL_INFERENCE_KEY)
         else:
             # Otherwise, it's a bare manager call, eg: DjangoUser.objects.all()
             klass_def = node.func.expr.expr.inferred()[0]
@@ -114,6 +115,7 @@ def get_inference_for_model(model_qname):
             # we infer a `List` node with a single `klass_obj` element
             klass_obj_list = nodes.List(ctx=LoadContext)
             klass_obj_list.elts = [klass_obj]
+            klass_obj_list._codewatch_inferred_model_klass_obj = klass_obj
             return iter((klass_obj_list,))
         # otherwise, just infer the `klass_obj`
         return iter((klass_obj,))

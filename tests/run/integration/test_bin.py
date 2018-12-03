@@ -5,7 +5,7 @@ from subprocess import call
 from tests.config_modules import (
     integration_config,
     integration_config_utf8,
-    codewatch_config
+    error_config
 )
 
 
@@ -31,5 +31,5 @@ def test_codewatch_utf8_returns_success():
 
 
 def test_codewatch_error_returns_255():
-    ret = _call_codewatch([codewatch_config.__name__])
+    ret = _call_codewatch([error_config.__name__])
     assert ret == 255

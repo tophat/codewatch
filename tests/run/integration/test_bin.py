@@ -29,6 +29,7 @@ def test_codewatch_utf8_returns_success():
     ret = _call_codewatch([integration_config_utf8.__name__])
     assert ret == 0
 
+
 def test_codewatch_config_returns_success():
     ret = _call_codewatch(['codewatch', codewatch_config.__name__])
     assert ret == 255

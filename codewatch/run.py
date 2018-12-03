@@ -22,6 +22,7 @@ class Runner(object):
     def run(self):
         try:
             sys.path.insert(0, self.base_directory)
+            NodeVisitorMaster.node_visitor_registry = []
             loader = ModuleLoader(self.codewatch_config_module)
             stats = Stats()
 

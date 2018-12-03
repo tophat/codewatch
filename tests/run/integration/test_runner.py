@@ -4,6 +4,7 @@ from codewatch.run import Runner
 from tests.config_modules import (
     integration_config,
     integration_config_utf8,
+    single_line_config,
 )
 
 
@@ -41,5 +42,13 @@ def test_full_run_utf8():
     assert successes == [
         'unicode_works'
     ]
+    assert failures == {}
+    assert errors == {}
+
+
+def test_runner_with_single_line_file():
+    successes, failures, errors = _get_runner_for_config(
+        single_line_config).run()
+    assert successes == ['single_line_file_works']
     assert failures == {}
     assert errors == {}

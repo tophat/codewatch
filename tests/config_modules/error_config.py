@@ -1,7 +1,9 @@
 from codewatch.assertion import assertion
 
+
 def file_filter(_file_name):
-  return False
+    return False
+
 
 @assertion()
 def error_assertion(_stats):

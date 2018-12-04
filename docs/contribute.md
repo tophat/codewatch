@@ -16,5 +16,5 @@ pip install -r requirements.txt -r requirements_test.txt
 pytest
 ```
 
-Join the discussion on [slack](https://tophat-opensource.slack.com)!
+Join the discussion on [slack](https://opensource.tophat.com/slack)!
 

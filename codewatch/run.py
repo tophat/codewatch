@@ -13,6 +13,10 @@ from codewatch.stats import Stats
 
 logger = logging.getLogger(__name__)
 
+NOT_DIR_ERR = (
+    'codewatch_config_module should be a module name, NOT a directory'
+)
+
 
 class Runner(object):
     def __init__(self, base_directory, codewatch_config_module):
@@ -20,6 +24,9 @@ class Runner(object):
         self.base_directory = base_directory
 
     def run(self):
+        if '/' in self.codewatch_config_module:
+            raise ValueError(NOT_DIR_ERR)
+
         try:
             sys.path.insert(0, self.base_directory)
             NodeVisitorMaster.node_visitor_registry = []

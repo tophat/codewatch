@@ -20,6 +20,9 @@ class Runner(object):
         self.base_directory = base_directory
 
     def run(self):
+        if '/' in self.codewatch_config_module:
+            raise ValueError('codewatch_config_module should be a module name, NOT a directory')
+
         try:
             sys.path.insert(0, self.base_directory)
             NodeVisitorMaster.node_visitor_registry = []

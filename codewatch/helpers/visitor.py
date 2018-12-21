@@ -110,7 +110,7 @@ def count_calling_files(
     NodeVisitorMaster.register_visitor(Call, visit_call, inferences=inferences)
 
 
-def count_calls_on_model(stats_namespace, model_qname, method_name):
+def count_calls_on_django_model(stats_namespace, model_qname, method_name):
     """
     Counts the number of times a particular method is called on a Django model
     Populates stats with the number of calls per file

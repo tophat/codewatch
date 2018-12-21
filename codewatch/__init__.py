@@ -11,7 +11,7 @@ from codewatch.helpers.inference import (
 )
 from codewatch.helpers.visitor import (
     count_calling_files,
-    count_calls_on_model,
+    count_calls_on_django_model,
     count_import_usages,
     visit,
 )
@@ -24,7 +24,7 @@ __all__ = [
     'AssertionChecker',
     'assertion',
     'count_calling_files',
-    'count_calls_on_model',
+    'count_calls_on_django_model',
     'count_import_usages',
     'get_inference_for_model',
     'FileWalker',

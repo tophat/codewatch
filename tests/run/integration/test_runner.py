@@ -65,7 +65,7 @@ def test_django_config():
     assert failures == {}
     assert errors == {}
 
-    
+
 def test_runner_raises_error_if_module_name_looks_like_directory():
     with pytest.raises(ValueError, match=NOT_DIR_ERR):
         Runner(None, 'directory/').run()

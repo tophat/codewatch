@@ -39,7 +39,7 @@ CODEWATCH_MODEL_INFERENCE_KEY = '_codewatch_inferred_model_klass_obj'
 
 
 def get_inference_for_model(model_qname):
-    def _did_we_infer(node):
+    def _get_inference_details(node):
         """
         Checks to see if we inferred this node as part of _inf_fn
 
@@ -79,7 +79,7 @@ def get_inference_for_model(model_qname):
             or node.func.expr.attrname != 'objects'
         ):
             # Check for case 2)
-            did_we_infer, klass_obj = _did_we_infer(node.func.expr)
+            did_we_infer, klass_obj = _get_inference_details(node.func.expr)
             if did_we_infer:
                 setattr(node, CODEWATCH_MODEL_INFERENCE_KEY, klass_obj)
             return did_we_infer

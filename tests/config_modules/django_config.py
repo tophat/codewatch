@@ -1,5 +1,5 @@
 from codewatch.assertion import assertion
-from codewatch.helpers.visitor import count_calls_on_model
+from codewatch.helpers.visitor import count_calls_on_django_model
 
 
 USAGE_FILE = 'django_usage.py'
@@ -14,7 +14,7 @@ def directory_filter(dir_name):
 
 
 STATS_NAMESPACE = 'DjangoConfigDangerousMethod'
-count_calls_on_model(
+count_calls_on_django_model(
     STATS_NAMESPACE,
     'django_usage.py.DjangoUser',
     'dangerous_method',

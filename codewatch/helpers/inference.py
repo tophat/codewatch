@@ -72,7 +72,7 @@ def get_inference_for_model(model_qname):
             return False
 
         if not hasattr(node.func, 'expr'):
-            return
+            return False
 
         if (
             not hasattr(node.func.expr, 'attrname')

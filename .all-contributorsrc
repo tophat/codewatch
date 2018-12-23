@@ -98,5 +98,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "vardan10",
+      "name": "Vardan Nadkarni",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/20511260?v=4",
+      "profile": "https://github.com/vardan10",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "greenkeeper[bot]",
+      "name": "greenkeeper[bot]",
+      "avatar_url": "https://avatars3.githubusercontent.com/in/505?v=4",
+      "profile": "https://github.com/apps/greenkeeper",
+      "contributions": [
+        "infra"
+      ]
     }
+  ]
 }

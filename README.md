@@ -133,11 +133,16 @@ pytest
 ```
 
 # Contributors
+Thanks goes to these wonderful people [emoji key](https://github.com/kentcdodds/all-contributors#emoji-key):
 
-Thanks goes to these wonderful people! ([Emoji key](https://github.com/kentcdodds/all-contributors#emoji-key))
-
-<!-- ALL-CONTRIBUTORS-LIST: START - Do not remove or modify this section -->
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars2.githubusercontent.com/u/9436142?v=4" width="100px;"/><br /><sub><b>Josh Doncaster Marsiglio</b></sub>](https://github.com/lime-green)<br />[💻](https://github.com/tophat/codewatch/commits?author=lime-green "Code") | [<img src="https://avatars0.githubusercontent.com/u/18485117?v=4" width="100px;"/><br /><sub><b>Rohit Jain</b></sub>](https://github.com/rohit-jain27)<br />[💻](https://github.com/tophat/codewatch/commits?author=rohit-jain27 "Code") | [<img src="https://avatars2.githubusercontent.com/u/840172?v=4" width="100px;"/><br /><sub><b>Chris Abiad</b></sub>](https://github.com/cabiad)<br />[💻](https://github.com/tophat/codewatch/commits?author=cabiad "Code") | [<img src="https://avatars.githubusercontent.com/u/3876970?v=4" width="100px;"/><br /><sub><b>Francois Campbell</b></sub>](https://github.com/francoiscampbell)<br />[💻](https://github.com/tophat/codewatch/commits?author=francoiscampbell "Code") | [<img src="https://avatars3.githubusercontent.com/u/8105535?v=4" width="100px;"/><br /><sub><b>Monica Moore</b></sub>](https://monicamoore.ca)<br />[🎨](#design-monicamm95 "Design") | [<img src="https://avatars0.githubusercontent.com/u/7827407?v=4" width="100px;"/><br /><sub><b>Jay Crumb</b></sub>](https://github.com/jcrumb)<br />[📖](https://github.com/tophat/codewatch/commits?author=jcrumb "Documentation") | [<img src="https://avatars.githubusercontent.com/u/3534236?v=4" width="100px;"/><br /><sub><b>Jake Bolam</b></sub>](https://github.com/jakebolam)<br />[🚇](#infra-jakebolam "Infrastructure (Hosting, Build-Tools, etc)") |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| [<img src="https://avatars0.githubusercontent.com/u/6020693?v=4" width="100px;"/><br /><sub><b>Shouvik D'Costa</b></sub>](https://github.com/sdcosta)<br />[📖](https://github.com/tophat/codewatch/commits?author=sdcosta "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/445636?v=4" width="100px;"/><br /><sub><b>Siavash Bidgoly</b></sub>](https://github.com/syavash)<br />[🚇](#infra-syavash "Infrastructure (Hosting, Build-Tools, etc)") | [<img src="https://avatars0.githubusercontent.com/u/1297096?v=4" width="100px;"/><br /><sub><b>Noah Negin-Ulster</b></sub>](https://github.com/noahnu)<br />[💻](https://github.com/tophat/codewatch/commits?author=noahnu "Code") | [<img src="https://avatars2.githubusercontent.com/u/20511260?v=4" width="100px;"/><br /><sub><b>Vardan Nadkarni</b></sub>](https://github.com/vardan10)<br />[💻](https://github.com/tophat/codewatch/commits?author=vardan10 "Code") | [<img src="https://avatars3.githubusercontent.com/in/505?v=4" width="100px;"/><br /><sub><b>greenkeeper[bot]</b></sub>](https://github.com/apps/greenkeeper)<br />[🚇](#infra-greenkeeper[bot] "Infrastructure (Hosting, Build-Tools, etc)") |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+We welcome contributions from the community, Top Hatters and non-Top Hatters alike. Check out our [contributing guidelines](CONTRIBUTING.md) for more details.
 
 # Credits
 

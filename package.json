@@ -1,0 +1,13 @@
+{
+  "name": "codewatch",
+  "description": "This package.json is just to manage all-contributors",
+  "private": true,
+  "scripts": {
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate",
+    "contributors:check": "all-contributors check"
+  },
+  "devDependencies": {
+    "all-contributors-cli": "^5.4.1"
+  }
+}

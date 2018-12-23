@@ -109,3 +109,9 @@ venv.bak/
 
 # test reports
 test-reports
+
+# JS stuff for all contributors
+node_modules
+yarn.lock
+!website/yarn.lock
+

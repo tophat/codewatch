@@ -10,6 +10,9 @@
 <br />
 
 [![Slack workspace](https://slackinvite.dev.tophat.com/badge.svg)](https://opensource.tophat.com/slack)
+<a href="#contributors">
+    <img alt="All Contributors" src="https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square"/>
+</a>
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Maturity badge - level 1](https://img.shields.io/badge/Maturity-Level%201%20--%20New%20Project-yellow.svg)](https://github.com/tophat/getting-started/blob/master/scorecard.md)
 
@@ -133,11 +136,9 @@ pytest
 
 Thanks goes to these wonderful people! ([Emoji key](https://github.com/kentcdodds/all-contributors#emoji-key))
 
-| [<img src="https://avatars2.githubusercontent.com/u/9436142?s=460&v=4" width="100px;"/><br /><sub><b>Josh Doncaster Marsiglio</b></sub>](https://github.com/lime-green)<br />[💻](https://github.com/tophat/codewatch/commits?author=lime-green)  | [<img src="https://avatars0.githubusercontent.com/u/18485117?s=460&v=4" width="100px;"/><br /><sub><b>Rohit Jain</b></sub>](https://github.com/rohit-jain27)<br />[💻](https://github.com/tophat/codewatch/commits?author=rohitjain-27) | [<img src="https://avatars2.githubusercontent.com/u/840172?s=460&v=4" width="100px;"/><br /><sub><b>Chris Abiad</b></sub>](https://github.com/cabiad)<br />[💻](https://github.com/tophat/codewatch/commits?author=cabiad) |
-| :---: | :---: | :---: |
-| [<img src="https://avatars.githubusercontent.com/u/3876970?s=100" width="100px;"/><br /><sub><b>Francois Campbell</b></sub>](https://github.com/francoiscampbell)<br />🤔[💻](https://github.com/tophat/codewatch/commits?author=francoiscampbell) | [<img src="https://avatars3.githubusercontent.com/u/8105535?s=100" width="100px;"/><br /><sub><b>Monica Moore</b></sub>](https://github.com/monicamm95)<br />🎨 | [<img src="https://avatars0.githubusercontent.com/u/7827407?s=100" width="100px;"/><br /><sub><b>Jay Crumb</b></sub>](https://github.com/jcrumb)<br />[📖](https://github.com/tophat/codewatch/commits?author=jcrumb) |
-| [<img src="https://avatars.githubusercontent.com/u/3534236?s=100" width="100px;"/><br /><sub><b>Jake Bolam</b></sub>](https://github.com/jakebolam)<br />[🚇](https://github.com/tophat/codewatch/commits?author=jakebolam) | [<img src="https://avatars0.githubusercontent.com/u/6020693?s=100" width="100px;"/><br /><sub><b>Shouvik D'Costa</b></sub>](https://github.com/sdcosta)<br />[🚇](https://github.com/tophat/codewatch/commits?author=sdcosta) | [<img src="https://avatars1.githubusercontent.com/u/445636?s=100" width="100px;"/><br /><sub><b>Siavash Bidgoly</b></sub>](https://github.com/syavash)<br />[🚇](https://github.com/tophat/codewatch/commits?author=syavash) |
-| [<img src="https://avatars0.githubusercontent.com/u/1297096?s=100" width="100px;"/><br /><sub><b>Noah Negin-Ulster</b></sub>](https://github.com/noahnu)<br />[💻](https://github.com/tophat/codewatch/commits?author=noahnu)
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 # Credits
 

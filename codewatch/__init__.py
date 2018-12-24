@@ -5,11 +5,14 @@ from codewatch.run import (
     AssertionChecker,
     Runner,
 )
-from codewatch.node_visitor import (
-    count_calling_files,
-    count_import_usages,
+from codewatch.helpers.inference import (
+    get_inference_for_model,
     inference,
-    NodeVisitor,
+)
+from codewatch.helpers.visitor import (
+    count_calling_files,
+    count_calls_on_django_model,
+    count_import_usages,
     visit,
 )
 from codewatch.predicates import CallNodePredicates
@@ -18,17 +21,19 @@ from codewatch.stats import Stats
 
 
 __all__ = [
-    'assertion',
-    'count_calling_files',
-    'count_import_usages',
-    'ModuleLoader',
     'Analyzer',
     'AssertionChecker',
-    'Runner',
-    'NodeVisitor',
-    'visit',
+    'assertion',
+    'CallNodePredicates',
+    'count_calling_files',
+    'count_calls_on_django_model',
+    'count_import_usages',
+    'get_inference_for_model',
     'FileWalker',
+    'inference',
+    'ModuleLoader',
+    'Runner',
     'Stats',
     'inference',
-    'CallNodePredicates',
+    'visit',
 ]

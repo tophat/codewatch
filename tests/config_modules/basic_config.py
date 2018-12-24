@@ -1,7 +1,7 @@
 from astroid import nodes
 
 from codewatch.assertion import assertion
-from codewatch.node_visitor import visit
+from codewatch.helpers.visitor import visit
 
 
 @assertion()

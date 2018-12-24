@@ -1,8 +1,4 @@
----
-id: contribute
-title: Contribute
----
-
+# Contributing
 View our [Code of Conduct](https://github.com/tophat/getting-started/blob/master/code-of-conduct.md)
 
 ## Running tests
@@ -21,7 +17,6 @@ Join the discussion on [slack](https://opensource.tophat.com/slack)!
 ## Add yourself as a Contributor
 To add yourself as a contributor:
 - `yarn install` or `npm install`
-- `yarn contributors:add` or `npm run contributors:add`
+- `yarn contributors:add`
 
 Contributions don't need to be code, they can come in many forms, check out the [emoji key](https://github.com/kentcdodds/all-contributors#emoji-key) for some examples.
-

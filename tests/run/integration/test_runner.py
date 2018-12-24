@@ -6,6 +6,7 @@ from codewatch.run import (
     NOT_DIR_ERR,
 )
 from tests.config_modules import (
+    django_config,
     integration_config,
     integration_config_utf8,
     single_line_config,
@@ -54,6 +55,13 @@ def test_runner_with_single_line_file():
     successes, failures, errors = _get_runner_for_config(
         single_line_config).run()
     assert successes == ['single_line_file_works']
+    assert failures == {}
+    assert errors == {}
+
+
+def test_django_config():
+    successes, failures, errors = _get_runner_for_config(django_config).run()
+    assert successes == ['correctly_infers_dangerous_method_call']
     assert failures == {}
     assert errors == {}
 

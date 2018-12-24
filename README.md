@@ -5,9 +5,15 @@
 
 [![version](https://img.shields.io/pypi/v/codewatch.svg)](https://pypi.org/project/codewatch/)
 [![codecov](https://codecov.io/gh/tophat/codewatch/branch/master/graph/badge.svg)](https://codecov.io/gh/tophat/codewatch)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Builds](https://img.shields.io/circleci/project/github/tophat/codewatch/master.svg)](https://circleci.com/gh/tophat/codewatch)
+[![Greenkeeper badge](https://badges.greenkeeper.io/tophat/codewatch.svg)](https://greenkeeper.io/)
+<br />
+
 [![Slack workspace](https://slackinvite.dev.tophat.com/badge.svg)](https://opensource.tophat.com/slack)
+<a href="#contributors">
+    <img alt="All Contributors" src="https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square"/>
+</a>
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Maturity badge - level 1](https://img.shields.io/badge/Maturity-Level%201%20--%20New%20Project-yellow.svg)](https://github.com/tophat/getting-started/blob/master/scorecard.md)
 
 </div>
@@ -113,28 +119,19 @@ Tune these filters to suit your needs.
 
 
 # Contributing
-View our Code of Conduct [here](https://github.com/tophat/getting-started/blob/master/code-of-conduct.md)
-
-## Running tests
-Assuming you have a suitable python version with pip:
-
-```bash
-# setup
-pip install -r requirements.txt -r requirements_test.txt
-
-# run the tests!
-pytest
-```
+See [the Contributing docs](CONTRIBUTING.md)
 
 # Contributors
+Thanks goes to these wonderful people [emoji key](https://github.com/kentcdodds/all-contributors#emoji-key):
 
-Thanks goes to these wonderful people! ([Emoji key](https://github.com/kentcdodds/all-contributors#emoji-key))
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars2.githubusercontent.com/u/9436142?v=4" width="100px;"/><br /><sub><b>Josh Doncaster Marsiglio</b></sub>](https://github.com/lime-green)<br />[💻](https://github.com/tophat/codewatch/commits?author=lime-green "Code") | [<img src="https://avatars0.githubusercontent.com/u/18485117?v=4" width="100px;"/><br /><sub><b>Rohit Jain</b></sub>](https://github.com/rohit-jain27)<br />[💻](https://github.com/tophat/codewatch/commits?author=rohit-jain27 "Code") | [<img src="https://avatars2.githubusercontent.com/u/840172?v=4" width="100px;"/><br /><sub><b>Chris Abiad</b></sub>](https://github.com/cabiad)<br />[💻](https://github.com/tophat/codewatch/commits?author=cabiad "Code") | [<img src="https://avatars.githubusercontent.com/u/3876970?v=4" width="100px;"/><br /><sub><b>Francois Campbell</b></sub>](https://github.com/francoiscampbell)<br />[💻](https://github.com/tophat/codewatch/commits?author=francoiscampbell "Code") | [<img src="https://avatars3.githubusercontent.com/u/8105535?v=4" width="100px;"/><br /><sub><b>Monica Moore</b></sub>](https://monicamoore.ca)<br />[🎨](#design-monicamm95 "Design") | [<img src="https://avatars0.githubusercontent.com/u/7827407?v=4" width="100px;"/><br /><sub><b>Jay Crumb</b></sub>](https://github.com/jcrumb)<br />[📖](https://github.com/tophat/codewatch/commits?author=jcrumb "Documentation") | [<img src="https://avatars.githubusercontent.com/u/3534236?v=4" width="100px;"/><br /><sub><b>Jake Bolam</b></sub>](https://github.com/jakebolam)<br />[🚇](#infra-jakebolam "Infrastructure (Hosting, Build-Tools, etc)") |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| [<img src="https://avatars0.githubusercontent.com/u/6020693?v=4" width="100px;"/><br /><sub><b>Shouvik D'Costa</b></sub>](https://github.com/sdcosta)<br />[📖](https://github.com/tophat/codewatch/commits?author=sdcosta "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/445636?v=4" width="100px;"/><br /><sub><b>Siavash Bidgoly</b></sub>](https://github.com/syavash)<br />[🚇](#infra-syavash "Infrastructure (Hosting, Build-Tools, etc)") | [<img src="https://avatars0.githubusercontent.com/u/1297096?v=4" width="100px;"/><br /><sub><b>Noah Negin-Ulster</b></sub>](https://github.com/noahnu)<br />[💻](https://github.com/tophat/codewatch/commits?author=noahnu "Code") | [<img src="https://avatars2.githubusercontent.com/u/20511260?v=4" width="100px;"/><br /><sub><b>Vardan Nadkarni</b></sub>](https://github.com/vardan10)<br />[💻](https://github.com/tophat/codewatch/commits?author=vardan10 "Code") | [<img src="https://avatars3.githubusercontent.com/in/505?v=4" width="100px;"/><br /><sub><b>greenkeeper[bot]</b></sub>](https://github.com/apps/greenkeeper)<br />[🚇](#infra-greenkeeper[bot] "Infrastructure (Hosting, Build-Tools, etc)") |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
-| [<img src="https://avatars2.githubusercontent.com/u/9436142?s=460&v=4" width="100px;"/><br /><sub><b>Josh Doncaster Marsiglio</b></sub>](https://github.com/lime-green)<br />[💻](https://github.com/tophat/codewatch/commits?author=lime-green)  | [<img src="https://avatars0.githubusercontent.com/u/18485117?s=460&v=4" width="100px;"/><br /><sub><b>Rohit Jain</b></sub>](https://github.com/rohit-jain27)<br />[💻](https://github.com/tophat/codewatch/commits?author=rohitjain-27) | [<img src="https://avatars2.githubusercontent.com/u/840172?s=460&v=4" width="100px;"/><br /><sub><b>Chris Abiad</b></sub>](https://github.com/cabiad)<br />[💻](https://github.com/tophat/codewatch/commits?author=cabiad) |
-| :---: | :---: | :---: |
-| [<img src="https://avatars.githubusercontent.com/u/3876970?s=100" width="100px;"/><br /><sub><b>Francois Campbell</b></sub>](https://github.com/francoiscampbell)<br />🤔[💻](https://github.com/tophat/codewatch/commits?author=francoiscampbell) | [<img src="https://avatars3.githubusercontent.com/u/8105535?s=100" width="100px;"/><br /><sub><b>Monica Moore</b></sub>](https://github.com/monicamm95)<br />🎨 | [<img src="https://avatars0.githubusercontent.com/u/7827407?s=100" width="100px;"/><br /><sub><b>Jay Crumb</b></sub>](https://github.com/jcrumb)<br />[📖](https://github.com/tophat/codewatch/commits?author=jcrumb) |
-| [<img src="https://avatars.githubusercontent.com/u/3534236?s=100" width="100px;"/><br /><sub><b>Jake Bolam</b></sub>](https://github.com/jakebolam)<br />[🚇](https://github.com/tophat/codewatch/commits?author=jakebolam) | [<img src="https://avatars0.githubusercontent.com/u/6020693?s=100" width="100px;"/><br /><sub><b>Shouvik D'Costa</b></sub>](https://github.com/sdcosta)<br />[🚇](https://github.com/tophat/codewatch/commits?author=sdcosta) | [<img src="https://avatars1.githubusercontent.com/u/445636?s=100" width="100px;"/><br /><sub><b>Siavash Bidgoly</b></sub>](https://github.com/syavash)<br />[🚇](https://github.com/tophat/codewatch/commits?author=syavash) |
-| [<img src="https://avatars0.githubusercontent.com/u/1297096?s=100" width="100px;"/><br /><sub><b>Noah Negin-Ulster</b></sub>](https://github.com/noahnu)<br />[💻](https://github.com/tophat/codewatch/commits?author=noahnu)
+We welcome contributions from the community, Top Hatters and non-Top Hatters alike. Check out our [contributing guidelines](CONTRIBUTING.md) for more details.
 
 # Credits
 

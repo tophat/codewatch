@@ -1,0 +1,121 @@
+{
+  "projectName": "codewatch",
+  "projectOwner": "tophat",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "lime-green",
+      "name": "Josh Doncaster Marsiglio",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/9436142?v=4",
+      "profile": "https://github.com/lime-green",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rohit-jain27",
+      "name": "Rohit Jain",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/18485117?v=4",
+      "profile": "https://github.com/rohit-jain27",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "cabiad",
+      "name": "Chris Abiad",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/840172?v=4",
+      "profile": "https://github.com/cabiad",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "francoiscampbell",
+      "name": "Francois Campbell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3876970?v=4",
+      "profile": "https://github.com/francoiscampbell",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "monicamm95",
+      "name": "Monica Moore",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/8105535?v=4",
+      "profile": "https://monicamoore.ca",
+      "contributions": [
+        "design"
+      ]
+    },
+    {
+      "login": "jcrumb",
+      "name": "Jay Crumb",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7827407?v=4",
+      "profile": "https://github.com/jcrumb",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "jakebolam",
+      "name": "Jake Bolam",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3534236?v=4",
+      "profile": "https://github.com/jakebolam",
+      "contributions": [
+        "infra"
+      ]
+    },
+    {
+      "login": "sdcosta",
+      "name": "Shouvik D'Costa",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6020693?v=4",
+      "profile": "https://github.com/sdcosta",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "syavash",
+      "name": "Siavash Bidgoly",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/445636?v=4",
+      "profile": "https://github.com/syavash",
+      "contributions": [
+        "infra"
+      ]
+    },
+    {
+      "login": "noahnu",
+      "name": "Noah Negin-Ulster",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1297096?v=4",
+      "profile": "https://github.com/noahnu",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "vardan10",
+      "name": "Vardan Nadkarni",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/20511260?v=4",
+      "profile": "https://github.com/vardan10",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "greenkeeper[bot]",
+      "name": "greenkeeper[bot]",
+      "avatar_url": "https://avatars3.githubusercontent.com/in/505?v=4",
+      "profile": "https://github.com/apps/greenkeeper",
+      "contributions": [
+        "infra"
+      ]
+    }
+  ]
+}

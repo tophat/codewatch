@@ -113,5 +113,6 @@ test-reports
 # JS stuff for all contributors
 node_modules
 yarn.lock
+package-lock.json
 !website/yarn.lock
 

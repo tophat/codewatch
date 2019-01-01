@@ -1,9 +1,5 @@
 from os import walk as os_walk
-from os.path import (
-    basename,
-    join,
-    relpath,
-)
+from os.path import join
 
 
 class FileWalker(object):

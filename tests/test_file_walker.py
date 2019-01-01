@@ -1,4 +1,5 @@
 from os.path import (normcase, join)
+from copy import deepcopy
 from codewatch.file_walker import FileWalker
 
 
@@ -21,7 +22,7 @@ def _expected_files_from_dir(dir_index):
 def create_mock_os_walk(mock_path):
     def _os_walk(path):
         assert path == mock_path
-        return MOCK_PATHS
+        return deepcopy(MOCK_PATHS)
     return _os_walk
 
 
@@ -64,7 +65,6 @@ def test_it_filters_on_directories():
         _expected_files_from_dir(1)
     )
     assert _walk(directory_filter, file_filter) == expected_files_walked
-
 
 def test_it_filters_on_files():
     def directory_filter(_path):

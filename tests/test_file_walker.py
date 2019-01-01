@@ -66,6 +66,7 @@ def test_it_filters_on_directories():
     )
     assert _walk(directory_filter, file_filter) == expected_files_walked
 
+
 def test_it_filters_on_files():
     def directory_filter(_path):
         return True

@@ -35,12 +35,14 @@ def create_mock_os_walk(mock_path):
             yield root
             for _dir in root[1]:
                 dirpath = join(base_path, _dir)
-                yield from _find_paths(mock_paths, dirpath)
+                for subpath in _find_paths(mock_paths, dirpath):
+                    yield subpath
 
     def _os_walk(path):
         assert path == mock_path
         mock_paths = deepcopy(MOCK_PATHS)
-        yield from _find_paths(mock_paths, path)
+        for subpath in _find_paths(mock_paths, path):
+            yield subpath
 
     return _os_walk
 

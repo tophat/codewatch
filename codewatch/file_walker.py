@@ -13,12 +13,14 @@ class FileWalker(object):
 
     def walk(self):
         for path, directories, files in self.walk_fn(self.base_directory_path):
+            print('path is', path)
             directories[:] = [
                 d for d in directories
                 if self.directory_filter(join(path, d))
             ]
 
             if not self.directory_filter(path):
+                print('nope')
                 continue
 
             for file in files:

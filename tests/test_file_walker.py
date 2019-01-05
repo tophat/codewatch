@@ -76,7 +76,7 @@ def test_it_can_walk_all_files():
 
 def test_it_filters_on_directories():
     def directory_filter(path):
-        return 'dir2_subdir' not in basename(path)
+        return 'dir2_subdir' != basename(path)
 
     def file_filter(_path):
         return True

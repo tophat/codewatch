@@ -1,4 +1,5 @@
 import re
+from os.path import basename
 
 PYTHON_FILE_REGEX = re.compile(r'.*.py$')
 TEST_FILE_REGEX = re.compile(r'.*test.*')
@@ -13,15 +14,20 @@ def is_not_test_file_filter(file_name):
     return not bool(TEST_FILE_REGEX.match(file_name))
 
 
-def is_not_test_directory_filter(dir_name):
-    return not bool(TEST_FILE_REGEX.match(dir_name))
+def is_not_test_directory_filter(dir_path):
+    return not bool(TEST_FILE_REGEX.match(dir_path))
 
 
-def is_not_migration_directory_filter(dir_name):
-    return not bool(MIGRATION_DIRECTORY_REGEX.match(dir_name))
+def is_not_migration_directory_filter(dir_path):
+    return not bool(MIGRATION_DIRECTORY_REGEX.match(dir_path))
+
+
+def is_not_hidden_directory(dir_path):
+    return not basename(dir_path).startswith('.')
 
 
 DEFAULT_DIRECTORY_FILTERS = [
+    is_not_hidden_directory,
     is_not_test_directory_filter,
     is_not_migration_directory_filter,
 ]

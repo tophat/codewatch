@@ -16,6 +16,11 @@ from codewatch.defaults import (
     ('test_dir', None, False),
     ('test_dir', [], True),
     ('another_test', None, False),
+
+    ('/nested/folder/.git', None, False),
+    ('/nested/folder/.git', [], True),
+    ('/nested/folder/.another_hidden', None, False),
+    ('/nested/folder/git', None, True),
 ])
 def test_create_directory_filter(
     dir_name,

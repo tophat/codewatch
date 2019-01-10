@@ -13,9 +13,19 @@ from codewatch.defaults import (
     ('normal_dir', None, True),
     ('another_normal', None, True),
 
-    ('test_dir', None, False),
+    # these aren't skipped
+    ('test_dir', None, True),
     ('test_dir', [], True),
-    ('another_test', None, False),
+    ('another_test', None, True),
+    ('other_tests', None, True),
+    # these are skipped
+    ('test', None, False),
+    ('tests', None, False),
+
+    ('/nested/folder/.git', None, False),
+    ('/nested/folder/.git', [], True),
+    ('/nested/folder/.another_hidden', None, False),
+    ('/nested/folder/git', None, True),
 ])
 def test_create_directory_filter(
     dir_name,

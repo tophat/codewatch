@@ -1,9 +1,5 @@
 from os import walk as os_walk
-from os.path import (
-    basename,
-    join,
-    relpath,
-)
+from os.path import join
 
 
 class FileWalker(object):
@@ -17,10 +13,10 @@ class FileWalker(object):
 
     def walk(self):
         for path, directories, files in self.walk_fn(self.base_directory_path):
-            rel_path = relpath(path, self.base_directory_path)
-            path_basename = basename(path)
-            if rel_path != '.' and not self.directory_filter(path_basename):
-                continue
+            directories[:] = [
+                d for d in directories
+                if self.directory_filter(join(path, d))
+            ]
 
             for file in files:
                 if not self.file_filter(file):

@@ -1,4 +1,5 @@
-from os.path import (normcase, join)
+from os.path import (basename, normcase, join, normpath)
+from copy import deepcopy
 from codewatch.file_walker import FileWalker
 
 
@@ -19,9 +20,30 @@ def _expected_files_from_dir(dir_index):
 
 
 def create_mock_os_walk(mock_path):
+    def _rel(path):
+        return normpath(join(mock_path, path))
+
+    def _find_path(mock_paths, base_path):
+        for path in mock_paths:
+            if _rel(path[0]) == _rel(base_path):
+                return path
+        return None
+
+    def _find_paths(mock_paths, base_path):
+        root = _find_path(mock_paths, base_path)
+        if root:
+            yield root
+            for _dir in root[1]:
+                dirpath = join(base_path, _dir)
+                for subpath in _find_paths(mock_paths, dirpath):
+                    yield subpath
+
     def _os_walk(path):
         assert path == mock_path
-        return MOCK_PATHS
+        mock_paths = deepcopy(MOCK_PATHS)
+        for subpath in _find_paths(mock_paths, path):
+            yield subpath
+
     return _os_walk
 
 
@@ -54,7 +76,22 @@ def test_it_can_walk_all_files():
 
 def test_it_filters_on_directories():
     def directory_filter(path):
-        return 'dir2' not in path
+        return 'dir2_subdir' != basename(path)
+
+    def file_filter(_path):
+        return True
+
+    expected_files_walked = (
+        _expected_files_from_dir(0) +
+        _expected_files_from_dir(1) +
+        _expected_files_from_dir(2)
+    )
+    assert _walk(directory_filter, file_filter) == expected_files_walked
+
+
+def test_does_not_walk_subdirectories_if_parent_is_filtered():
+    def directory_filter(path):
+        return path != normcase('./dir2')
 
     def file_filter(_path):
         return True

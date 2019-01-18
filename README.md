@@ -1,6 +1,6 @@
 <div align="center">
 <a href="https://github.com/tophat/codewatch">
-<img src="website/static/img/codewatch@2x.png"/>
+    <img src="website/static/img/codewatch@2x.png"/>
 </a>
 
 [![version](https://img.shields.io/pypi/v/codewatch.svg)](https://pypi.org/project/codewatch/)

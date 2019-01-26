@@ -24,15 +24,10 @@ CLASSIFIERS = [
 ]
 
 
-if sys.version_info[0:3] >= (3, 6, 0):
-    # astroid<2.0 does not work on python>=3.7 because StopIteration is removed
-    INSTALL_REQUIRES = [
-        'astroid==2.0.4'
-    ]
-else:
-    INSTALL_REQUIRES = [
-        'astroid==1.6.4',  # 2.0 onwards is py3 only
-    ]
+INSTALL_REQUIRES = [
+    'astroid==2.0.4; python_version>="3"',
+    'astroid==1.6.4; python_version<"3"',  # 2.0 onwards is py3 only
+]
 
 base_dir = os.path.dirname(__file__)
 readme_path = join(base_dir, 'README.md')
@@ -46,7 +41,7 @@ setup(
     name='codewatch',
     classifiers=CLASSIFIERS,
     packages=find_packages(),
-    version='0.0.18',
+    version='0.0.19',
     description="Monitor and manage deeply customizable metrics about your python code using ASTs",
     long_description=long_description,
     long_description_content_type="text/markdown",

@@ -8,7 +8,7 @@ def _get_assertion_failure_message(assertion_failure):
     if there's an assertion error message return that
     otherwise, return the code line the assertion is called from
     """
-    if len(assertion_failure.args) > 0:
+    if assertion_failure.args:
         return assertion_failure.args[0]
     tb_info = extract_tb(exc_info()[2])
     return tb_info[-1][3]

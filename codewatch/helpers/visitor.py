@@ -29,9 +29,9 @@ def visit(node_type, predicate=None, inferences=None):
     return decorator
 
 
-def _validate_stats_namespace(stats_namespace):
+def _validate_stats_namespace(fn_name, stats_namespace):
     if stats_namespace is None:
-        raise Exception("count_calling_files() requires a valid namespace")
+        raise Exception("{} requires a valid namespace".format(fn_name))
 
 
 def count_import_usages(stats_namespace, expected_qname, importer=None):
@@ -41,7 +41,7 @@ def count_import_usages(stats_namespace, expected_qname, importer=None):
 
     count_import_usages('imports_num_user_model', 'app.models.User')
     """
-    _validate_stats_namespace(stats_namespace)
+    _validate_stats_namespace('count_import_usages', stats_namespace)
     if importer is None:
         importer = importlib.import_module
 
@@ -80,7 +80,7 @@ def count_calling_files(
         expected_callable_qname,
         inferences=None,
 ):
-    _validate_stats_namespace(stats_namespace)
+    _validate_stats_namespace('count_calling_files', stats_namespace)
     expected_callable_name = expected_callable_qname.split(".")[-1]
 
     def record_stats(stats, rel_file_path):
@@ -142,6 +142,8 @@ def count_calls_on_django_model(stats_namespace, model_qname, method_name):
     This indicates the the destroy() function was called 15 times on the
     User model in app/lobby/views.py
     """
+    _validate_stats_namespace('count_calls_on_django_model', stats_namespace)
+
     def record_stats(stats, rel_file_path):
         stats = stats.namespaced(stats_namespace)
         stats.increment(rel_file_path)

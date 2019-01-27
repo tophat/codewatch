@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 class DjangoUser(object):
     def dangerous_method(self):
         pass

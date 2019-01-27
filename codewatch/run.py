@@ -4,6 +4,7 @@ import logging
 import os
 import re
 import sys
+from traceback import print_exc
 
 from codewatch.assertion import Assertion
 from codewatch.file_walker import FileWalker
@@ -52,6 +53,10 @@ class AssertionChecker(object):
         return assertion_runner.run()
 
 
+class ParseException(ValueError):
+    pass
+
+
 class Analyzer(object):
     # https://www.python.org/dev/peps/pep-0263/
     CODING_REGEX = re.compile(
@@ -85,7 +90,18 @@ class Analyzer(object):
     def run(self, stats):
         for file_name in self.file_walker.walk():
             file_contents = self._get_file_contents(file_name)
-            tree = self.parser_fn(file_contents, os.path.basename(file_name))
+
+            try:
+                tree = self.parser_fn(
+                    file_contents,
+                    os.path.basename(file_name),
+                )
+            except Exception:
+                print_exc()
+                raise ParseException(
+                    'An exception occurred while parsing file: %s' % file_name,
+                )
+
             rel_file_path = os.path.relpath(
                 file_name, self.base_directory_path
             )

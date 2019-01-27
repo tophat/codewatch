@@ -17,6 +17,11 @@ def unsuccessful_assertion(_stats):
 
 
 @assertion()
+def unsuccessful_assertion_no_message(_stats):
+    assert False
+
+
+@assertion()
 def erroring_assertion(_stats):
     raise MOCK_ERR
 

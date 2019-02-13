@@ -1,20 +1,25 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 from contextlib import contextmanager
 from io import StringIO
 
 import astroid
 import pytest
-from codewatch.run import Analyzer
+from codewatch.run import (
+    Analyzer,
+    ParseException,
+)
 from codewatch.stats import Stats
 
 
 MOCK_BASE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
+MOCK_DIR_NAME = "mockdir"
 MOCK_FILE_NAMES = ("mockfile1.py", "mockfile2.py")
 RELATIVE_MOCK_FILE_PATHS = (
-    os.path.normcase("mockdir/" + MOCK_FILE_NAMES[0]),
-    os.path.normcase("mockdir/" + MOCK_FILE_NAMES[1]),
+    os.path.normcase(MOCK_DIR_NAME + "/" + MOCK_FILE_NAMES[0]),
+    os.path.normcase(MOCK_DIR_NAME + "/" + MOCK_FILE_NAMES[1]),
 )
 MOCK_FILES = [
     os.path.join(MOCK_BASE_DIRECTORY_PATH, RELATIVE_MOCK_FILE_PATHS[0]),
@@ -66,8 +71,15 @@ class MockParser(object):
         return self.mock_tree
 
 
+class MockErrorParser(MockParser):
+    ERR_MSG = 'my error message'
+
+    def parse(self, *args, **kwargs):
+        raise Exception(self.ERR_MSG)
+
+
 def _test_visits_file_with_ast_tree_and_relative_path(
-    mock_file_contents, expected_file_contents_for_parsing
+    mock_file_contents, expected_file_contents_for_parsing,
 ):
     mock_tree = astroid.Module(doc="", name="mock_module")
     file_opener = MockFileOpener(mock_file_contents)
@@ -135,5 +147,26 @@ def test_visits_file_with_ast_tree_and_relative_path(
     file, expected_file_contents_for_parsing
 ):
     _test_visits_file_with_ast_tree_and_relative_path(
-        file, expected_file_contents_for_parsing
+        file, expected_file_contents_for_parsing,
     )
+
+
+def test_parse_errors_are_rethrown():
+    mock_tree = astroid.Module(doc="", name="mock_module")
+    file_opener = MockFileOpener('')
+    file_walker = MockFileWalker(MOCK_FILES)
+    parser = MockErrorParser(mock_tree)
+    analyzer = Analyzer(
+        MOCK_BASE_DIRECTORY_PATH, file_walker, file_opener.open, parser.parse
+    )
+    analyzer.override_node_visitor_master(MockNodeMaster)
+
+    expected_err = (
+        'An exception occurred while parsing file: '
+        '.*{}'.format(
+            re.escape(os.path.join(MOCK_DIR_NAME, MOCK_FILE_NAMES[0])),
+        )
+    )
+
+    with pytest.raises(ParseException, match=expected_err):
+        analyzer.run(Stats())

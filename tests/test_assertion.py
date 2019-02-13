@@ -16,6 +16,7 @@ from tests.mock_data import (
     stats_assertion,
     successful_assertion,
     unsuccessful_assertion,
+    unsuccessful_assertion_no_message,
 )
 
 
@@ -36,6 +37,18 @@ def test_unsuccessful_assertion():
     ).run()
     assert successes == []
     assert failures == {unsuccessful_assertion.__name__: MOCK_FAILURE_MSG}
+    assert errors == {}
+
+
+def test_unsuccessful_assertion_no_message():
+    successes, failures, errors = Assertion(
+        Stats(),
+        [unsuccessful_assertion_no_message],
+    ).run()
+    assert successes == []
+    assert failures == {
+        unsuccessful_assertion_no_message.__name__: 'assert False',
+    }
     assert errors == {}
 
 

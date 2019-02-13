@@ -1,4 +1,21 @@
 from functools import wraps
+from sys import exc_info
+from traceback import extract_tb
+
+
+def _get_assertion_failure_message(assertion_failure):
+    """
+    if there's an assertion error message return that
+    otherwise, return the code line the assertion is called from
+    """
+    if assertion_failure.args:
+        return assertion_failure.args[0]
+    # extract_tb returns a StackSummary, which wraps a list of FrameSummary
+    tb_info = extract_tb(exc_info()[2])
+    # FrameSummary contains:
+    # (self.filename, self.lineno, self.name, self.line)
+    # Get the last FrameSummary then get the line's text
+    return tb_info[-1][3]
 
 
 class Assertion(object):
@@ -28,7 +45,9 @@ class Assertion(object):
             try:
                 assertion_fn(self.stats)
             except AssertionError as assertion_failure:
-                failures[assertion_label] = assertion_failure.args[0]
+                failures[assertion_label] = _get_assertion_failure_message(
+                    assertion_failure,
+                )
             except Exception as error:
                 errors[assertion_label] = error
             else:

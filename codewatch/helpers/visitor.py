@@ -12,6 +12,14 @@ from codewatch.node_visitor import NodeVisitorMaster
 
 
 def visit(node_type, predicate=None, inferences=None):
+    """
+    Functions decorated with `visit` are called on nodes of type `node_type`
+    eg: To count the number of imports in each file
+
+    @visit('import')
+    def my_visitor(node, stats, rel_file_path):
+        stats['imports'].increment(rel_file_path)
+    """
     def decorator(fn):
         NodeVisitorMaster.register_visitor(
             node_type, fn, predicate, inferences,
@@ -21,7 +29,19 @@ def visit(node_type, predicate=None, inferences=None):
     return decorator
 
 
+def _validate_stats_namespace(fn_name, stats_namespace):
+    if stats_namespace is None:
+        raise Exception("{} requires a valid namespace".format(fn_name))
+
+
 def count_import_usages(stats_namespace, expected_qname, importer=None):
+    """
+    A visitor to track the number of times a particular attribute is imported
+    eg: To track the number of times the User model is imported
+
+    count_import_usages('imports_num_user_model', 'app.models.User')
+    """
+    _validate_stats_namespace('count_import_usages', stats_namespace)
     if importer is None:
         importer = importlib.import_module
 
@@ -41,7 +61,7 @@ def count_import_usages(stats_namespace, expected_qname, importer=None):
         modname = import_from_node.modname
 
         for name, alias in import_from_node.names:
-            if name == '*':
+            if name == '*' and module_name == modname:
                 module = importer(module_name)
                 if trouble_attribute in dir(module):
                     track_import(stats, rel_file_path)
@@ -60,9 +80,7 @@ def count_calling_files(
         expected_callable_qname,
         inferences=None,
 ):
-    if stats_namespace is None:
-        raise Exception("count_calling_files() requires a valid namespace")
-
+    _validate_stats_namespace('count_calling_files', stats_namespace)
     expected_callable_name = expected_callable_qname.split(".")[-1]
 
     def record_stats(stats, rel_file_path):
@@ -116,13 +134,16 @@ def count_calls_on_django_model(stats_namespace, model_qname, method_name):
     Populates stats with the number of calls per file
 
     eg:
-    count_calls_on_model('destroy_calls', 'app.lobby.models.User', 'destroy')
+    count_calls_on_django_model(
+      'destroy_calls', 'app.lobby.models.User', 'destroy')
 
     stats => {'destroy_calls': {'app/lobby/views.py': 15}}
 
     This indicates the the destroy() function was called 15 times on the
     User model in app/lobby/views.py
     """
+    _validate_stats_namespace('count_calls_on_django_model', stats_namespace)
+
     def record_stats(stats, rel_file_path):
         stats = stats.namespaced(stats_namespace)
         stats.increment(rel_file_path)

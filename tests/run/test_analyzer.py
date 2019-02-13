@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 from contextlib import contextmanager
 from io import StringIO
 
@@ -163,7 +164,7 @@ def test_parse_errors_are_rethrown():
     expected_err = (
         'An exception occurred while parsing file: '
         '.*{}'.format(
-            os.path.join(MOCK_DIR_NAME, MOCK_FILE_NAMES[0]),
+            re.escape(os.path.join(MOCK_DIR_NAME, MOCK_FILE_NAMES[0])),
         )
     )
 

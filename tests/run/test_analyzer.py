@@ -160,7 +160,12 @@ def test_parse_errors_are_rethrown():
     )
     analyzer.override_node_visitor_master(MockNodeMaster)
 
-    expected_err = 'An exception occurred while parsing file: ' \
-                   '.*{}/{}'.format(MOCK_DIR_NAME, MOCK_FILE_NAMES[0])
+    expected_err = (
+        'An exception occurred while parsing file: '
+        '.*{}'.format(
+            os.path.join(MOCK_DIR_NAME, MOCK_FILE_NAMES[0]),
+        )
+    )
+
     with pytest.raises(ParseException, match=expected_err):
         analyzer.run(Stats())

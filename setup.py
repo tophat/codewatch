@@ -8,7 +8,7 @@ from setuptools import (
 )
 
 CLASSIFIERS = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "License :: OSI Approved :: Apache Software License",
@@ -41,7 +41,7 @@ setup(
     name='codewatch',
     classifiers=CLASSIFIERS,
     packages=find_packages(),
-    version='0.0.19',
+    version='0.1.0',
     description="Monitor and manage deeply customizable metrics about your python code using ASTs",
     long_description=long_description,
     long_description_content_type="text/markdown",

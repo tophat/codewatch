@@ -116,6 +116,16 @@
       "contributions": [
         "infra"
       ]
+    },
+    {
+      "login": "kazu9su",
+      "name": "Kazushige Tominaga",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2306108?v=4",
+      "profile": "https://kazu9su.com",
+      "contributions": [
+        "code"
+      ]
     }
-  ]
+  ],
+  "contributorsPerLine": 7
 }

@@ -19,7 +19,7 @@ Usage:
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.WARNING)
 
     if len(sys.argv) != 2:
         help()

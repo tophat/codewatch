@@ -8,6 +8,6 @@
     "contributors:check": "all-contributors check"
   },
   "devDependencies": {
-    "all-contributors-cli": "^5.4.1"
+    "all-contributors-cli": "^6.9.0"
   }
 }

@@ -1,3 +1,5 @@
+> This project is currently deprecated and may be archived. If you're looking for something similar, you could try [bellybutton](https://github.com/hchasestevens/bellybutton) or [writing a custom checking in pylint instead](http://pylint.pycqa.org/en/latest/how_tos/custom_checkers.html).
+
 <div align="center">
 <a href="https://github.com/tophat/codewatch">
     <img src="website/static/img/codewatch@2x.png"/>

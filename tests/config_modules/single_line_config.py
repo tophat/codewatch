@@ -21,11 +21,6 @@ def count_prints_py3(node, stats, _rel_file_path):
         stats.increment('print')
 
 
-@visit(nodes.Print)
-def count_prints_py2(node, stats, _rel_file_path):
-    stats.increment('print')
-
-
 @assertion()
 def single_line_file_works(stats):
     assert stats.get('print', 0) == 1, 'single line file not working'

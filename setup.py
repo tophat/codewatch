@@ -14,9 +14,6 @@ CLASSIFIERS = [
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 2",
-    "Programming Language :: Python :: 2.7",
-    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: Implementation :: CPython",
@@ -25,8 +22,7 @@ CLASSIFIERS = [
 
 
 INSTALL_REQUIRES = [
-    'astroid==2.0.4; python_version>="3"',
-    'astroid==1.6.4; python_version<"3"',  # 2.0 onwards is py3 only
+    'astroid>=2'
 ]
 
 base_dir = os.path.dirname(__file__)

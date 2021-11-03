@@ -24,12 +24,12 @@ commands:
 
 
 jobs:
-  python-27: &build-template
+  python-36: &build-template
     environment:
-      TOX_ENV: py27
+      TOX_ENV: py36
 
     docker:
-      - image: circleci/python:3.6.7
+      - image: circleci/python:3.6
 
     working_directory: ~/repo
 
@@ -70,9 +70,9 @@ jobs:
 
       - save_cache:
           paths:
-          - ./.tox/py27
           - ./.tox/py36
           - ./.tox/py37
+          - ./.tox/py38
           key: tox-dependencies-v2-{{ checksum "/tmp/TOX_ENV" }}-{{ checksum "requirements_test.txt" }}-{{ checksum "setup.py" }}
 
       - store_test_results:
@@ -109,16 +109,18 @@ jobs:
             git config --global user.name "CircleCI Codewatch"
             USE_SSH=true yarn publish-gh-pages
 
-  python-36:
-    <<: *build-template
-    environment:
-      TOX_ENV: py36
   python-37:
     <<: *build-template
     environment:
       TOX_ENV: py37
     docker:
-      - image: circleci/python:3.7.1-stretch
+      - image: circleci/python:3.7
+  python-38:
+    <<: *build-template
+    environment:
+      TOX_ENV: py38
+    docker:
+      - image: circleci/python:3.8
   deploy_to_pypi:
     <<: *build-template
     steps:
@@ -136,14 +138,14 @@ workflows:
   version: 2
   codewatch_and_website:
     jobs:
-      - python-27
       - python-36
       - python-37
+      - python-38
       - deploy_to_pypi:
           requires:
-            - python-27
             - python-36
             - python-37
+            - python-38
           filters:
             branches:
               only:

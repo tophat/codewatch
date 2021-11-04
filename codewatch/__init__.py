@@ -15,6 +15,7 @@ from codewatch.helpers.visitor import (
     count_import_usages,
     visit,
 )
+from codewatch.predicates import CallNodePredicates
 from codewatch.file_walker import FileWalker
 from codewatch.stats import Stats
 
@@ -23,6 +24,7 @@ __all__ = [
     'Analyzer',
     'AssertionChecker',
     'assertion',
+    'CallNodePredicates',
     'count_calling_files',
     'count_calls_on_django_model',
     'count_import_usages',
@@ -32,5 +34,6 @@ __all__ = [
     'ModuleLoader',
     'Runner',
     'Stats',
+    'inference',
     'visit',
 ]
